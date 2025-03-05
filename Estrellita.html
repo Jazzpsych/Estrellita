@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Estrellita</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #fce4ec;
+            color: #333;
+        }
+        h1 {
+            color: #d81b60;
+        }
+        select, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #mensaje {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #880e4f;
+        }
+        img {
+            margin-top: 30px;
+            width: 500px; /* Ajusta el tamaño de la imagen */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Para mi Estrellita 🌟</h1>
+    <p>¿Cómo te sientes hoy, mi niña?</p>
+
+    <select id="emocion">
+        <option value="feliz">Feliz 😊</option>
+        <option value="triste">Triste 😔</option>
+        <option value="estresada">Estresada 😵‍💫</option>
+        <option value="cansada">Cansada 🥱</option>
+        <option value="extrañandote">Extrañándote 🥺</option>
+        <option value="pensandoEnTi">Pensando en ti 💭❤️</option>
+        <option value="conGanasDeVerte">Con ganas de verte 🥰</option>
+        <option value="conGanasDePensar">Con ganas de "pensar" 😏</option>
+    </select>
+
+    <button onclick="mostrarMensaje()">Ver mensaje</button>
+
+    <p id="mensaje"></p>
+
+  <img src="https://i.imgur.com/8jWcK6P.png" alt="Piano con notas musicales">
+
+    <script>
+        function mostrarMensaje() {
+            const emocion = document.getElementById("emocion").value;
+            let mensaje = "";
+
+            switch (emocion) {
+                case "feliz":
+                    mensaje = "Me encanta saber que estás feliz, mi niña. Siempre quiero verte así. 🌸";
+                    break;
+                case "triste":
+                    mensaje = "Recuerda que, pase lo que pase, siempre estaré para ti. Te quiero infinito. 💕";
+                    break;
+                case "estresada":
+                    mensaje = "A veces así es la vida, mi princesita. Respira hondo, cierra los ojos y recuerda que eres capaz de todo. Si has llegado hasta aquí, también superarás esto ❤️";
+                    break;
+                case "cansada":
+                    mensaje = "Descansa, mi estrellita. Yo me encargaré de iluminar tu camino mientras lo haces. ✨";
+                    break;
+                case "extrañandote":
+                    mensaje = "Tú dices que me extrañas... Pero yo te extraño más. Y lo sabes. 🥺❤️";
+                    break;
+                case "pensandoEnTi":
+                    mensaje = "Ahora mismo estaba pensando en ti... Aunque en realidad, siempre lo hago. 🥰";
+                    break;
+                case "conGanasDeVerte":
+                    mensaje = "Ojalá pudiera verte ahora mismo. ¿Sabes cuánto daría por eso? Muchísimo. 💖";
+                    break;
+                case "conGanasDePensar":
+                    mensaje = "¿Otra vez con ganas de 'pensar'? 😏 Bueno... La verdad es que yo también. ❤️‍🔥";
+                    break;
+                default:
+                    mensaje = "No importa cómo te sientas, siempre estaré aquí para ti. 💫";
+            }
+
+            document.getElementById("mensaje").innerText = mensaje;
+        }
+    </script>
+
+</body>
+</html>
