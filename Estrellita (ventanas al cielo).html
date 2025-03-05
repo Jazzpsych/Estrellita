@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Estrellita</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #fce4ec;
+            color: #333;
+        }
+        h1 {
+            color: #d81b60;
+        }
+        select, button, input {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #mensaje {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #880e4f;
+        }
+        img {
+            margin-top: 20px;
+            width: 300px;
+        }
+        #chat {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+        .mensaje-item {
+            border-bottom: 1px solid #ddd;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Para mi Estrellita 🌟</h1>
+
+    <!-- Menú de inicio de sesión -->
+    <div id="loginContainer">
+        <h2>Iniciar Sesión</h2>
+        <input type="email" id="email" placeholder="Correo">
+        <input type="password" id="password" placeholder="Contraseña">
+        <button id="login">Iniciar Sesión</button>
+        <p id="loginStatus"></p>
+    </div>
+
+    <!-- Contenido de la página -->
+    <div id="contenido" style="display: none;">
+        <p>¿Cómo te sientes hoy, mi niña?</p>
+        <select id="emocion">
+            <option value="feliz">Feliz 😊</option>
+            <option value="triste">Triste 😔</option>
+            <option value="estresada">Estresada 😵‍💫</option>
+            <option value="cansada">Cansada 🥱</option>
+            <option value="extrañandote">Extrañándote 🥺</option>
+            <option value="pensandoEnTi">Pensando en ti 💭❤️</option>
+            <option value="conGanasDeVerte">Con ganas de verte 🥰</option>
+            <option value="conGanasDePensar">Con ganas de "pensar" 😏</option>
+        </select>
+        <button onclick="mostrarMensaje()">Ver mensaje</button>
+        <p id="mensaje"></p>
+        <img src="https://i.imgur.com/8jWcK6P.png" alt="Piano con notas musicales">
+
+        <!-- Chat -->
+        <h2>Chat con Estrellita 💬</h2>
+        <input type="text" id="mensajeInput" placeholder="Escribe un mensaje..." />
+        <button id="enviarMensaje">Enviar</button>
+        <div id="chat"></div>
+    </div>
+
+  <script>
+        function mostrarMensaje() {
+            const emocion = document.getElementById("emocion").value;
+            let mensaje = "";
+
+            switch (emocion) {
+                case "feliz":
+                    mensaje = "Me encanta saber que estás feliz, mi niña. Siempre quiero verte así. 🌸";
+                    break;
+                case "triste":
+                    mensaje = "Recuerda que, pase lo que pase, siempre estaré para ti. Te quiero infinito. 💕";
+                    break;
+                case "estresada":
+                    mensaje = "A veces así es la vida, mi princesita. Respira hondo, cierra los ojos y recuerda que eres capaz de todo. Si has llegado hasta aquí, también superarás esto ❤️";
+                    break;
+                case "cansada":
+                    mensaje = "Descansa, mi estrellita. Yo me encargaré de iluminar tu camino mientras lo haces. ✨";
+                    break;
+                case "extrañandote":
+                    mensaje = "Tú dices que me extrañas... Pero yo te extraño más. Y lo sabes. 🥺❤️";
+                    break;
+                case "pensandoEnTi":
+                    mensaje = "Ahora mismo estaba pensando en ti... Aunque en realidad, siempre lo hago. 🥰";
+                    break;
+                case "conGanasDeVerte":
+                    mensaje = "Ojalá pudiera verte ahora mismo. ¿Sabes cuánto daría por eso? Muchísimo. 💖";
+                    break;
+                case "conGanasDePensar":
+                    mensaje = "¿Otra vez con ganas de 'pensar'? 😏 Bueno... La verdad es que yo también. ❤️‍🔥";
+                    break;
+                default:
+                    mensaje = "No importa cómo te sientas, siempre estaré aquí para ti. 💫";
+            }
+
+            document.getElementById("mensaje").innerText = mensaje;
+        }
+    </script>
+
+  
+    <script type="module">
+        // Importar Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAcweOs5qS3v4xbzmkYCFLKxVaSWVsly_M",
+            authDomain: "estrellita-chl.firebaseapp.com",
+            databaseURL: "https://estrellita-chl-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "estrellita-chl",
+            storageBucket: "estrellita-chl.firebasestorage.app",
+            messagingSenderId: "1006618062076",
+            appId: "1:1006618062076:web:8cc3a6bb3ebe800d11fb79",
+            measurementId: "G-X2K8ZCR608"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getDatabase(app);
+
+        let inactivityTimer;
+
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                signOut(auth).then(() => {
+                    document.getElementById("contenido").style.display = "none";
+                    document.getElementById("loginContainer").style.display = "block";
+                    alert("Sesión cerrada por inactividad");
+                });
+            }, 5 * 60 * 1000); // 5 minutos
+        }
+
+        // Iniciar sesión
+        document.getElementById("login").addEventListener("click", function () {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            
+            signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                document.getElementById("loginContainer").style.display = "none";
+                document.getElementById("contenido").style.display = "block";
+                resetInactivityTimer();
+            })
+            .catch((error) => {
+                document.getElementById("loginStatus").innerText = "Error: " + error.message;
+            });
+        });
+
+        // Mantener sesión iniciada
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById("loginContainer").style.display = "none";
+                document.getElementById("contenido").style.display = "block";
+                resetInactivityTimer();
+            } else {
+                document.getElementById("loginContainer").style.display = "block";
+                document.getElementById("contenido").style.display = "none";
+            }
+        });
+
+        // Detectar actividad del usuario
+        document.addEventListener("mousemove", resetInactivityTimer);
+        document.addEventListener("keydown", resetInactivityTimer);
+
+        // Enviar mensaje
+        document.getElementById("enviarMensaje").addEventListener("click", function () {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const mensajesRef = ref(db, "mensajes");
+            const mensaje = document.getElementById("mensajeInput").value;
+
+            if (mensaje) {
+                push(mensajesRef, {
+                    usuario: user.email,
+                    mensaje: mensaje,
+                    fecha: new Date().toLocaleString()
+                });
+
+                document.getElementById("mensajeInput").value = ""; // Limpiar input
+            }
+        });
+
+        // Leer mensajes
+        onChildAdded(ref(db, "mensajes"), function (snapshot) {
+            const data = snapshot.val();
+            const chat = document.getElementById("chat");
+            const mensajeElemento = document.createElement("div");
+            mensajeElemento.classList.add("mensaje-item");
+            mensajeElemento.innerHTML = `<p><strong>${data.usuario}:</strong> ${data.mensaje} <small>(${data.fecha})</small></p>`;
+            chat.appendChild(mensajeElemento);
+        });
+
+    </script>
+
+</body>
+</html>
