@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Estrellita 🌟</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #fce4ec;
+            color: #333;
+        }
+        h1 {
+            color: #d81b60;
+        }
+        select, button, input {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+        }
+        #mensaje {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #880e4f;
+        }
+        img {
+            margin-top: 20px;
+            width: 300px;
+        }
+        .mensaje-item {
+            text-align: left;
+            margin: 10px;
+            padding: 5px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+        }
+        #loginError {
+            color: red;
+        }
+        #contenido {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .password-container {
+            position: relative;
+            display: inline-block;
+        }
+        #togglePassword {
+            position: absolute;
+            right: 15px;
+            top: 30%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Para mi Estrellita 🌟</h1>
+
+    <div id="loginContainer">
+        <h2>Iniciar Sesión</h2>
+        <input type="email" id="email" placeholder="Correo electrónico" required>
+        
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="button" id="togglePassword">👁</button>
+        </div>
+        
+        <button id="login">Iniciar sesión</button>
+        <p id="loginError"></p>
+    </div>
+
+    <div id="contenido" style="display: none;">
+        <button id="logout" style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer;">Cerrar Sesión</button>
+
+        <p>¿Cómo te sientes hoy, mi niña?</p>
+
+        <select id="emocion">
+            <option value="feliz">Feliz 😊</option>
+            <option value="triste">Triste 😔</option>
+            <option value="estresada">Estresada 😵‍💫</option>
+            <option value="cansada">Cansada 🥱</option>
+            <option value="extrañandote">Extrañándote 🥺</option>
+            <option value="pensandoEnTi">Pensando en ti 💭❤️</option>
+            <option value="conGanasDeVerte">Con ganas de verte 🥰</option>
+            <option value="conGanasDePensar">Con ganas de "pensar" 😏</option>
+        </select>
+
+        <button onclick="mostrarMensaje()">Ver mensaje</button>
+        <p id="mensaje"></p>
+
+        <img src="https://i.imgur.com/8jWcK6P.png" alt="Piano con notas musicales">
+
+        <h2>Chat con Estrellita 💬</h2>
+        <input type="text" id="mensajeInput" placeholder="Escribe un mensaje..." />
+        <button id="enviarMensaje">Enviar</button>
+        
+        <div id="chat"></div>
+    </div>
+
+    <script>
+        // Frases para cada emoción
+        const frases = {
+            feliz: [
+                "Me encanta saber que estás feliz, mi niña. Siempre quiero verte así. 🌸",
+                "Tu felicidad es mi felicidad, mi amor. Que nunca te falte una sonrisa. 😊",
+                "Hoy el sol brilla más porque tú estás feliz. ☀️💖"
+            ],
+            triste: [
+                "Recuerda que, pase lo que pase, siempre estaré para ti. Te quiero infinito. 💕",
+                "Las nubes pasan, pero el cielo sigue ahí. Y yo también estaré siempre contigo. 🌧️❤️",
+                "Si estás triste, piensa en lo mucho que significas para mí. 💖"
+            ],
+            estresada: [
+                "A veces así es la vida, mi princesita. Respira hondo, cierra los ojos y recuerda que eres capaz de todo. ❤️",
+                "Descansa un momento, relájate y recuerda que todo pasará. 🌸",
+                "Eres fuerte, mi amor. Más de lo que crees. 💪✨"
+            ],
+            cansada: [
+                "Descansa, mi estrellita. Yo me encargaré de iluminar tu camino mientras lo haces. ✨",
+                "Cada día es un paso más, pero también mereces un respiro. Relájate, mi vida. 💕",
+                "Dormir bien es importante, pero soñar contigo lo es más. 😘🌙"
+            ],
+            extrañandote: [
+                "Tú dices que me extrañas... Pero yo te extraño más. Y lo sabes. 🥺❤️",
+                "La distancia solo hace que te quiera más. 💫",
+                "Ojalá pudiera abrazarte ahora mismo. Pero mientras tanto, aquí tienes un mensaje con mucho amor. 💖"
+            ],
+            pensandoEnTi: [
+                "Ahora mismo estaba pensando en ti... Aunque en realidad, siempre lo hago. 🥰",
+                "Eres mi pensamiento favorito del día. 💭❤️",
+                "Si supieras cuántas veces pienso en ti al día, te asustarías. 😆💓"
+            ],
+            conGanasDeVerte: [
+                "Ojalá pudiera verte ahora mismo. ¿Sabes cuánto daría por eso? Muchísimo. 💖",
+                "Contando los días para verte de nuevo... Porque cada segundo sin ti es un siglo. ⏳❤️",
+                "Si pudiera teletransportarme, ya estaría contigo. 💫"
+            ],
+            conGanasDePensar: [
+                "¿Otra vez con ganas de 'pensar'? 😏 Bueno... La verdad es que yo también. ❤️‍🔥",
+                "Pensar contigo siempre es una buena idea. 😉",
+                "Sabes que cuando dices eso, solo me dan más ganas de verte... 😏🔥"
+            ]
+        };
+
+        // Función para obtener una frase diaria
+        function obtenerFraseDiaria(emocion) {
+            const hoy = new Date().toISOString().split("T")[0];
+            const clave = `frase-${emocion}-${hoy}`;
+
+            let fraseGuardada = localStorage.getItem(clave);
+
+            if (!fraseGuardada) {
+                const frasesDisponibles = frases[emocion];
+                fraseGuardada = frasesDisponibles[Math.floor(Math.random() * frasesDisponibles.length)];
+                localStorage.setItem(clave, fraseGuardada);
+            }
+
+            return fraseGuardada;
+        }
+
+        function mostrarMensaje() {
+            const emocion = document.getElementById("emocion").value;
+            const mensaje = obtenerFraseDiaria(emocion);
+            document.getElementById("mensaje").innerText = mensaje;
+        }
+    </script>
+   
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAcweOs5qS3v4xbzmkYCFLKxVaSWVsly_M",
+            authDomain: "estrellita-chl.firebaseapp.com",
+            databaseURL: "https://estrellita-chl-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "estrellita-chl",
+            storageBucket: "estrellita-chl.firebasestorage.app",
+            messagingSenderId: "1006618062076",
+            appId: "1:1006618062076:web:8cc3a6bb3ebe800d11fb79",
+            measurementId: "G-X2K8ZCR608"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const db = getDatabase(app);
+
+        let inactivityTimer;
+
+        // Mostrar/Ocultar contraseña
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordInput = document.getElementById("password");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                this.innerText = "🙈";
+            } else {
+                passwordInput.type = "password";
+                this.innerText = "🐱";
+            }
+        });
+
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                signOut(auth).then(() => {
+                    document.getElementById("contenido").style.display = "none";
+                    document.getElementById("loginContainer").style.display = "block";
+                    alert("Sesión cerrada por inactividad");
+                });
+            }, 5 * 60 * 1000); // 5 minutos
+        }
+
+        // Iniciar sesión
+        document.getElementById("login").addEventListener("click", function () {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const loginError = document.getElementById("loginError");
+            
+            loginError.textContent = "";
+            
+            signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                document.getElementById("loginContainer").style.display = "none";
+                document.getElementById("contenido").style.display = "block";
+                resetInactivityTimer();
+            })
+            .catch((error) => {
+                switch(error.code) {
+                    case 'auth/invalid-email':
+                        loginError.textContent = "El correo electrónico no es válido.";
+                        break;
+                    case 'auth/user-not-found':
+                        loginError.textContent = "No se encontró un usuario con este correo.";
+                        break;
+                    case 'auth/wrong-password':
+                        loginError.textContent = "La contraseña es incorrecta.";
+                        break;
+                    case 'auth/too-many-requests':
+                        loginError.textContent = "Demasiados intentos. Intenta más tarde.";
+                        break;
+                    default:
+                        loginError.textContent = "Error al iniciar sesión.";
+                }
+            });
+        });
+
+        // Cerrar sesión
+        document.getElementById("logout").addEventListener("click", function () {
+            signOut(auth).then(() => {
+                document.getElementById("contenido").style.display = "none";
+                document.getElementById("loginContainer").style.display = "block";
+            }).catch((error) => {
+                alert("Error al cerrar sesión: " + error.message);
+            });
+        });
+
+        // Mantener sesión iniciada
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById("loginContainer").style.display = "none";
+                document.getElementById("contenido").style.display = "block";
+                resetInactivityTimer();
+            } else {
+                document.getElementById("loginContainer").style.display = "block";
+                document.getElementById("contenido").style.display = "none";
+            }
+        });
+
+        // Detectar actividad del usuario
+        document.addEventListener("mousemove", resetInactivityTimer);
+        document.addEventListener("keydown", resetInactivityTimer);
+
+        // Enviar mensaje
+        document.getElementById("enviarMensaje").addEventListener("click", function () {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const mensajesRef = ref(db, "mensajes");
+            const mensaje = document.getElementById("mensajeInput").value;
+
+            if (mensaje) {
+                push(mensajesRef, {
+                    usuario: user.email,
+                    mensaje: mensaje,
+                    fecha: new Date().toLocaleString()
+                });
+
+                document.getElementById("mensajeInput").value = ""; // Limpiar input
+            }
+        });
+
+        // Recibir mensajes
+        onChildAdded(ref(db, "mensajes"), function (snapshot) {
+            const data = snapshot.val();
+            const chat = document.getElementById("chat");
+            const mensajeElemento = document.createElement("div");
+            mensajeElemento.classList.add("mensaje-item");
+            mensajeElemento.innerHTML = `<p><strong>${data.usuario}:</strong> ${data.mensaje} <small>(${data.fecha})</small></p>`;
+            chat.appendChild(mensajeElemento);
+        });
+    </script>
+</body>
+</html>
