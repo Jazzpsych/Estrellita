@@ -56,6 +56,32 @@
             border: none;
             cursor: pointer;
         }
+        .contador-emociones {
+            margin: 20px auto;
+            text-align: left;
+            max-width: 400px;
+            background-color: #f8bbd0;
+            padding: 15px;
+            border-radius: 10px;
+            display: none; /* Oculto por defecto */
+        }
+        .contador-item {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .contador-label {
+            font-weight: bold;
+            color: #880e4f;
+        }
+        .contador-valor {
+            font-weight: bold;
+            background-color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            min-width: 30px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -67,7 +93,7 @@
         
         <div class="password-container">
             <input type="password" id="password" placeholder="Contraseña" required>
-            <button type="button" id="togglePassword">👁</button>
+            <button type="button" id="togglePassword">🐱</button>
         </div>
         
         <button id="login">Iniciar sesión</button>
@@ -92,6 +118,13 @@
 
         <button onclick="mostrarMensaje()">Ver mensaje</button>
         <p id="mensaje"></p>
+
+        <div id="contador-emociones" class="contador-emociones">
+            <h3>Contador de Emociones ❤️</h3>
+            <div id="contadores-container">
+                <!-- Los contadores se cargarán dinámicamente aquí -->
+            </div>
+        </div>
 
         <img src="https://i.imgur.com/8jWcK6P.png" alt="Piano con notas musicales">
 
@@ -167,13 +200,16 @@
             const emocion = document.getElementById("emocion").value;
             const mensaje = obtenerFraseDiaria(emocion);
             document.getElementById("mensaje").innerText = mensaje;
+            
+            // Incrementar contador de emociones (solo si es la cuenta de Estrellita)
+            incrementarContadorEmocion(emocion);
         }
     </script>
    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, push, onChildAdded, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         // Configuración de Firebase
         const firebaseConfig = {
@@ -192,7 +228,109 @@
         const auth = getAuth();
         const db = getDatabase(app);
 
+        // Definir usuarios específicos
+        const USUARIO_ESTRELLITA = "oras5982"; // Usuario de Estrellita (sin dominio)
+        const USUARIO_ADMIN = "jahaziel.alvarezreyes"; // Tu cuenta de correo (sin dominio)
+
         let inactivityTimer;
+        let usuarioActual = "";
+
+        // Lista de emociones para los contadores
+        const listaEmociones = [
+            { value: "feliz", label: "Feliz 😊" },
+            { value: "triste", label: "Triste 😔" },
+            { value: "estresada", label: "Estresada 😵‍💫" },
+            { value: "cansada", label: "Cansada 🥱" },
+            { value: "extrañandote", label: "Extrañándote 🥺" },
+            { value: "pensandoEnTi", label: "Pensando en ti 💭❤️" },
+            { value: "conGanasDeVerte", label: "Con ganas de verte 🥰" },
+            { value: "conGanasDePensar", label: "Con ganas de 'pensar' 😏" }
+        ];
+
+        // Función para extraer el nombre de usuario del email
+        function obtenerNombreUsuario(email) {
+            return email.split('@')[0].toLowerCase();
+        }
+
+        // Función para obtener el nombre que se mostrará según el usuario
+        function obtenerNombreMostrado(email) {
+            const usuario = obtenerNombreUsuario(email);
+            
+            if (usuario === USUARIO_ESTRELLITA) {
+                return "Estrellita";
+            } else {
+                return "Luna";
+            }
+        }
+
+        // Inicializar contadores de emociones
+        function inicializarContadoresEmociones() {
+            const contadoresRef = ref(db, "contadores");
+            
+            // Verificar si ya existen contadores
+            get(contadoresRef).then((snapshot) => {
+                if (!snapshot.exists()) {
+                    // Si no existen, inicializar todos a cero
+                    const contadoresIniciales = {};
+                    listaEmociones.forEach(emocion => {
+                        contadoresIniciales[emocion.value] = 0;
+                    });
+                    
+                    set(contadoresRef, contadoresIniciales);
+                }
+            });
+            
+            // Verificar si el usuario actual debe ver los contadores
+            const usuario = obtenerNombreUsuario(auth.currentUser.email);
+            const contadorElement = document.getElementById("contador-emociones");
+            
+            // Solo mostrar los contadores al usuario administrador (tú)
+            if (usuario === USUARIO_ADMIN) {
+                // Mostrar el contador
+                contadorElement.style.display = "block";
+                
+                // Actualizar la UI cuando cambien los contadores
+                onValue(contadoresRef, (snapshot) => {
+                    if (snapshot.exists()) {
+                        const contadores = snapshot.val();
+                        actualizarUIContadores(contadores);
+                    }
+                });
+            } else {
+                // Ocultar el contador para otros usuarios (incluido Estrellita)
+                contadorElement.style.display = "none";
+            }
+        }
+
+        // Actualizar la interfaz de usuario con los contadores
+        function actualizarUIContadores(contadores) {
+            const contenedor = document.getElementById("contadores-container");
+            contenedor.innerHTML = "";
+            
+            listaEmociones.forEach(emocion => {
+                const contador = contadores[emocion.value] || 0;
+                const div = document.createElement("div");
+                div.className = "contador-item";
+                div.innerHTML = `
+                    <span class="contador-label">${emocion.label}:</span>
+                    <span class="contador-valor">${contador}</span>
+                `;
+                contenedor.appendChild(div);
+            });
+        }
+
+        // Incrementar contador de emoción (solo si es la cuenta de Estrellita)
+        window.incrementarContadorEmocion = function(emocion) {
+            // Solo incrementar si es la cuenta de Estrellita
+            if (usuarioActual === USUARIO_ESTRELLITA) {
+                const contadorRef = ref(db, `contadores/${emocion}`);
+                
+                get(contadorRef).then((snapshot) => {
+                    const valorActual = snapshot.exists() ? snapshot.val() : 0;
+                    set(contadorRef, valorActual + 1);
+                });
+            }
+        };
 
         // Mostrar/Ocultar contraseña
         document.getElementById("togglePassword").addEventListener("click", function () {
@@ -230,6 +368,12 @@
                 document.getElementById("loginContainer").style.display = "none";
                 document.getElementById("contenido").style.display = "block";
                 resetInactivityTimer();
+                
+                // Guardar el nombre de usuario actual (sin dominio)
+                usuarioActual = obtenerNombreUsuario(userCredential.user.email);
+                
+                // Inicializar contadores (solo visibles para el admin)
+                inicializarContadoresEmociones();
             })
             .catch((error) => {
                 switch(error.code) {
@@ -256,6 +400,7 @@
             signOut(auth).then(() => {
                 document.getElementById("contenido").style.display = "none";
                 document.getElementById("loginContainer").style.display = "block";
+                usuarioActual = "";
             }).catch((error) => {
                 alert("Error al cerrar sesión: " + error.message);
             });
@@ -267,9 +412,16 @@
                 document.getElementById("loginContainer").style.display = "none";
                 document.getElementById("contenido").style.display = "block";
                 resetInactivityTimer();
+                
+                // Guardar el nombre de usuario actual (sin dominio)
+                usuarioActual = obtenerNombreUsuario(user.email);
+                
+                // Inicializar contadores (solo visibles para el admin)
+                inicializarContadoresEmociones();
             } else {
                 document.getElementById("loginContainer").style.display = "block";
                 document.getElementById("contenido").style.display = "none";
+                usuarioActual = "";
             }
         });
 
@@ -287,7 +439,10 @@
 
             if (mensaje) {
                 push(mensajesRef, {
-                    usuario: user.email,
+                    // Guardar el email completo por si se necesita en el futuro
+                    emailCompleto: user.email,
+                    // Mostrar "Estrellita" o "Luna" según el usuario
+                    usuario: obtenerNombreMostrado(user.email),
                     mensaje: mensaje,
                     fecha: new Date().toLocaleString()
                 });
@@ -302,7 +457,13 @@
             const chat = document.getElementById("chat");
             const mensajeElemento = document.createElement("div");
             mensajeElemento.classList.add("mensaje-item");
-            mensajeElemento.innerHTML = `<p><strong>${data.usuario}:</strong> ${data.mensaje} <small>(${data.fecha})</small></p>`;
+            
+            // Usar el nombre de usuario que viene en el mensaje
+            // Si es un mensaje antiguo sin "usuario", usar un valor predeterminado
+            const nombreMostrado = data.usuario || "Usuario";
+            
+            mensajeElemento.innerHTML = `<p><strong>${nombreMostrado}:</strong> ${data.mensaje} <small>(${data.fecha})</small></p>`;
+            
             chat.appendChild(mensajeElemento);
         });
     </script>
