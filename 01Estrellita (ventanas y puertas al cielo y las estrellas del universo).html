@@ -249,431 +249,682 @@
     </script>
    
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, push, onChildAdded, get, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getDatabase, ref, push, onChildAdded, get, set, onValue, serverTimestamp, onDisconnect } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    
+    // Configuración de Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAcweOs5qS3v4xbzmkYCFLKxVaSWVsly_M",
+        authDomain: "estrellita-chl.firebaseapp.com",
+        databaseURL: "https://estrellita-chl-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "estrellita-chl",
+        storageBucket: "estrellita-chl.firebasestorage.app",
+        messagingSenderId: "1006618062076",
+        appId: "1:1006618062076:web:8cc3a6bb3ebe800d11fb79",
+        measurementId: "G-X2K8ZCR608"
+    };
 
-        // Configuración de Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAcweOs5qS3v4xbzmkYCFLKxVaSWVsly_M",
-            authDomain: "estrellita-chl.firebaseapp.com",
-            databaseURL: "https://estrellita-chl-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "estrellita-chl",
-            storageBucket: "estrellita-chl.firebasestorage.app",
-            messagingSenderId: "1006618062076",
-            appId: "1:1006618062076:web:8cc3a6bb3ebe800d11fb79",
-            measurementId: "G-X2K8ZCR608"
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const db = getDatabase(app);
+
+    // Definir usuarios específicos
+    const USUARIO_ESTRELLITA = "oras5982"; // Usuario de Estrellita (sin dominio)
+    const USUARIO_ADMIN = "jahaziel.alvarezreyes"; // Tu cuenta de correo (sin dominio)
+
+    let inactivityTimer;
+    let usuarioActual = "";
+    let loginTime = null; // Para rastrear cuando inicia sesión Estrellita
+
+    // Inicializar EmailJS
+    function cargarEmailJS() {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+        script.onload = function() {
+            window.emailjs.init('FK-l7zhLUb3b7Ah2X');
         };
+        document.head.appendChild(script);
+    }
+    cargarEmailJS();
 
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth();
-        const db = getDatabase(app);
-
-        // Definir usuarios específicos
-        const USUARIO_ESTRELLITA = "oras5982"; // Usuario de Estrellita (sin dominio)
-        const USUARIO_ADMIN = "jahaziel.alvarezreyes"; // Tu cuenta de correo (sin dominio)
-
-        let inactivityTimer;
-        let usuarioActual = "";
-        let loginTime = null; // Para rastrear cuando inicia sesión Estrellita
-
-        // Lista de emociones para los contadores
-        const listaEmociones = [
-            { value: "feliz", label: "Feliz 😊" },
-            { value: "triste", label: "Triste 😔" },
-            { value: "estresada", label: "Estresada 😵‍💫" },
-            { value: "cansada", label: "Cansada 🥱" },
-            { value: "extrañandote", label: "Extrañándote 🥺" },
-            { value: "pensandoEnTi", label: "Pensando en ti 💭❤️" },
-            { value: "conGanasDeVerte", label: "Con ganas de verte 🥰" },
-            { value: "conGanasDePensar", label: "Con ganas de 'pensar' 😏" }
-        ];
-
-        // Función para extraer el nombre de usuario del email
-        function obtenerNombreUsuario(email) {
-            return email.split('@')[0].toLowerCase();
+    // Función para enviar notificación de acceso
+    function enviarNotificacionAcceso(usuario) {
+        if (window.emailjs) {
+            window.emailjs.send('service_mrtsxqh', 'template_xypee8k', {
+                from_name: usuario,
+                message: "Ha iniciado sesión en la aplicación",
+                date: new Date().toLocaleString()
+            }).then(function(response) {
+                console.log('Notificación de acceso enviada con éxito:', response.status, response.text);
+            }, function(error) {
+                console.error('Error al enviar notificación de acceso:', error);
+            });
+        } else {
+            console.error('EmailJS no está cargado correctamente para notificación de acceso');
         }
-
-        // Función para obtener el nombre que se mostrará según el usuario
-        function obtenerNombreMostrado(email) {
-            const usuario = obtenerNombreUsuario(email);
-            
-            if (usuario === USUARIO_ESTRELLITA) {
-                return "Estrellita";
-            } else {
-                return "Luna";
-            }
-        }
+    }
+      
+    // Función para manejar el estado de conexión de Estrellita
+    function inicializarEstadoConexion() {
+        // Referencia para el estado de conexión de Estrellita
+        const estadoRef = ref(db, 'estado/estrellita');
         
-        // Registrar acceso en Firebase - SOLO PARA ESTRELLITA
-        function registrarAcceso(usuario) {
-            // Solo registrar si es Estrellita
-            if (usuario === USUARIO_ESTRELLITA) {
-                const accessLogRef = ref(db, "accesos");
-                push(accessLogRef, {
-                    usuario: usuario,
-                    timestamp: serverTimestamp(),
-                    fecha: new Date().toLocaleString(),
-                    inicio: new Date().getTime() // Guardar timestamp exacto para calcular duración
-                });
+        // Cuando un usuario inicia sesión
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const usuario = obtenerNombreUsuario(user.email);
                 
-                // Guardar tiempo de inicio para calcular duración
-                loginTime = new Date().getTime();
-            }
-        }
-        
-        // Registrar tiempo de sesión al cerrar sesión - SOLO PARA ESTRELLITA
-        function registrarTiempoSesion(usuario) {
-            if (usuario === USUARIO_ESTRELLITA && loginTime !== null) {
-                const sessionEndTime = new Date().getTime();
-                const sessionDuration = (sessionEndTime - loginTime) / 1000 / 60; // Duración en minutos
-                
-                const sessionLogRef = ref(db, "tiempoSesiones");
-                push(sessionLogRef, {
-                    usuario: usuario,
-                    timestamp: serverTimestamp(),
-                    fecha: new Date().toLocaleString(),
-                    duracionMinutos: sessionDuration.toFixed(2),
-                    inicio: new Date(loginTime).toLocaleString(),
-                    fin: new Date().toLocaleString()
-                });
-                
-                // Resetear loginTime
-                loginTime = null;
-            }
-        }
-
-        // Inicializar contadores de emociones
-        function inicializarContadoresEmociones() {
-            const contadoresRef = ref(db, "contadores");
-            
-            // Verificar si ya existen contadores
-            get(contadoresRef).then((snapshot) => {
-                if (!snapshot.exists()) {
-                    // Si no existen, inicializar todos a cero
-                    const contadoresIniciales = {};
-                    listaEmociones.forEach(emocion => {
-                        contadoresIniciales[emocion.value] = 0;
-                    });
+                // Si el usuario es Estrellita
+                if (usuario === USUARIO_ESTRELLITA) {
+                    // Marcar como conectado
+                    set(estadoRef, true);
                     
-                    set(contadoresRef, contadoresIniciales);
+                    // Cuando se desconecte, marcar como desconectado
+                    onDisconnect(estadoRef).set(false);
+                    
+                    // Enviar notificación de inicio de sesión
+                    enviarNotificacionAcceso(usuario);
+                }
+            }
+        });
+
+        // Escuchar cambios en el estado de Estrellita para el administrador
+        onValue(estadoRef, (snapshot) => {
+            const conectado = snapshot.val();
+            console.log("Estado de Estrellita:", conectado ? "Conectada" : "Desconectada");
+            
+            // Solo notificar al administrador cuando Estrellita se conecta
+            if (conectado && usuarioActual === USUARIO_ADMIN) {
+                mostrarNotificacionLocal("¡Estrellita ha iniciado sesión!");
+            }
+        });
+    }
+
+    // Función para enviar el correo usando EmailJS
+    function enviarCorreo(usuario, mensaje, fecha) {
+        if (window.emailjs) {
+            window.emailjs.send('service_mrtsxqh', 'template_xypee8k', {
+                from_name: usuario,
+                message: mensaje,
+                date: fecha
+            }).then(function(response) {
+                console.log('Correo enviado con éxito:', response.status, response.text);
+            }, function(error) {
+                console.error('Error al enviar correo:', error);
+            });
+        } else {
+            console.error('EmailJS no está cargado correctamente');
+        }
+    }
+
+    // Función para mostrar notificación local al administrador
+    function mostrarNotificacionLocal(mensaje) {
+        // Verificar soporte para notificaciones
+        if (!("Notification" in window)) {
+            alert(mensaje);
+        } else if (Notification.permission === "granted") {
+            new Notification(mensaje);
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(function (permission) {
+                if (permission === "granted") {
+                    new Notification(mensaje);
+                } else {
+                    alert(mensaje);
                 }
             });
-            
-            // Verificar si el usuario actual debe ver los contadores
-            const usuario = obtenerNombreUsuario(auth.currentUser.email);
-            usuarioActual = usuario; // Asegurarnos de que usuarioActual esté actualizado
-            
-            // Actualizar la información de debug para el administrador
-            actualizarInfoAdmin(usuario);
-            
-            const contadorElement = document.getElementById("contador-emociones");
-            const historialElement = document.getElementById("historial-emociones");
-            
-            // Solo mostrar los contadores y el historial al usuario administrador (tú)
-            if (usuario === USUARIO_ADMIN) {
-                console.log("¡Usuario administrador detectado!", usuario);
-                
-                // Mostrar el contador
-                contadorElement.style.display = "block";
-                
-                // Mostrar el historial
-                historialElement.style.display = "block";
-                
-                // Actualizar la UI cuando cambien los contadores
-                onValue(contadoresRef, (snapshot) => {
-                    if (snapshot.exists()) {
-                        const contadores = snapshot.val();
-                        actualizarUIContadores(contadores);
-                    }
-                });
-                
-                // Inicializar el historial de emociones
-                inicializarHistorialEmociones();
-            } else {
-                console.log("Usuario no administrador:", usuario);
-                // Ocultar el contador y el historial para otros usuarios (incluido Estrellita)
-                contadorElement.style.display = "none";
-                historialElement.style.display = "none";
-            }
+        } else {
+            alert(mensaje);
         }
-        
-        // Función para actualizar la información de debug para el administrador
-        function actualizarInfoAdmin(usuario) {
-            const adminInfoPanel = document.getElementById("admin-info");
-            const usuarioNombre = document.getElementById("usuario-nombre");
-            const adminStatus = document.getElementById("admin-status");
-            
-            // Mostrar información solo para posible depuración
-            if (usuario === USUARIO_ADMIN) {
-                adminInfoPanel.style.display = "block";
-                usuarioNombre.textContent = usuario;
-                adminStatus.textContent = "Sí";
-                adminStatus.style.color = "green";
-            } else {
-                adminInfoPanel.style.display = "none";
-            }
-        }
+    }
 
-        // Actualizar la interfaz de usuario con los contadores
-        function actualizarUIContadores(contadores) {
-            const contenedor = document.getElementById("contadores-container");
-            contenedor.innerHTML = "";
+    // Inicializar la detección de mensajes nuevos para notificaciones
+    function inicializarNotificacionesMensajes() {
+        onChildAdded(ref(db, "mensajes"), function (snapshot) {
+            const data = snapshot.val();
             
-            listaEmociones.forEach(emocion => {
-                const contador = contadores[emocion.value] || 0;
-                const div = document.createElement("div");
-                div.className = "contador-item";
-                div.innerHTML = `
-                    <span class="contador-label">${emocion.label}:</span>
-                    <span class="contador-valor">${contador}</span>
-                `;
-                contenedor.appendChild(div);
+            // Solo enviar notificación por correo si:
+            // 1. El mensaje es de Estrellita
+            // 2. El usuario actual no es el administrador (porque si lo es, ya vería el mensaje)
+            if (data.usuario === "Estrellita" && usuarioActual !== USUARIO_ADMIN) {
+                enviarCorreo(data.usuario, data.mensaje, data.fecha);
+            }
+        });
+    }
+
+    // Lista de emociones para los contadores
+    const listaEmociones = [
+        { value: "feliz", label: "Feliz 😊" },
+        { value: "triste", label: "Triste 😔" },
+        { value: "estresada", label: "Estresada 😵‍💫" },
+        { value: "cansada", label: "Cansada 🥱" },
+        { value: "extrañandote", label: "Extrañándote 🥺" },
+        { value: "pensandoEnTi", label: "Pensando en ti 💭❤️" },
+        { value: "conGanasDeVerte", label: "Con ganas de verte 🥰" },
+        { value: "conGanasDePensar", label: "Con ganas de 'pensar' 😏" }
+    ];
+
+    // Función para extraer el nombre de usuario del email
+    function obtenerNombreUsuario(email) {
+        return email.split('@')[0].toLowerCase();
+    }
+
+    // Función para obtener el nombre que se mostrará según el usuario
+    function obtenerNombreMostrado(email) {
+        const usuario = obtenerNombreUsuario(email);
+        
+        if (usuario === USUARIO_ESTRELLITA) {
+            return "Estrellita";
+        } else {
+            return "Luna";
+        }
+    }
+    
+    // Registrar acceso en Firebase - SOLO PARA ESTRELLITA
+    function registrarAcceso(usuario) {
+        // Solo registrar si es Estrellita
+        if (usuario === USUARIO_ESTRELLITA) {
+            const accessLogRef = ref(db, "accesos");
+            push(accessLogRef, {
+                usuario: usuario,
+                timestamp: serverTimestamp(),
+                fecha: new Date().toLocaleString(),
+                inicio: new Date().getTime() // Guardar timestamp exacto para calcular duración
             });
-        }
-
-        // Incrementar contador de emoción (solo si es la cuenta de Estrellita)
-        window.incrementarContadorEmocion = function(emocion) {
-            // Solo incrementar si es la cuenta de Estrellita
-            if (usuarioActual === USUARIO_ESTRELLITA) {
-                // 1. Incrementar el contador general como antes
-                const contadorRef = ref(db, `contadores/${emocion}`);
-                
-                get(contadorRef).then((snapshot) => {
-                    const valorActual = snapshot.exists() ? snapshot.val() : 0;
-                    set(contadorRef, valorActual + 1);
-                });
-                
-                // 2. Registrar un nuevo evento en el historial de emociones
-                const historialEmocionesRef = ref(db, "historialEmociones");
-                push(historialEmocionesRef, {
-                    emocion: emocion,
-                    usuario: usuarioActual,
-                    timestamp: serverTimestamp(),
-                    fecha: new Date().toLocaleString()
-                });
-            }
-        };
-        
-        // Función para inicializar el historial de emociones
-        function inicializarHistorialEmociones() {
-            console.log("Inicializando historial de emociones para administrador");
             
-            // Escuchar cambios en el historial de emociones
-            const historialRef = ref(db, "historialEmociones");
-            onValue(historialRef, (snapshot) => {
+            // Guardar tiempo de inicio para calcular duración
+            loginTime = new Date().getTime();
+        }
+    }
+    
+    // Registrar tiempo de sesión al cerrar sesión - SOLO PARA ESTRELLITA
+    function registrarTiempoSesion(usuario) {
+        if (usuario === USUARIO_ESTRELLITA && loginTime !== null) {
+            const sessionEndTime = new Date().getTime();
+            const sessionDuration = (sessionEndTime - loginTime) / 1000 / 60; // Duración en minutos
+            
+            const sessionLogRef = ref(db, "tiempoSesiones");
+            push(sessionLogRef, {
+                usuario: usuario,
+                timestamp: serverTimestamp(),
+                fecha: new Date().toLocaleString(),
+                duracionMinutos: sessionDuration.toFixed(2),
+                inicio: new Date(loginTime).toLocaleString(),
+                fin: new Date().toLocaleString()
+            });
+            
+            // Resetear loginTime
+            loginTime = null;
+        }
+    }
+
+    // Inicializar contadores de emociones
+    function inicializarContadoresEmociones() {
+        const contadoresRef = ref(db, "contadores");
+        
+        // Verificar si ya existen contadores
+        get(contadoresRef).then((snapshot) => {
+            if (!snapshot.exists()) {
+                // Si no existen, inicializar todos a cero
+                const contadoresIniciales = {};
+                listaEmociones.forEach(emocion => {
+                    contadoresIniciales[emocion.value] = 0;
+                });
+                
+                set(contadoresRef, contadoresIniciales);
+            }
+        });
+        
+        // Verificar si el usuario actual debe ver los contadores
+        const usuario = obtenerNombreUsuario(auth.currentUser.email);
+        usuarioActual = usuario; // Asegurarnos de que usuarioActual esté actualizado
+        
+        // Actualizar la información de debug para el administrador
+        actualizarInfoAdmin(usuario);
+        
+        const contadorElement = document.getElementById("contador-emociones");
+        const historialElement = document.getElementById("historial-emociones");
+        
+        // Solo mostrar los contadores y el historial al usuario administrador (tú)
+        if (usuario === USUARIO_ADMIN) {
+            console.log("¡Usuario administrador detectado!", usuario);
+            
+            // Mostrar el contador
+            contadorElement.style.display = "block";
+            
+            // Mostrar el historial
+            historialElement.style.display = "block";
+            
+            // Actualizar la UI cuando cambien los contadores
+            onValue(contadoresRef, (snapshot) => {
                 if (snapshot.exists()) {
-                    actualizarUIHistorial(snapshot.val());
+                    const contadores = snapshot.val();
+                    actualizarUIContadores(contadores);
                 }
             });
+            
+            // Inicializar el historial de emociones
+            inicializarHistorialEmociones();
+        } else {
+            console.log("Usuario no administrador:", usuario);
+            // Ocultar el contador y el historial para otros usuarios (incluido Estrellita)
+            contadorElement.style.display = "none";
+            historialElement.style.display = "none";
         }
+    }
+    
+    // Función para actualizar la información de debug para el administrador
+    function actualizarInfoAdmin(usuario) {
+        const adminInfoPanel = document.getElementById("admin-info");
+        const usuarioNombre = document.getElementById("usuario-nombre");
+        const adminStatus = document.getElementById("admin-status");
+        
+        // Mostrar información solo para posible depuración
+        if (usuario === USUARIO_ADMIN) {
+            adminInfoPanel.style.display = "block";
+            usuarioNombre.textContent = usuario;
+            adminStatus.textContent = "Sí";
+            adminStatus.style.color = "green";
+        } else {
+            adminInfoPanel.style.display = "none";
+        }
+    }
 
-        // Función para actualizar la UI con el historial de emociones
-        function actualizarUIHistorial(historial) {
-            const contenedor = document.getElementById("historial-container");
-            contenedor.innerHTML = "";
+    // Actualizar la interfaz de usuario con los contadores
+    function actualizarUIContadores(contadores) {
+        const contenedor = document.getElementById("contadores-container");
+        contenedor.innerHTML = "";
+        
+        listaEmociones.forEach(emocion => {
+            const contador = contadores[emocion.value] || 0;
+            const div = document.createElement("div");
+            div.className = "contador-item";
+            div.innerHTML = `
+                <span class="contador-label">${emocion.label}:</span>
+                <span class="contador-valor">${contador}</span>
+            `;
+            contenedor.appendChild(div);
+        });
+    }
+
+    // Incrementar contador de emoción (solo si es la cuenta de Estrellita)
+    window.incrementarContadorEmocion = function(emocion) {
+        // Solo incrementar si es la cuenta de Estrellita
+        if (usuarioActual === USUARIO_ESTRELLITA) {
+            // 1. Incrementar el contador general como antes
+            const contadorRef = ref(db, `contadores/${emocion}`);
             
-            // Convertir el objeto en un array para poder ordenarlo
-            const historialArray = Object.entries(historial).map(([key, value]) => ({
-                id: key,
-                ...value
-            }));
-            
-            // Ordenar por timestamp (más reciente primero)
-            historialArray.sort((a, b) => {
-                return new Date(b.fecha) - new Date(a.fecha);
+            get(contadorRef).then((snapshot) => {
+                const valorActual = snapshot.exists() ? snapshot.val() : 0;
+                set(contadorRef, valorActual + 1);
             });
             
-            // Mostrar los últimos 10 eventos
-            historialArray.slice(0, 10).forEach(evento => {
-                const nombreEmocion = listaEmociones.find(e => e.value === evento.emocion)?.label || evento.emocion;
-                
-                const div = document.createElement("div");
-                div.className = "historial-item";
-                div.innerHTML = `
-                    <span>${nombreEmocion}</span>
-                    <span style="float: right; font-style: italic; font-size: 0.9em;">${evento.fecha}</span>
-                `;
-                contenedor.appendChild(div);
+            // 2. Registrar un nuevo evento en el historial de emociones
+            const historialEmocionesRef = ref(db, "historialEmociones");
+            push(historialEmocionesRef, {
+                emocion: emocion,
+                usuario: usuarioActual,
+                timestamp: serverTimestamp(),
+                fecha: new Date().toLocaleString()
             });
         }
-
-        // Mostrar/Ocultar contraseña
-        document.getElementById("togglePassword").addEventListener("click", function () {
-            const passwordInput = document.getElementById("password");
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                this.innerText = "🙈";
-            } else {
-                passwordInput.type = "password";
-                this.innerText = "👁";
+    };
+    
+    // Función para inicializar el historial de emociones
+    function inicializarHistorialEmociones() {
+        console.log("Inicializando historial de emociones para administrador");
+        
+        // Escuchar cambios en el historial de emociones
+        const historialRef = ref(db, "historialEmociones");
+        onValue(historialRef, (snapshot) => {
+            if (snapshot.exists()) {
+                actualizarUIHistorial(snapshot.val());
             }
         });
+    }
 
-        function resetInactivityTimer() {
-            clearTimeout(inactivityTimer);
-            inactivityTimer = setTimeout(() => {
-                // Registrar tiempo de sesión antes de cerrar
-                registrarTiempoSesion(usuarioActual);
-                
-                signOut(auth).then(() => {
-                    document.getElementById("contenido").style.display = "none";
-                    document.getElementById("loginContainer").style.display = "block";
-                    alert("Sesión cerrada por inactividad");
-                });
-            }, 5 * 60 * 1000); // 5 minutos
+    // Función para actualizar la UI con el historial de emociones
+    function actualizarUIHistorial(historial) {
+        const contenedor = document.getElementById("historial-container");
+        contenedor.innerHTML = "";
+        
+        // Convertir el objeto en un array para poder ordenarlo
+        const historialArray = Object.entries(historial).map(([key, value]) => ({
+            id: key,
+            ...value
+        }));
+        
+        // Ordenar por timestamp (más reciente primero)
+        historialArray.sort((a, b) => {
+            return new Date(b.fecha) - new Date(a.fecha);
+        });
+        
+        // Mostrar los últimos 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 eventos
+        historialArray.slice(0, 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000).forEach(evento => {
+            const nombreEmocion = listaEmociones.find(e => e.value === evento.emocion)?.label || evento.emocion;
+            
+            const div = document.createElement("div");
+            div.className = "historial-item";
+            div.innerHTML = `
+                <span>${nombreEmocion}</span>
+                <span style="float: right; font-style: italic; font-size: 0.9em;">${evento.fecha}</span>
+            `;
+            contenedor.appendChild(div);
+        });
+    }
+
+    // Mostrar/Ocultar contraseña
+    document.getElementById("togglePassword").addEventListener("click", function () {
+        const passwordInput = document.getElementById("password");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            this.innerText = "🙈";
+        } else {
+            passwordInput.type = "password";
+            this.innerText = "👁";
         }
+    });
 
-        // Iniciar sesión
-        document.getElementById("login").addEventListener("click", function () {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            const loginError = document.getElementById("loginError");
-            
-            loginError.textContent = "";
-            
-            signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                document.getElementById("loginContainer").style.display = "none";
-                document.getElementById("contenido").style.display = "block";
-                resetInactivityTimer();
-                
-                // Guardar el nombre de usuario actual (sin dominio)
-                usuarioActual = obtenerNombreUsuario(userCredential.user.email);
-                console.log("Inicio de sesión exitoso. Usuario:", usuarioActual);
-                
-                // Registrar acceso en Firebase (solo para Estrellita)
-                registrarAcceso(usuarioActual);
-                
-                // Inicializar contadores (solo visibles para el admin)
-                inicializarContadoresEmociones();
-            })
-            .catch((error) => {
-                switch(error.code) {
-                    case 'auth/invalid-email':
-                        loginError.textContent = "El correo electrónico no es válido.";
-                        break;
-                    case 'auth/user-not-found':
-                        loginError.textContent = "No se encontró un usuario con este correo.";
-                        break;
-                    case 'auth/wrong-password':
-                        loginError.textContent = "La contraseña es incorrecta.";
-                        break;
-                    case 'auth/too-many-requests':
-                        loginError.textContent = "Demasiados intentos. Intenta más tarde.";
-                        break;
-                    default:
-                        loginError.textContent = "Error al iniciar sesión.";
-                }
-            });
-        });
-
-        // Evento para el email también
-        document.getElementById("email").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                document.getElementById("password").focus();
-            }
-        });
-
-        // Cerrar sesión
-        document.getElementById("logout").addEventListener("click", function () {
-            // Registrar tiempo de sesión antes de cerrar (solo para Estrellita)
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+            // Registrar tiempo de sesión antes de cerrar
             registrarTiempoSesion(usuarioActual);
             
             signOut(auth).then(() => {
                 document.getElementById("contenido").style.display = "none";
                 document.getElementById("loginContainer").style.display = "block";
-                usuarioActual = "";
-            }).catch((error) => {
-                alert("Error al cerrar sesión: " + error.message);
+                alert("Sesión cerrada por inactividad");
             });
-        });
+        }, 5 * 60 * 1000); // 5 minutos
+    }
 
-        // Mantener sesión iniciada
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById("loginContainer").style.display = "none";
-                document.getElementById("contenido").style.display = "block";
-                resetInactivityTimer();
-                
-                // Guardar el nombre de usuario actual (sin dominio)
-                usuarioActual = obtenerNombreUsuario(user.email);
-                console.log("Usuario detectado en cambio de estado:", usuarioActual);
-                
-                // Registrar acceso (solo para Estrellita)
-                registrarAcceso(usuarioActual);
-                
-                // Inicializar contadores (solo visibles para el admin)
-                inicializarContadoresEmociones();
-            } else {
-                document.getElementById("loginContainer").style.display = "block";
-                document.getElementById("contenido").style.display = "none";
-                usuarioActual = "";
-                loginTime = null; // Resetear tiempo de inicio de sesión
-            }
-        });
+// Iniciar sesión
+document.getElementById("login").addEventListener("click", function () {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const loginError = document.getElementById("loginError");
+    
+    loginError.textContent = "";
+    
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+        document.getElementById("loginContainer").style.display = "none";
+        document.getElementById("contenido").style.display = "block";
+        resetInactivityTimer();
+        
+        // Guardar el nombre de usuario actual (sin dominio)
+        usuarioActual = obtenerNombreUsuario(userCredential.user.email);
+        console.log("Inicio de sesión exitoso. Usuario:", usuarioActual);
+        
+        // Registrar acceso en Firebase (solo para Estrellita)
+        registrarAcceso(usuarioActual);
+        
+        // Inicializar contadores (solo visibles para el admin)
+        inicializarContadoresEmociones();
+    })
+    .catch((error) => {
+        switch(error.code) {
+            case 'auth/invalid-email':
+                loginError.textContent = "El correo electrónico no es válido.";
+                break;
+            case 'auth/user-not-found':
+                loginError.textContent = "No se encontró un usuario con este correo.";
+                break;
+            case 'auth/wrong-password':
+                loginError.textContent = "La contraseña es incorrecta.";
+                break;
+            case 'auth/too-many-requests':
+                loginError.textContent = "Demasiados intentos. Intenta más tarde.";
+                break;
+            default:
+                loginError.textContent = "Error al iniciar sesión.";
+        }
+    });
+});
 
-        // Detectar actividad del usuario
-        document.addEventListener("mousemove", resetInactivityTimer);
-        document.addEventListener("keydown", resetInactivityTimer);
+// Evento para el email también
+document.getElementById("email").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("password").focus();
+    }
+});
 
-        // Enviar mensaje SOLO CON BOTÓN (ya no con enter)
-        document.getElementById("mensajeInput").addEventListener("keydown", function(event) {
-            // Ya no hacer nada especial con Enter (comportamiento predeterminado de textarea)
-            // Enter simplemente agregará un salto de línea
-        });
+// Cerrar sesión
+document.getElementById("logout").addEventListener("click", function () {
+    // Registrar tiempo de sesión antes de cerrar (solo para Estrellita)
+    registrarTiempoSesion(usuarioActual);
+    
+    signOut(auth).then(() => {
+        document.getElementById("contenido").style.display = "none";
+        document.getElementById("loginContainer").style.display = "block";
+        usuarioActual = "";
+    }).catch((error) => {
+        alert("Error al cerrar sesión: " + error.message);
+    });
+});
 
-        // Enviar mensaje
-        document.getElementById("enviarMensaje").addEventListener("click", function () {
-            const user = auth.currentUser;
-            if (!user) return;
+// Mantener sesión iniciada
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        document.getElementById("loginContainer").style.display = "none";
+        document.getElementById("contenido").style.display = "block";
+        resetInactivityTimer();
+        
+        // Guardar el nombre de usuario actual (sin dominio)
+        usuarioActual = obtenerNombreUsuario(user.email);
+        console.log("Usuario detectado en cambio de estado:", usuarioActual);
+        
+        // Registrar acceso (solo para Estrellita)
+        registrarAcceso(usuarioActual);
+        
+        // Inicializar contadores (solo visibles para el admin)
+        inicializarContadoresEmociones();
+    } else {
+        document.getElementById("loginContainer").style.display = "block";
+        document.getElementById("contenido").style.display = "none";
+        usuarioActual = "";
+        loginTime = null; // Resetear tiempo de inicio de sesión
+    }
+});
 
-            const mensajesRef = ref(db, "mensajes");
-            const mensaje = document.getElementById("mensajeInput").value.trim();
+// Detectar actividad del usuario
+document.addEventListener("mousemove", resetInactivityTimer);
+document.addEventListener("keydown", resetInactivityTimer);
 
-            if (mensaje) {
-                push(mensajesRef, {
-                    // Guardar el email completo por si se necesita en el futuro
-                    emailCompleto: user.email,
-                    // Mostrar "Estrellita" o "Luna" según el usuario
-                    usuario: obtenerNombreMostrado(user.email),
-                    mensaje: mensaje,
-                    fecha: new Date().toLocaleString()
+// Enviar mensaje SOLO CON BOTÓN (ya no con enter)
+document.getElementById("mensajeInput").addEventListener("keydown", function(event) {
+    // Ya no hacer nada especial con Enter (comportamiento predeterminado de textarea)
+    // Enter simplemente agregará un salto de línea
+});
+
+// Modificar CSS para el chat - sin invertir dirección
+function agregarEstiloChat() {
+    // Crear elemento de estilo
+    const style = document.createElement('style');
+    style.textContent = `
+        #chat {
+            display: flex;
+            flex-direction: column; /* Normal direction */
+            overflow-y: auto;
+            height: 70vh;
+            padding: 10px;
+        }
+        
+        .mensaje-item {
+            margin-bottom: 8px;
+        }
+    `;
+    
+    // Agregar al head del documento
+    document.head.appendChild(style);
+}
+
+// Variable para almacenar mensajes ya mostrados
+let mensajesMostrados = new Set();
+
+// Función para mostrar un mensaje en el chat - coloca al inicio del contenedor
+function mostrarMensaje(data) {
+    // Si este mensaje ya fue mostrado, no duplicar
+    if (data.key && mensajesMostrados.has(data.key)) {
+        return;
+    }
+    
+    const chat = document.getElementById("chat");
+    const mensajeElemento = document.createElement("div");
+    mensajeElemento.classList.add("mensaje-item");
+    
+    // Registrar este mensaje como mostrado
+    if (data.key) {
+        mensajesMostrados.add(data.key);
+        mensajeElemento.setAttribute("data-id", data.key);
+    }
+    
+    // Usar el nombre de usuario que viene en el mensaje
+    const nombreMostrado = data.usuario || "Usuario";
+    
+    // Preservar saltos de línea en el mensaje
+    const mensajeFormateado = data.mensaje.replace(/\n/g, '<br>');
+    
+    // Sin mostrar la hora de envío
+    mensajeElemento.innerHTML = `<p><strong>${nombreMostrado}:</strong> ${mensajeFormateado}</p>`;
+    
+    // Insertar al inicio del chat (como primer hijo)
+    if (chat.firstChild) {
+        chat.insertBefore(mensajeElemento, chat.firstChild);
+    } else {
+        chat.appendChild(mensajeElemento);
+    }
+}
+
+// Función para cargar los mensajes iniciales con ordenamiento explícito
+function cargarMensajesIniciales() {
+    const mensajesRef = ref(db, "mensajes");
+    
+    // Limpiar primero el conjunto de mensajes mostrados
+    mensajesMostrados.clear();
+    
+    // Obtener todos los mensajes existentes
+    get(mensajesRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            // Convertir a array para poder ordenarlos
+            const mensajes = [];
+            snapshot.forEach((childSnapshot) => {
+                mensajes.push({
+                    key: childSnapshot.key,
+                    ...childSnapshot.val()
                 });
-
-                document.getElementById("mensajeInput").value = ""; // Limpiar input
-            }
-        });
-
-        // Recibir mensajes
-        onChildAdded(ref(db, "mensajes"), function (snapshot) {
-            const data = snapshot.val();
+            });
+            
+            // Ordenar del más reciente al más antiguo (según la fecha)
+            mensajes.sort((a, b) => {
+                return new Date(b.fecha) - new Date(a.fecha);
+            });
+            
+            // Limpiar el chat antes de mostrar los mensajes
             const chat = document.getElementById("chat");
-            const mensajeElemento = document.createElement("div");
-            mensajeElemento.classList.add("mensaje-item");
+            chat.innerHTML = "";
             
-            // Usar el nombre de usuario que viene en el mensaje
-            // Si es un mensaje antiguo sin "usuario", usar un valor predeterminado
-            const nombreMostrado = data.usuario || "Usuario";
+            // Mostrar los mensajes en orden (más recientes primero)
+            for (let i = 0; i < mensajes.length; i++) {
+                mostrarMensaje(mensajes[i]);
+            }
             
-            // Preservar saltos de línea en el mensaje
-            const mensajeFormateado = data.mensaje.replace(/\n/g, '<br>');
-            
-            mensajeElemento.innerHTML = `<p><strong>${nombreMostrado}:</strong> ${mensajeFormateado} <small>(${data.fecha})</small></p>`;
-            
-            chat.appendChild(mensajeElemento);
-            
-            // Scroll hacia abajo para mostrar el último mensaje
-            chat.scrollTop = chat.scrollHeight;
-        });
+            // Marcar la carga inicial como completada
+            window.cargaInicialCompletada = true;
+        } else {
+            window.cargaInicialCompletada = true;
+        }
+    }).catch(error => {
+        console.error("Error al cargar mensajes:", error);
+        window.cargaInicialCompletada = true;
+    });
+}
 
-        // Al cerrar la ventana o abandonar la página, registrar la duración de la sesión
-        window.addEventListener('beforeunload', function() {
-            // Registrar tiempo de sesión si es Estrellita
-            registrarTiempoSesion(usuarioActual);
+// Inicializar receptor de mensajes
+function inicializarReceptorMensajes() {
+    // Referencia a la colección de mensajes
+    const mensajesRef = ref(db, "mensajes");
+    
+    // Marcar que no hemos terminado la carga inicial
+    window.cargaInicialCompletada = false;
+    
+    // Primero cargamos los mensajes existentes en orden invertido
+    cargarMensajesIniciales();
+    
+    // Escuchar NUEVOS mensajes que se agregan
+    onChildAdded(mensajesRef, function (snapshot) {
+        // Solo procesar si ya terminamos la carga inicial
+        if (window.cargaInicialCompletada) {
+            const data = snapshot.val();
+            // Asegurar que tengamos la clave del mensaje
+            mostrarMensaje({
+                key: snapshot.key,
+                ...data
+            });
+        }
+    });
+}
+
+// Enviar mensaje
+document.getElementById("enviarMensaje").addEventListener("click", function () {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const mensajesRef = ref(db, "mensajes");
+    const mensaje = document.getElementById("mensajeInput").value.trim();
+
+    if (mensaje) {
+        // Crear el objeto de mensaje
+        const nuevoMensaje = {
+            emailCompleto: user.email,
+            usuario: obtenerNombreMostrado(user.email),
+            mensaje: mensaje,
+            fecha: new Date().toLocaleString()
+        };
+        
+        // Limpiar input antes de enviar para mejorar UX
+        document.getElementById("mensajeInput").value = "";
+        
+        // Enviar a Firebase y mostrar inmediatamente
+        const newRef = push(mensajesRef);
+        const messageId = newRef.key;
+        
+        // Mostrar el mensaje localmente primero (para respuesta inmediata)
+        mostrarMensaje({
+            key: messageId,
+            ...nuevoMensaje
         });
-    </script>
+        
+        // Luego guardarlo en Firebase
+        set(newRef, nuevoMensaje)
+            .catch((error) => {
+                console.error("Error al enviar mensaje:", error);
+            });
+    }
+});
+
+// Al cerrar la ventana o abandonar la página, registrar la duración de la sesión
+window.addEventListener('beforeunload', function() {
+    // Registrar tiempo de sesión si es Estrellita
+    registrarTiempoSesion(usuarioActual);
+});
+
+// Iniciar funcionalidades al cargar el documento
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar Set para seguimiento de mensajes
+    mensajesMostrados = new Set();
+    
+    // Agregar estilos CSS personalizados
+    agregarEstiloChat();
+    
+    // Inicializar funcionalidades
+    inicializarEstadoConexion();
+    inicializarNotificacionesMensajes();
+    inicializarReceptorMensajes();
+});
+  </script>
 </body>
 </html>
