@@ -10,28 +10,32 @@
             text-align: center;
             background-color: #fce4ec;
             color: #333;
+            margin: 0; /* Eliminar márgenes por defecto */
+            padding: 10px; /* Añadir un poco de padding general */
         }
         h1 {
             color: #d81b60;
+            margin: 10px 0;
         }
         select, button, input {
-            padding: 10px;
-            margin: 10px;
+            padding: 8px;
+            margin: 5px;
             font-size: 16px;
         }
         #mensaje {
             font-size: 20px;
-            margin-top: 20px;
+            margin-top: 15px;
             font-weight: bold;
             color: #880e4f;
         }
         img {
-            margin-top: 20px;
-            width: 300px;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 300px;
         }
         .mensaje-item {
             text-align: left;
-            margin: 10px;
+            margin: 8px 0;
             padding: 5px;
             background-color: #f8f8f8;
             border-radius: 5px;
@@ -49,21 +53,21 @@
         }
         #togglePassword {
             position: absolute;
-            right: 15px;
-            top: 30%;
+            right: 10px;
+            top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
             cursor: pointer;
         }
         .contador-emociones {
-            margin: 20px auto;
+            margin: 15px auto;
             text-align: left;
             max-width: 400px;
             background-color: #f8bbd0;
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
-            display: none; /* Oculto por defecto */
+            display: none;
         }
         .contador-item {
             margin: 5px 0;
@@ -85,6 +89,8 @@
         #mensajeInput {
             width: 70%;
             resize: vertical;
+            min-height: 40px;
+            max-height: 100px;
         }
         .historial-item {
             margin: 5px 0;
@@ -101,26 +107,72 @@
             border-radius: 5px;
             display: none;
         }
-        #chat {
-            display: flex;
-            flex-direction: column; /* Orden natural: más antiguo arriba, más reciente abajo */
-            overflow-y: auto;
-            height: 70vh;
-            padding: 10px;
-        }
-        .mensaje-item {
-            margin-bottom: 8px;
-        }
         .chat-container {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+        }
+        #chat {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            height: 60vh; /* Reducido para dejar espacio en móviles */
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .input-container {
             display: flex;
             justify-content: center;
+            align-items: center;
             width: 100%;
-            margin-top: 10px;
+            margin-top: 5px; /* Reducir margen en móviles */
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        #enviarMensaje {
+            margin-left: 5px;
+        }
+
+        /* Media Queries para móviles */
+        @media (max-width: 600px) {
+            body {
+                padding: 5px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            select, button, input {
+                padding: 6px;
+                margin: 3px;
+                font-size: 14px;
+            }
+            #mensaje {
+                font-size: 18px;
+            }
+            #chat {
+                height: 50vh; /* Menor altura en móviles */
+            }
+            #mensajeInput {
+                width: 65%; /* Ajustar ancho en móviles */
+                min-height: 30px;
+                font-size: 14px;
+            }
+            #enviarMensaje {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+            .input-container {
+                margin-top: 3px;
+            }
+            .contador-emociones {
+                max-width: 100%;
+                padding: 8px;
+            }
+            #historial-container {
+                max-height: 150px;
+            }
         }
     </style>
 </head>
@@ -640,8 +692,8 @@
             const mensajeSanitizado = sanitizarTexto(data.mensaje);
             const mensajeFormateado = mensajeSanitizado.replace(/\n/g, '<br>');
             mensajeElemento.innerHTML = `<p><strong>${nombreMostrado}:</strong> ${mensajeFormateado}</p>`;
-            chat.appendChild(mensajeElemento); // Añadir al final
-            chat.scrollTop = chat.scrollHeight; // Desplazar al final
+            chat.appendChild(mensajeElemento);
+            chat.scrollTop = chat.scrollHeight;
         }
 
         function cargarMensajesIniciales() {
@@ -660,7 +712,6 @@
                         });
                     });
 
-                    // Ordenar del más antiguo al más reciente
                     mensajes.sort((a, b) => {
                         if (a.timestamp && b.timestamp) return a.timestamp - b.timestamp;
                         return new Date(a.fecha) - new Date(b.fecha);
