@@ -10,8 +10,8 @@
             text-align: center;
             background-color: #fce4ec;
             color: #333;
-            margin: 0; /* Eliminar márgenes por defecto */
-            padding: 10px; /* Añadir un poco de padding general */
+            margin: 0;
+            padding: 10px;
         }
         h1 {
             color: #d81b60;
@@ -28,10 +28,31 @@
             font-weight: bold;
             color: #880e4f;
         }
-        img {
+        .imagenes-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin-top: 15px;
+        }
+        .imagen-item {
+            margin-bottom: 15px;
+        }
+        .imagen-item img {
             width: 100%;
             max-width: 300px;
+            border-radius: 5px;
+        }
+        .imagen-emojis {
+            margin-top: 5px;
+            font-size: 20px;
+        }
+        .imagen-emojis a {
+            text-decoration: none;
+            color: #d81b60;
+            margin-left: 10px;
+        }
+        .imagen-emojis a:hover {
+            color: #880e4f;
         }
         .mensaje-item {
             text-align: left;
@@ -117,7 +138,7 @@
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-            height: 60vh; /* Reducido para dejar espacio en móviles */
+            height: 60vh;
             padding: 10px;
             width: 100%;
             box-sizing: border-box;
@@ -127,7 +148,7 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            margin-top: 5px; /* Reducir margen en móviles */
+            margin-top: 5px;
             padding: 0 10px;
             box-sizing: border-box;
         }
@@ -152,10 +173,10 @@
                 font-size: 18px;
             }
             #chat {
-                height: 50vh; /* Menor altura en móviles */
+                height: 50vh;
             }
             #mensajeInput {
-                width: 65%; /* Ajustar ancho en móviles */
+                width: 65%;
                 min-height: 30px;
                 font-size: 14px;
             }
@@ -172,6 +193,15 @@
             }
             #historial-container {
                 max-height: 150px;
+            }
+            .imagen-item {
+                margin-bottom: 10px;
+            }
+            .imagen-item img {
+                max-width: 250px;
+            }
+            .imagen-emojis {
+                font-size: 18px;
             }
         }
     </style>
@@ -229,7 +259,22 @@
             </div>
         </div>
 
-        <img src="https://i.imgur.com/8jWcK6P.png" alt="Piano con notas musicales">
+        <div class="imagenes-container">
+            <div class="imagen-item">
+                <img src="https://i.imgur.com/8jWcK6P.png" alt="Piano con notas musicales">
+                <div class="imagen-emojis">
+                    <span>❤️</span>
+                    <a href="https://www.youtube.com/watch?v=Chs2bmqzyUs&pp=ygU8a2lzcyBtZSBvbmNlIGFuZCBraXNzIG1lIHR3aWNlIGFuZCBraXNzIG1lIG9uY2UgYWdhaW4gbHlyaWNz">🎵❤️</a>
+                </div>
+            </div>
+            <div class="imagen-item">
+                <img src="https://i.imgur.com/qO3JLoN.jpeg" alt="Estrellita especial">
+                <div class="imagen-emojis">
+                    <span>❤️</span>
+                    <a href="https://www.youtube.com/watch?v=H-H8U6As-wg&pp=ygUPc28gdGhpcyBpcyBsb3Zl">🎵❤️</a>
+                </div>
+            </div>
+        </div>
 
         <h2>Chat con Estrellita 💬</h2>
         <div class="chat-container">
@@ -476,6 +521,8 @@
                     });
                     set(contadoresRef, contadoresIniciales);
                 }
+            }).catch(error => {
+                console.error("Error al inicializar contadores:", error);
             });
 
             const usuario = obtenerNombreUsuario(auth.currentUser.email);
@@ -539,6 +586,8 @@
                 get(contadorRef).then((snapshot) => {
                     const valorActual = snapshot.exists() ? snapshot.val() : 0;
                     set(contadorRef, valorActual + 1);
+                }).catch(error => {
+                    console.error("Error al incrementar contador:", error);
                 });
 
                 const historialEmocionesRef = ref(db, "historialEmociones");
@@ -547,6 +596,8 @@
                     usuario: usuarioActual,
                     timestamp: serverTimestamp(),
                     fecha: new Date().toLocaleString()
+                }).catch(error => {
+                    console.error("Error al registrar historial:", error);
                 });
             }
         };
@@ -622,12 +673,13 @@
                 inicializarContadoresEmociones();
             })
             .catch((error) => {
+                console.error("Error al iniciar sesión:", error);
                 switch(error.code) {
                     case 'auth/invalid-email': loginError.textContent = "El correo electrónico no es válido."; break;
                     case 'auth/user-not-found': loginError.textContent = "No se encontró un usuario con este correo."; break;
                     case 'auth/wrong-password': loginError.textContent = "La contraseña es incorrecta."; break;
                     case 'auth/too-many-requests': loginError.textContent = "Demasiados intentos. Intenta más tarde."; break;
-                    default: loginError.textContent = "Error al iniciar sesión.";
+                    default: loginError.textContent = "Error al iniciar sesión: " + error.message;
                 }
             });
         });
@@ -646,6 +698,7 @@
                 document.getElementById("loginContainer").style.display = "block";
                 usuarioActual = "";
             }).catch((error) => {
+                console.error("Error al cerrar sesión:", error);
                 alert("Error al cerrar sesión: " + error.message);
             });
         });
@@ -792,6 +845,5 @@
             inicializarReceptorMensajes();
         });
     </script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'91dc3dda6b4ab0e5',t:'MTc0MTU0MDgxMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
