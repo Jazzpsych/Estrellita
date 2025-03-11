@@ -22,11 +22,15 @@
             margin: 5px;
             font-size: 16px;
         }
-        #mensaje {
+        #mensaje, #poema {
             font-size: 20px;
             margin-top: 15px;
             font-weight: bold;
             color: #880e4f;
+        }
+        #poema {
+            font-style: italic;
+            white-space: pre-wrap; /* Respeta saltos de línea en poemas */
         }
         .imagenes-container {
             display: flex;
@@ -169,7 +173,7 @@
                 margin: 3px;
                 font-size: 14px;
             }
-            #mensaje {
+            #mensaje, #poema {
                 font-size: 18px;
             }
             #chat {
@@ -242,7 +246,9 @@
             <option value="conGanasDePensar">Con ganas de "pensar" 😏</option>
         </select>
         <button onclick="mostrarMensaje()">Ver mensaje</button>
+        <button onclick="mostrarPoema()">Poema del día</button>
         <p id="mensaje"></p>
+        <p id="poema"></p>
 
         <div id="contador-emociones" class="contador-emociones">
             <h3>Contador de Emociones ❤️</h3>
@@ -264,14 +270,14 @@
                 <img src="https://i.imgur.com/8jWcK6P.png" alt="Piano con notas musicales">
                 <div class="imagen-emojis">
                     <span>❤️</span>
-                    <a href="https://www.youtube.com/watch?v=Chs2bmqzyUs&pp=ygU8a2lzcyBtZSBvbmNlIGFuZCBraXNzIG1lIHR3aWNlIGFuZCBraXNzIG1lIG9uY2UgYWdhaW4gbHlyaWNz">🎵❤️</a>
+                    <a href="https://www.youtube.com/watch?v=Chs2bmqzyUs&pp=ygU8a2lzcyBtZSBvbmNlIGFuZCBraXNzIG1lIHR3aWNlIGFuZCBraXNzIG1lIG9uY2UgYWdhaW4gbHlyaWNz" target="_blank">🎵❤️</a>
                 </div>
             </div>
             <div class="imagen-item">
                 <img src="https://i.imgur.com/qO3JLoN.jpeg" alt="Estrellita especial">
                 <div class="imagen-emojis">
                     <span>❤️</span>
-                    <a href="https://www.youtube.com/watch?v=H-H8U6As-wg&pp=ygUPc28gdGhpcyBpcyBsb3Zl">🎵❤️</a>
+                    <a href="https://www.youtube.com/watch?v=H-H8U6As-wg&pp=ygUPc28gdGhpcyBpcyBsb3Zl" target="_blank">🎵❤️</a>
                 </div>
             </div>
         </div>
@@ -330,6 +336,40 @@
                 "Sabes que cuando dices eso, solo me dan más ganas de verte... 😏🔥"
             ]
         };
+
+        // Poemas (3 iniciales, repetidos para 365 días)
+        const poemas = [
+            `ENTRE NÚMEROS Y LETRAS\n\nEntre números y letras\nsurgió una rosa en una libreta.\nEntre ecuaciones y canciones\nsurgieron nuestros amores.`,
+            `TOMA MI MANO\n\nToma mi mano,\ny acompáñame al camino\nde la vida.\n\nToma mi mano,\ny recorramos juntos la senda,\nde por vida.`,
+            `ES IMPOSIBLE OCULTARTE\n\nEs imposible ocultar que estoy enamorado\n¿Cómo esconder lo tanto que te amo?\nPuedo intentar moderarme con todas mis ganas\nPero resulta que tu encanto siempre me gana.`
+        ];
+        while (poemas.length < 365) {
+            poemas.push(poemas[Math.floor(Math.random() * 3)]);
+        }
+
+        function obtenerDiaDelAño() {
+            const ahora = new Date();
+            const inicioAño = new Date(ahora.getFullYear(), 0, 1);
+            const diferencia = ahora - inicioAño;
+            return Math.floor(diferencia / (1000 * 60 * 60 * 24)); // Día del año (0-364)
+        }
+
+        function obtenerPoemaDiario() {
+            const hoy = new Date().toISOString().split("T")[0];
+            const clave = `poema-${hoy}`;
+            let poemaGuardado = localStorage.getItem(clave);
+            if (!poemaGuardado) {
+                const diaDelAño = obtenerDiaDelAño();
+                poemaGuardado = poemas[diaDelAño];
+                localStorage.setItem(clave, poemaGuardado);
+            }
+            return poemaGuardado;
+        }
+
+        function mostrarPoema() {
+            const poema = obtenerPoemaDiario();
+            document.getElementById("poema").innerText = poema;
+        }
 
         function obtenerFraseDiaria(emocion) {
             const hoy = new Date().toISOString().split("T")[0];
