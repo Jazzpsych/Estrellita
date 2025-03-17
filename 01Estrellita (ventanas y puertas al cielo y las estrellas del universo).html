@@ -30,7 +30,7 @@
         }
         #poema {
             font-style: italic;
-            white-space: pre-wrap; /* Respeta saltos de línea en poemas */
+            white-space: pre-wrap;
         }
         .imagenes-container {
             display: flex;
@@ -159,54 +159,20 @@
         #enviarMensaje {
             margin-left: 5px;
         }
-
-        /* Media Queries para móviles */
         @media (max-width: 600px) {
-            body {
-                padding: 5px;
-            }
-            h1 {
-                font-size: 24px;
-            }
-            select, button, input {
-                padding: 6px;
-                margin: 3px;
-                font-size: 14px;
-            }
-            #mensaje, #poema {
-                font-size: 18px;
-            }
-            #chat {
-                height: 50vh;
-            }
-            #mensajeInput {
-                width: 65%;
-                min-height: 30px;
-                font-size: 14px;
-            }
-            #enviarMensaje {
-                padding: 6px 10px;
-                font-size: 14px;
-            }
-            .input-container {
-                margin-top: 3px;
-            }
-            .contador-emociones {
-                max-width: 100%;
-                padding: 8px;
-            }
-            #historial-container {
-                max-height: 150px;
-            }
-            .imagen-item {
-                margin-bottom: 10px;
-            }
-            .imagen-item img {
-                max-width: 250px;
-            }
-            .imagen-emojis {
-                font-size: 18px;
-            }
+            body { padding: 5px; }
+            h1 { font-size: 24px; }
+            select, button, input { padding: 6px; margin: 3px; font-size: 14px; }
+            #mensaje, #poema { font-size: 18px; }
+            #chat { height: 50vh; }
+            #mensajeInput { width: 65%; min-height: 30px; font-size: 14px; }
+            #enviarMensaje { padding: 6px 10px; font-size: 14px; }
+            .input-container { margin-top: 3px; }
+            .contador-emociones { max-width: 100%; padding: 8px; }
+            #historial-container { max-height: 150px; }
+            .imagen-item { margin-bottom: 10px; }
+            .imagen-item img { max-width: 250px; }
+            .imagen-emojis { font-size: 18px; }
         }
     </style>
 </head>
@@ -227,7 +193,6 @@
     <div id="contenido" style="display: none;">
         <button id="logout" style="background-color: red; color: white; padding: 10px; border: none; cursor: pointer;">Cerrar Sesión</button>
 
-        <!-- Panel de información del administrador -->
         <div id="admin-info">
             <h3>Panel de administrador</h3>
             <p id="usuario-actual-info">Usuario actual: <strong id="usuario-nombre">No detectado</strong></p>
@@ -252,17 +217,12 @@
 
         <div id="contador-emociones" class="contador-emociones">
             <h3>Contador de Emociones ❤️</h3>
-            <div id="contadores-container">
-                <!-- Los contadores se cargarán dinámicamente aquí -->
-            </div>
+            <div id="contadores-container"></div>
         </div>
 
-        <!-- Historial de emociones -->
         <div id="historial-emociones" class="contador-emociones">
             <h3>Historial de Emociones ⏱️</h3>
-            <div id="historial-container" style="max-height: 200px; overflow-y: auto;">
-                <!-- El historial se cargará aquí -->
-            </div>
+            <div id="historial-container" style="max-height: 200px; overflow-y: auto;"></div>
         </div>
 
         <div class="imagenes-container">
@@ -293,7 +253,6 @@
     </div>
 
     <script>
-        // Frases para cada emoción
         const frases = {
             feliz: [
                 "Me encanta saber que estás feliz, mi niña. Siempre quiero verte así. 🌸",
@@ -404,7 +363,7 @@
                 "Hoy te ganaste el derecho de descansar sin remordimientos. 💕",
                 "A veces, descansar es la mejor forma de seguir adelante. 🚶‍♀️💛",
                 "Cierra los ojos, piensa en algo lindo y deja que el sueño te abrace. 💖",
-                "No hay prisa, todo estará aquí cuando despiertes. 🌸",
+                "No hay prisa, todo庞大的 aquí cuando despiertes. 🌸",
                 "Mañana será un nuevo día, lleno de oportunidades. 🌟",
                 "Cuando estés lista, sigue adelante. Por ahora, descansa. 💤",
                 "Deja que el cansancio se disuelva y la tranquilidad tome su lugar. 💕",
@@ -414,7 +373,7 @@
                 "No tienes que cargar el mundo, solo descansar y ser tú. ✨"
             ],
             extrañandote: [
-               "Tú dices que me extrañas... Pero yo te extraño más. Y lo sabes. 🥺❤️",
+                "Tú dices que me extrañas... Pero yo te extraño más. Y lo sabes. 🥺❤️",
                 "La distancia solo hace que te quiera más. 💫",
                 "Ojalá pudiera abrazarte ahora mismo. 💖",
                 "Cierro los ojos y te imagino aquí conmigo. 🌙",
@@ -530,82 +489,80 @@
                 "Me pregunto si tu 'pensar' se parece al mío… 😏",
                 "Si estás pensando lo que creo… 👀",
                 "¿Segura que solo quieres 'pensar'? 😏"
-                            
             ]
         };
 
-        // Poemas (3 iniciales, repetidos para 365 días)
-  const poemas = [
-    "ENTRE NÚMEROS Y LETRAS\n\nEntre números y letras\nsurgió una rosa en una libreta.\nEntre ecuaciones y canciones\nsurgieron nuestros amores.",
-    "TOMA MI MANO\n\nToma mi mano,\ny acompáñame al camino\nde la vida.\n\nToma mi mano,\ny recorramos la senda,\nde por vida.",
-    "ES IMPOSIBLE OCULTARTE\n\nEs imposible ocultar que estoy enamorado\n¿Cómo esconder lo tanto que te amo?\nPuedo intentar moderarme con todas mis ganas\nPero resulta que tu encanto siempre me gana.",
-    "TU LLEGADA\n\nComo un destello de luz\nfue tu llegada a mi vida.\nEl amor a mi lado,\ny yo no enterado.\n\nTu esplendor trastornó\ntodo mi interior,\ny enamorarte\nfue mi gran pasión.\n\nTu sonrisa en mis ojos\nme estremeció,\ny mi reflejo en tus ojos\nme venció.\n\nNo sé cuándo ni cómo\nme enamoré,\npero la gran lección\npude aprender.",
-    "No hace falta ir lejos\npara hallar el amor.\nTu llegada a mi vida\nme lo demostró.\n\nPuede ser instantáneo,\no en un momento surgir;\npero cuando se siembra,\nva a persistir.",
-    "HÁBLAME\n\nHáblame por favor.\nNo dejes el silencio\nconsumir mi interior.\n\nNo dejes este fuego,\ny su ardor,\nperder la pasión.",
-    "CUANDO TE VEO\n\nCuando te veo,\nno sé quién soy.\nCuando te veo,\nfluye el amor.\nCuando te veo,\n¡qué pasión!\n\nCuando te veo,\nsalta el corazón.",
-    "NO SÉ CÓMO\n\nNo sé cuándo ni cómo\nse encendió una chispa en mí.\nNo sé cuándo ni cómo\nme enamoré de ti.\n\nDicen que el amor ciego es,\ny por eso Cupido no ve,\npero yo ahora puedo verlo\nen tu sonrisa sin placer.",
-    "TE QUIERO\n\nNo sabes tú\ncuánto anhelo\ndecirte te quiero.\nMirarte a los ojos,\ny con corazón sincero,\nexpresarte mi deseo.",
-    "AMOR... ¿CORRESPONDIDO?\n\nEstoy enamorado,\ny no sé por qué.\nQuizás no es mi deseo,\nno lo puedo entender.\nPero tu rostro es lo que veo,\ny no te veo en él.\nAhí no está la imagen\nque de ti representé.\n\nQué momento de placer,\ncuando te veo aparecer.\nTodo se detiene,\npero no parece fiel.\nNo dejo de mirarte,\ny con disimulo proceder,\ninhibiendo lo que siento,\ny con miedo de perder.",
-    "Con miedo de perderte a ti,\nde perder tu neonatal,\nde que no seas para mí,\nde no importante a ti.\n\nCorresponde hoy a mi amor,\ncorresponde a esta pasión,\ncorresponde hoy al deseo\nque hay en mi corazón.\n\nConcédeme tu sonrisa,\ny el instante que no corra yo por ti,\ncoro tú por mí.",
-    "NO DEJO DE PENSAR EN TI\n\nNo dejo de pensar en ti,\ny hasta me estoy preocupando.\n¿Será solo una obsesión?\n¿O en realidad es amor?\n\nTú me has hecho ver estrellas,\ny transformado mi pensar.\n\nAhora no lo entienden ni ellas...\n¿Por ti loco debo estar?",
-    "¿ME QUIERES?\n\nTe quiero,\npero parece que no me quieres.\nMas vuelvo a quererte,\ny de repente creo que me quieres.\n¿Será una simple cosa ilusoria,\no es una verdad notoria?\n\n¿En verdad me quieres,\no solo mi esperanza mantienes?\n¡Cómo quisiera saber\ntu corazón, conocerlo.\n\n¿En verdad me quieres?\n¿O solo me retienes?\nNo comprendo tu reacción,\ny a veces me trastorno,\npero hay un rayo de luz,\nque despierta mi canción.\n\nPara tu corazón es un adorno\nque del mío proviene:\nalmas gemelas conectadas,\ny por la eternidad enlazadas.",
-    "DESTINO\n\nVoy soplado del destino\ndonde este quiera guiarme.\nY si me lleva contigo,\ncon gusto he de aceptarle.",
-    "QUÉ DIFÍCIL ES DEJAR DE PENSAR EN TI\n\nQué difícil es dejar de pensar en ti;\nqué difícil es abandonar ese momento.\n¡Dan ganas de poder detener el tiempo!, para transitar.\nPero el fluir nunca se detiene,\nAvanza rápido y sin perdón.\nOh, segundos de mi corazón,\n¡multiplicaos por causa del amor!",
-    "TE VEO Y NO TE VEO\n\nTe veo y no te veo.\nY cuando te veo,\nno sé por qué te veo.\nY si te dejo de ver,\nparece que voy a perecer,\nluego te quiero volver a ver.",
-    "TE VEO DIFERENTE\n\nTe veo diferente,\ny no sé qué es lo que sientes.\nPero me imagino tu mente\ny creo que no mientes.\nParezco correspondido,\ny amado con motivo\npor la mejor rosa entre los vivos.\n¡La más bonita que he conocido!",
-    "DESEO CUMPLIDO\n\nHoy se cumplió ese deseo,\ny te dije que te quiero.\nHoy vivimos el momento\nen que expresamos los sentimientos.\nHoy pude acercarme a ti\npara mi corazón traducir.\nY fue una nueva muy feliz\nsaber que pensabas igual de mí.",
-    "SINCERIDAD\n\nSinceridad, es lo que todos queremos.\n¿Quieres que sea sincero?\n\nAnhelo que te recuestes de mi pecho.\nAnhelo hilar mi mano entre tus dedos.\nAnhelo acariciar tu dulce pelo.\nLo que eres, anhelo conocerlo.",
-    "QUÉ IMPACTO\n\nQué impacto tuvo mi ser\ncuando tu entrada pude ver.\nTanta hermosura de repente\nque no sabía responder mi mente.\n\nQué hermosa estás siempre,\ny hoy me sorprendiste nuevamente.\nTu belleza me cautiva,\nen un segundo cambias mi ambiente.\n\nCuando te saludé... ¿Cómo he de hacerte frente?\nDe mi enamoramiento eso es una prueba patente.\nEres grandiosa, y cada día es algo creciente.\nPreciosa, ¡cómo me encantas! Eso es evidente.",
-    "EN EL AMOR NADIE MANDA\n\nEn el amor nadie manda.\nY cuando menos te lo esperas,\na tu puerta llama.\nMuy sutilmente comienza.\nY aunque abrirle no quieras.",
-    "ASÍ ES LA VIDA\n\nAsí es la vida.\nA veces es buena,\na veces compleja.\nAsí es la vida.\nA veces es bella,\na veces novela.\nAsí es la vida.\nDe repente tierna,\ny en un momento te atropella.\nAsí es la vida.\nPero desde que estás tú,\nno hago más que ver estrellas.",
-    "EL INFINITO EN TUS OJOS\n\nEstaba anocheciendo\ncuando de repente pensé:\n«Hoy no he dejado mi poema,\n¡ni un segundo más tardaré!».\nCon pasión me apresuré,\ny la pluma fuerte agarré.\nNo sabía qué iba a hacer,\ny en la luna terminé.\n\nY contemplé desde las alturas\nla hermosura de la tierra,\ny a un segundo luz de distancia\nuna luz resplandeciente y bella.\n\nEn la oscuridad estaba ella,\nalumbrando como todo un sol.\nY con su enorme destello\ntraspasaba mi corazón.",
-    "Para analizar su enorme esplendor\ntuve que sacar mi telescopio.\nY acercándome al máximo\nahora deseaba un microscopio.\nSu estilo único y propio\npudo despertar mis escritos.\nY desde aquel observatorio,\ndisfruté en sus ojos el infinito.",
-    "CUANDO ESTOY CONTIGO\n\nCuando estoy contigo,\nse desvanece el tiempo.\nCuando estoy contigo,\ndisfruto cada momento.\nCuando estoy contigo,\namor es lo que siento.\nCuando estoy contigo,\ntodo es una eternidad.\nCuando estoy contigo,\nparece que la vida se detendrá.\nPero cuando estoy contigo,\nesa eternidad velozmente se va.",
-    "DICEN QUE EL AMOR...\n\nDicen que el amor te hace ver estrellas,\npero yo solo veo una.\nDicen que sientes muchas maripositas,\npero yo solo siento una.\nDicen que quieres muchas sonrisas,\npero yo solo quiero una.\nDicen que entonces se regalan rosas,\npero yo solo anhelo una:\nA mi estrella, mi mariposita, mi sonrisa.",
-    "¿ES ETERNO?\n\n¿Es eterno\neste fuego de amor que siento?\n¿Es eterno\neste río de pasión que tengo?\n¿Es eterna\nesta llama que arde en mi corazón?\n¿Es eterna\nnuestra conexión de amor?",
-    "LATIDO DEL CORAZÓN\n\nUnas lágrimas rodean mi rostro,\nrecorren la faz sin piedad.\nHay una distancia entre nosotros,\n¿pero cuál será nuestro parar?\n\nEsa figura llega a mi interior,\nintensifica el latir del corazón.\nComo si fuera un sencillo cantor,\nque con su rima transmite amor.\n\n¿Pero qué es eso tan deseado,\nque todos tiemblan si lo oyen?\nNo es solo querer y arrancar,\nes proteger y saber cuidar.",
-    "QUEBRANTO\n\nNo sabes cómo me siento,\ny yo no sé cómo te sientes.\n¿Estos son esos momentos\nen los que desearías parar el tiempo?\n¿O simplemente son suspiros\nque te gustaría no hubieran ocurrido?\n\nEn medio de la alegría inmensa\nse forma una profunda tristeza.\n¿Acaso al final de esta senda\nencontrarás cerrada la puerta?\n¿O esa pequeña lágrima de dolor\nestá condenada a sufrir prisión?\n\nNo sé el objeto de este quebranto,\npero en vano no será el llanto.\n¿Miras al cielo y ves azul eterno?\n¿O miras al sol y ves amarillo alegre?\n¿O acaso las nubes de la densa lluvia\nhan cubierto tu paisaje de penuria?",
-    "CARPE DIEM\n\nHay tantas cosas que el corazón desea decir.\nHay tantas cosas que el corazón desea hacer.\nHay tantas cosas que anhelamos conseguir.\nHay tantas cosas que anhelamos tener,\nque muchas veces nos olvidamos del carpe diem.",
-    "VIAJE\n\nHoy te fuiste de viaje,\nmi sol.\nCon una maleta de flores,\ny un girasol.\n¿Qué pasará? Pensaba mi alma,\n¡qué dolor!\nTodavía no se ha ido,\ny ya extraño su calor.\nPero ve, disfruta y aprende\ncon amor,\nque seguiremos uniendo\nnuestro corazón.",
-    "TE EXTRAÑO\n\nNo estamos a la distancia\nde la tierra a la luna,\npero ese muchacho\nextraña tu ternura.\n«¿Qué será de mis nietos?»\nse pregunta sin parar,\ny nunca deja de soñar,\nni en su belleza pensar.",
-    "EN MEDIO DEL SILENCIO\n\nAun en medio del silencio\nse escucha una hermosa voz.\nA paradoja parece esto,\npero es más que una pasión.\n\nAun en medio del silencio\nnoto tu mano en mis labios.\nEstás frenando el desenfreno...\n«Shhhh, solo calla de Amor».",
-    "HOY ME ADELANTO YO\n\n¿Y si hoy me adelanto yo?\n¿Y si hoy me tomo el atrevimiento,\nde otra vez mis pensamientos,\ndejarlos inscritos en tu corazón?\n\nLo haré, y será como una canción.\n\nYa casi mi lenguaje son los versos,\nquiero que su luz siempre brille.\nY créeme no serte molesto,\nsino escuchar de ti un «¿¡Qué dices!?»\n\n¿Y si me tomo la valentía\nde mirar por mi ventana\nel análisis de muchas estrellas,\nque resplandecen en la nada?\nLo haré, sé que eres una de ellas.\n\nSiempre quieres ser la primera\ncon esa sonrisa tan sincera.\n¿Pero si hoy yo soy el primero,\nen decirte que te quiero?",
-    "Ganaremos los dos, lo sé,\ny ninguno perderá, también lo sé.\nPor lo que seguiremos ganando tú y yo.\nAsí que, triste no estés: te quiero con fervor.",
-    "¿CÓMO PIENSO EN TI!\n\nPienso en mí,\ny pienso en ti.\nPienso en mi mente\ny pienso en ti.\nPienso en mi corazón,\ny pienso en ti.\nPienso en mi tiempo,\ny pienso en ti.\nPienso en todo,\ny, claro está, pienso en ti.",
-    "TUS DULCES MANOS\n\nTus dulces manos,\ndeleitosas como las teclas de un piano\ncuando conoces sus secretos\ny no las tocas en vano.\nAgradables como la melodía\nde una grata sinfonía\ny codiciables como los manjares\nen las grandes compañías.\nTus dulces manos,\ncautivadoras más que el mar,\ntan relajantes que mi corazón\nhacen derramar.",
-    "NARCISO\n\nEl narciso es una flor hermosa,\npero no tanto como mi rosa.\nNarciso se cree el más bello aquí,\nal menos quiere creerlo así.\n¿Acaso sabe que te conocí?\nPorque él no se compara a ti.",
-    "JUGUEMOS AL INFINITO\n\n¿Quieres jugar al infinito...?\n¿En serio deseas hacerlo?\nAdmiro mucho tu solicitud,\nmas querida, el infinito eres tú.",
-    "INEXORABLE\n\nInexorable,\nes este amor que siento por ti.\nInevitable,\npalpitar veloz y olvidar el existir.\nIndescriptible,\nla flecha que atravesó mi corazón.\nIrresistible,\nver tu rostro y Malcolm el amor.",
-    "CUENTA LOS DÍAS\n\nCuenta los días, hazlo.\nCuenta el paso del reloj.\nVerás en ellos los escritos\nque de mi corazón son los gritos.\nUno en cada paso,\ny poca sería la cifra,\npara anunciar al mundo entero\ncómo mi ser por ti suspira.",
-    "¿POR QUÉ SUFRO?\n\nSi te quiero, ¿por qué sufro?\nSi me quieres, ¿por qué duele?\n«¿Acaso el amor y el dolor son dos cosas gemelas?»\nTontería no es,\nporque he vivido los dos contigo.\n\nQuizá es ese deseo de no herir\ntu dulce corazón\ncon promesas hoy encendidas\ny mañana de cenizas revestidas.\nQuizá es la duda de mi mente\ndiciéndose\n«¿acaso es la elección correcta?»\nQuizá es el temor de mi ser\na lo que dirán al ver\na dos jovencitos apasionados,\nsin entender lo que viven,\nsimplemente enamorados.\n\nPor qué sufro,\nsi has flechado mi corazón.\nPor qué duele,\nquizá sea la herida de tu flecha.\nAmada, es cierto que duele y quebranta...\nAún así: aquí hay un corazón que te ama.",
-    "TAUTOLOGÍA\n\nTautología,\npalabras antes para mí desconocida.\nTautología,\nser circular y redundancia sin medida.\nTautología,\n¿sabes qué es esa palabra en mi vida?\nTautología es decir siempre que te quiero,\naunque ya haya dicho lo mucho que te quería.",
-    "BRECHA\n\nTe escribo desde el otro lado,\natravesando el abismo del olvido.\nDesde donde el amor aflora,\ny las emociones no tienen morada.\n\nTe escribo desde el precipicio,\nal límite de todo lo prohibido.\nNo atendiendo la profundidad,\ny mostrando la debilidad.\n\n¿Así tiene que ser la autoridad?\n¡Si esto lo sufre toda la humanidad!\nSolo busco un poco de intimidad,\nMcCarthy de por de.\nEs intensa la velocidad,\npero en mi corazón no hay maldad.",
-    "Te escribo desde ese mismo lugar\ndonde los sueños se vuelven realidad.\nDesde donde salen las palabras\nlimitadas por las etapas.\nTe escribo desde dentro,\ny con la mirada en lo alto.\nTe saludan mis ojos,\nque solo esbozan tu belleza.\n\nYo veo tus ojitos... Sí,\nlos que describen el infinito.\nTe escribo desde mi corazón,\ny directo a tu interior.\n¿Cómo fingir, cómo inhibir,\n¡cómo mentir!?\n¿Cómo esconder lo que siento por ti?\n\nMultitud de pensamientos\nno lo han podido conseguir.\nLo siento, pero la vida es así.",
-    "¿Cómo dejar de decir\nlo que tú despertaste en mí?\n\nTe escribo... Te hablo aun sin voz.\nSi alguien no lo entiende...\nLo siento, el amor me tocó.",
-    "ROSAS VACÍAS\n\nMultitud de rosas\nen un jardín encantado.\nMultitud de flores\npara un jardín desesperado.\n¿Acaso todas huelen igual?\n¿Acaso todas son así de hermosas?\n\nPienso, y ninguna será igual.\nMedito, y ninguna tendrá la misma fragancia.\nMi rosa sí tiene encanto,\ny benditos son sus pétalos.\nSus espinas incluso confortan;\nmi rosa, ninguna con su valor.",
-    "MIRAR TUS OJOS\n\nMirarte a los ojos\ny transmitir amor.\nMirarte a los ojos\ny ver tu corazón.\nMirarte a los ojos\ny escuchar tu clamor.\nMirarte a los ojos,\nmucho más que pasión.\nMirarte a los ojos\ny quererte siempre.\n¿Quién lo entiende?\nSolo tú y yo.",
-    "MI CIELO\n\nTú eres el cielo de mi vida.\nAl verte, todas las estrellas giran.\nTu imagen, siempre alumbra mis días.\nTu voz, la más dulce y tierna melodía.\nTú, tú eres mi mejor compañía.\nSí, tú eres el cielo de mi vida.",
-    "NO SABÍA QUE DOLÍA TANTO\n\nNo sabía que dolía tanto.\nNo imaginaba este quebranto.\nVer traspasado mi corazón\npor la supuesta alegría del amor.\nEstar rodeado y a la vez solo,\nmientras tiene lugar el desarrollo.\n\nSuelen decir que el amor trae paz,\npero eso no ha resultado eficaz.\n\nOh, quisiera decir que mientras escribo\ngozo es lo único que cultivo.\nPero más honda la herida percibo,\n¿cómo llegó hasta aquí? ¿Cuál fue su camino?\nOh, si los demás pudieran entender\nque siento más que un simple querer.\nAl menos una figura traducir,\nque mi corazón no piensa en maldecir.",
-    "Oh, si escucharan de mi interior el canto...\nOtra vez lo digo, solo estoy enamorado.",
-    "PIENSO EN TI\n\nPienso en ti donde esté.\nY cuando no estoy, pienso en ti.\nEres el recuerdo de mi amor,\ny también el de mi dolor.\n\nPero pienso en ti, y disfruto.\nY cuando no, pienso en ti.\nEsta es mi vida por ahora, así:\nSolo me queda pensar en ti.",
-    "NO ROMPAS EL CORAZÓN\n\nDicen que dos corazones unidos...\nPor cierto, ¿qué es el amor entre nosotros?\nDifícilmente son separados.\n¿Sabes que te quiero?\nNo importa que estén entristecidos,\n¿Te gusta mirar las estrellas en la soledad?\nPorque su vínculo ya ha sido establecido.\n¿Disfrutas el resplandor de la luna atravesar tu ventana?\nNo rompas nuestras canciones.\n¿Sabes que nuestro corazón atraviesa?",
-    "¿SIGUES TENIENDO ALAS?\n\n¿Sigues sintiéndolo?\n¿Sigues estando radiante?\n¿Tu corazón sigue teniendo alas?\n¿Sigues teniendo las ansias?\n¿Sigues viendo el milagro de tus sueños?\n¿Todavía existe el calor?\n¿Permanecen tus melodías?\n¿Todavía sigue nuestra sinfonía?\n¿O se supone que no debía haber ninguna?\n¿O nosotros, inmaduros,\nvivimos nuestro sueño de luna?\n¿Todavía puede componer el cantor?\n¿Sigue brillando eso que llamamos «amor»?",
-    "ENTENDÍ LO DIFÍCIL\n\nAl principio parecía hermoso;\nluego se miraba escandaloso.\nDespués seguía lo glorioso,\nsegún los ritos religiosos.\n\nMas en la experiencia, silencioso,\nel transcurso vivía, nervioso.\n\nQuería mostrarme respetuoso,\nempero terminaba contencioso.\nComo todo un cuidadoso,\nquería vencer lo doloroso.\n\nMas entendí que el comienzo amoroso,\ntambién puede ser desamoroso.",
-    "ESOS JUEGUITOS\n\n¿Dónde están esos jueguitos\nque jugábamos toditos?\n¿Dónde están esos momentos\nen que ignorábamos el tiempo?\n¿Dónde están esos días\nque nos hacían gozar y tanto?\n\nParece que se perdieron en el rincón del tiempo.\nEse tiempo que una mirada nos hizo querernos.\nPero no creo que estén perdidos,\nsimplemente están escondidos.\nEsperan a alguien que los encuentre,\ny los saque a brillar nuevamente.",
-    "UN ABRAZO\n\nCómo extraño ese instante\nen el que el tiempo se detiene.\nDonde se juntan nuestras visiones\ny saltan los corazones.\nDonde la ilusión del contacto\nse convierte en realidad.\n¿Dónde están esos momentos\nen los que oímos el «te quiero»?",
-    "RECUERDO VACÍO\n\nUn destello deslumbrante\na la distancia se asoma.\nUn recuerdo en el vacío\ncomo un reflejo levitante.\n\nFlores, perlas y mariposas\nadornan una casa Barbosa.\n«Venid, entrad y aspirad;\nllenad este círculo tan vacío»\n¿Esto tiene significado?\n\nPuede ser un lugar reservado.\nUn vacío en un alma sedienta\nesperando ser saciado.\n\nFlores, perlas y mariposas\nadornan una casa arteriosa.\nLos destellos, como luces cariñosas,\nla hacen cada vez más hermosa.",
-    "INTRUSIÓN\n\nMente viva en un momento desviada.\nPierde su pensamiento sin entender nada.\nSolo es fruto de la intrusión, camarada;\nesa figura en tu mente, apasionada.\n\nParece que en ti se ha quedado abandonada,\ncomo si nada más existiera, ahí condenada.\n\nPara tus sentimientos se vuelve una espada,\nmientras buscas el fin de esa jornada.\nEntonces tu alma se pregunta ansiosa:\n«¿Cómo caí en esta trampa envenenada?»\nLa doncella que te extendía la llamada\nresultó ser simplemente la camada.\n\nMas cuando quieres abandonar esa parada,\nno te resistes ante una nueva mirada.\nLa llama vuelve a la intensidad adecuada,\ny se prepara a esperar: «¿cuándo será la bajada?»",
-    "LA LUNA COMO NUNCA\n\nHe visto la luna como nunca antes.\nTan brillante y cálida como el sol.\nHe visto cómo deslumbra su reflejo,\ncapaz de despertar el corazón.\nHe visto cómo con su mirada\nllora y expresa mucho dolor,\nal traer a memoria aquellos días\nen que yo admiraba su expresión.\n\n¡Qué inocencia la de mi luna!\nNo conoce mi intención.\nNo me he olvidado de ella,\naún le compongo mi canción."
-];
+        const poemas = [
+            "ENTRE NÚMEROS Y LETRAS\n\nEntre números y letras\nsurgió una rosa en una libreta.\nEntre ecuaciones y canciones\nsurgieron nuestros amores.",
+            "TOMA MI MANO\n\nToma mi mano,\ny acompáñame al camino\nde la vida.\n\nToma mi mano,\ny recorramos la senda,\nde por vida.",
+            "ES IMPOSIBLE OCULTARTE\n\nEs imposible ocultar que estoy enamorado\n¿Cómo esconder lo tanto que te amo?\nPuedo intentar moderarme con todas mis ganas\nPero resulta que tu encanto siempre me gana.",
+            "TU LLEGADA\n\nComo un destello de luz\nfue tu llegada a mi vida.\nEl amor a mi lado,\ny yo no enterado.\n\nTu esplendor trastornó\ntodo mi interior,\ny enamorarte\nfue mi gran pasión.\n\nTu sonrisa en mis ojos\nme estremeció,\ny mi reflejo en tus ojos\nme venció.\n\nNo sé cuándo ni cómo\nme enamoré,\npero la gran lección\npude aprender.",
+            "No hace falta ir lejos\npara hallar el amor.\nTu llegada a mi vida\nme lo demostró.\n\nPuede ser instantáneo,\no en un momento surgir;\npero cuando se siembra,\nva a persistir.",
+            "HÁBLAME\n\nHáblame por favor.\nNo dejes el silencio\nconsumir mi interior.\n\nNo dejes este fuego,\ny su ardor,\nperder la pasión.",
+            "CUANDO TE VEO\n\nCuando te veo,\nno sé quién soy.\nCuando te veo,\nfluye el amor.\nCuando te veo,\n¡qué pasión!\n\nCuando te veo,\nsalta el corazón.",
+            "NO SÉ CÓMO\n\nNo sé cuándo ni cómo\nse encendió una chispa en mí.\nNo sé cuándo ni cómo\nme enamoré de ti.\n\nDicen que el amor ciego es,\ny por eso Cupido no ve,\npero yo ahora puedo verlo\nen tu sonrisa sin placer.",
+            "TE QUIERO\n\nNo sabes tú\ncuánto anhelo\ndecirte te quiero.\nMirarte a los ojos,\ny con corazón sincero,\nexpresarte mi deseo.",
+            "AMOR... ¿CORRESPONDIDO?\n\nEstoy enamorado,\ny no sé por qué.\nQuizás no es mi deseo,\nno lo puedo entender.\nPero tu rostro es lo que veo,\ny no te veo en él.\nAhí no está la imagen\nque de ti representé.\n\nQué momento de placer,\ncuando te veo aparecer.\nTodo se detiene,\npero no parece fiel.\nNo dejo de mirarte,\ny con disimulo proceder,\ninhibiendo lo que siento,\ny con miedo de perder.",
+            "Con miedo de perderte a ti,\nde perder tu neonatal,\nde que no seas para mí,\nde no importante a ti.\n\nCorresponde hoy a mi amor,\ncorresponde a esta pasión,\ncorresponde hoy al deseo\nque hay en mi corazón.\n\nConcédeme tu sonrisa,\ny el instante que no corra yo por ti,\ncoro tú por mí.",
+            "NO DEJO DE PENSAR EN TI\n\nNo dejo de pensar en ti,\ny hasta me estoy preocupando.\n¿Será solo una obsesión?\n¿O en realidad es amor?\n\nTú me has hecho ver estrellas,\ny transformado mi pensar.\n\nAhora no lo entienden ni ellas...\n¿Por ti loco debo estar?",
+            "¿ME QUIERES?\n\nTe quiero,\npero parece que no me quieres.\nMas vuelvo a quererte,\ny de repente creo que me quieres.\n¿Será una simple cosa ilusoria,\no es una verdad notoria?\n\n¿En verdad me quieres,\no solo mi esperanza mantienes?\n¡Cómo quisiera saber\ntu corazón, conocerlo.\n\n¿En verdad me quieres?\n¿O solo me retienes?\nNo comprendo tu reacción,\ny a veces me trastorno,\npero hay un rayo de luz,\nque despierta mi canción.\n\nPara tu corazón es un adorno\nque del mío proviene:\nalmas gemelas conectadas,\ny por la eternidad enlazadas.",
+            "DESTINO\n\nVoy soplado del destino\ndonde este quiera guiarme.\nY si me lleva contigo,\ncon gusto he de aceptarle.",
+            "QUÉ DIFÍCIL ES DEJAR DE PENSAR EN TI\n\nQué difícil es dejar de pensar en ti;\nqué difícil es abandonar ese momento.\n¡Dan ganas de poder detener el tiempo!, para transitar.\nPero el fluir nunca se detiene,\nAvanza rápido y sin perdón.\nOh, segundos de mi corazón,\n¡multiplicaos por causa del amor!",
+            "TE VEO Y NO TE VEO\n\nTe veo y no te veo.\nY cuando te veo,\nno sé por qué te veo.\nY si te dejo de ver,\nparece que voy a perecer,\nluego te quiero volver a ver.",
+            "TE VEO DIFERENTE\n\nTe veo diferente,\ny no sé qué es lo que sientes.\nPero me imagino tu mente\ny creo que no mientes.\nParezco correspondido,\ny amado con motivo\npor la mejor rosa entre los vivos.\n¡La más bonita que he conocido!",
+            "DESEO CUMPLIDO\n\nHoy se cumplió ese deseo,\ny te dije que te quiero.\nHoy vivimos el momento\nen que expresamos los sentimientos.\nHoy pude acercarme a ti\npara mi corazón traducir.\nY fue una nueva muy feliz\nsaber que pensabas igual de mí.",
+            "SINCERIDAD\n\nSinceridad, es lo que todos queremos.\n¿Quieres que sea sincero?\n\nAnhelo que te recuestes de mi pecho.\nAnhelo hilar mi mano entre tus dedos.\nAnhelo acariciar tu dulce pelo.\nLo que eres, anhelo conocerlo.",
+            "QUÉ IMPACTO\n\nQué impacto tuvo mi ser\ncuando tu entrada pude ver.\nTanta hermosura de repente\nque no sabía responder mi mente.\n\nQué hermosa estás siempre,\ny hoy me sorprendiste nuevamente.\nTu belleza me cautiva,\nen un segundo cambias mi ambiente.\n\nCuando te saludé... ¿Cómo he de hacerte frente?\nDe mi enamoramiento eso es una prueba patente.\nEres grandiosa, y cada día es algo creciente.\nPreciosa, ¡cómo me encantas! Eso es evidente.",
+            "EN EL AMOR NADIE MANDA\n\nEn el amor nadie manda.\nY cuando menos te lo esperas,\na tu puerta llama.\nMuy sutilmente comienza.\nY aunque abrirle no quieras.",
+            "ASÍ ES LA VIDA\n\nAsí es la vida.\nA veces es buena,\na veces compleja.\nAsí es la vida.\nA veces es bella,\na veces novela.\nAsí es la vida.\nDe repente tierna,\ny en un momento te atropella.\nAsí es la vida.\nPero desde que estás tú,\nno hago más que ver estrellas.",
+            "EL INFINITO EN TUS OJOS\n\nEstaba anocheciendo\ncuando de repente pensé:\n«Hoy no he dejado mi poema,\n¡ni un segundo más tardaré!».\nCon pasión me apresuré,\ny la pluma fuerte agarré.\nNo sabía qué iba a hacer,\ny en la luna terminé.\n\nY contemplé desde las alturas\nla hermosura de la tierra,\ny a un segundo luz de distancia\nuna luz resplandeciente y bella.\n\nEn la oscuridad estaba ella,\nalumbrando como todo un sol.\nY con su enorme destello\ntraspasaba mi corazón.",
+            "Para analizar su enorme esplendor\ntuve que sacar mi telescopio.\nY acercándome al máximo\nahora deseaba un microscopio.\nSu estilo único y propio\npudo despertar mis escritos.\nY desde aquel observatorio,\ndisfruté en sus ojos el infinito.",
+            "CUANDO ESTOY CONTIGO\n\nCuando estoy contigo,\nse desvanece el tiempo.\nCuando estoy contigo,\ndisfruto cada momento.\nCuando estoy contigo,\namor es lo que siento.\nCuando estoy contigo,\ntodo es una eternidad.\nCuando estoy contigo,\nparece que la vida se detendrá.\nPero cuando estoy contigo,\nesa eternidad velozmente se va.",
+            "DICEN QUE EL AMOR...\n\nDicen que el amor te hace ver estrellas,\npero yo solo veo una.\nDicen que sientes muchas maripositas,\npero yo solo siento una.\nDicen que quieres muchas sonrisas,\npero yo solo quiero una.\nDicen que entonces se regalan rosas,\npero yo solo anhelo una:\nA mi estrella, mi mariposita, mi sonrisa.",
+            "¿ES ETERNO?\n\n¿Es eterno\neste fuego de amor que siento?\n¿Es eterno\neste río de pasión que tengo?\n¿Es eterna\nesta llama que arde en mi corazón?\n¿Es eterna\nnuestra conexión de amor?",
+            "LATIDO DEL CORAZÓN\n\nUnas lágrimas rodean mi rostro,\nrecorren la faz sin piedad.\nHay una distancia entre nosotros,\n¿pero cuál será nuestro parar?\n\nEsa figura llega a mi interior,\nintensifica el latir del corazón.\nComo si fuera un sencillo cantor,\nque con su rima transmite amor.\n\n¿Pero qué es eso tan deseado,\nque todos tiemblan si lo oyen?\nNo es solo querer y arrancar,\nes proteger y saber cuidar.",
+            "QUEBRANTO\n\nNo sabes cómo me siento,\ny yo no sé cómo te sientes.\n¿Estos son esos momentos\nen los que desearías parar el tiempo?\n¿O simplemente son suspiros\nque te gustaría no hubieran ocurrido?\n\nEn medio de la alegría inmensa\nse forma una profunda tristeza.\n¿Acaso al final de esta senda\nencontrarás cerrada la puerta?\n¿O esa pequeña lágrima de dolor\nestá condenada a sufrir prisión?\n\nNo sé el objeto de este quebranto,\npero en vano no será el llanto.\n¿Miras al cielo y ves azul eterno?\n¿O miras al sol y ves amarillo alegre?\n¿O acaso las nubes de la densa lluvia\nhan cubierto tu paisaje de penuria?",
+            "CARPE DIEM\n\nHay tantas cosas que el corazón desea decir.\nHay tantas cosas que el corazón desea hacer.\nHay tantas cosas que anhelamos conseguir.\nHay tantas cosas que anhelamos tener,\nque muchas veces nos olvidamos del carpe diem.",
+            "VIAJE\n\nHoy te fuiste de viaje,\nmi sol.\nCon una maleta de flores,\ny un girasol.\n¿Qué pasará? Pensaba mi alma,\n¡qué dolor!\nTodavía no se ha ido,\ny ya extraño su calor.\nPero ve, disfruta y aprende\ncon amor,\nque seguiremos uniendo\nnuestro corazón.",
+            "TE EXTRAÑO\n\nNo estamos a la distancia\nde la tierra a la luna,\npero ese muchacho\nextraña tu ternura.\n«¿Qué será de mis nietos?»\nse pregunta sin parar,\ny nunca deja de soñar,\nni en su belleza pensar.",
+            "EN MEDIO DEL SILENCIO\n\nAun en medio del silencio\nse escucha una hermosa voz.\nA paradoja parece esto,\npero es más que una pasión.\n\nAun en medio del silencio\nnoto tu mano en mis labios.\nEstás frenando el desenfreno...\n«Shhhh, solo calla de Amor».",
+            "HOY ME ADELANTO YO\n\n¿Y si hoy me adelanto yo?\n¿Y si hoy me tomo el atrevimiento,\nde otra vez mis pensamientos,\ndejarlos inscritos en tu corazón?\n\nLo haré, y será como una canción.\n\nYa casi mi lenguaje son los versos,\nquiero que su luz siempre brille.\nY créeme no serte molesto,\nsino escuchar de ti un «¿¡Qué dices!?»\n\n¿Y si me tomo la valentía\nde mirar por mi ventana\nel análisis de muchas estrellas,\nque resplandecen en la nada?\nLo haré, sé que eres una de ellas.\n\nSiempre quieres ser la primera\ncon esa sonrisa tan sincera.\n¿Pero si hoy yo soy el primero,\nen decirte que te quiero?",
+            "Ganaremos los dos, lo sé,\ny ninguno perderá, también lo sé.\nPor lo que seguiremos ganando tú y yo.\nAsí que, triste no estés: te quiero con fervor.",
+            "¿CÓMO PIENSO EN TI!\n\nPienso en mí,\ny pienso en ti.\nPienso en mi mente\ny pienso en ti.\nPienso en mi corazón,\ny pienso en ti.\nPienso en mi tiempo,\ny pienso en ti.\nPienso en todo,\ny, claro está, pienso en ti.",
+            "TUS DULCES MANOS\n\nTus dulces manos,\ndeleitosas como las teclas de un piano\ncuando conoces sus secretos\ny no las tocas en vano.\nAgradables como la melodía\nde una grata sinfonía\ny codiciables como los manjares\nen las grandes compañías.\nTus dulces manos,\ncautivadoras más que el mar,\ntan relajantes que mi corazón\nhacen derramar.",
+            "NARCISO\n\nEl narciso es una flor hermosa,\npero no tanto como mi rosa.\nNarciso se cree el más bello aquí,\nal menos quiere creerlo así.\n¿Acaso sabe que te conocí?\nPorque él no se compara a ti.",
+            "JUGUEMOS AL INFINITO\n\n¿Quieres jugar al infinito...?\n¿En serio deseas hacerlo?\nAdmiro mucho tu solicitud,\nmas querida, el infinito eres tú.",
+            "INEXORABLE\n\nInexorable,\nes este amor que siento por ti.\nInevitable,\npalpitar veloz y olvidar el existir.\nIndescriptible,\nla flecha que atravesó mi corazón.\nIrresistible,\nver tu rostro y Malcolm el amor.",
+            "CUENTA LOS DÍAS\n\nCuenta los días, hazlo.\nCuenta el paso del reloj.\nVerás en ellos los escritos\nque de mi corazón son los gritos.\nUno en cada paso,\ny poca sería la cifra,\npara anunciar al mundo entero\ncómo mi ser por ti suspira.",
+            "¿POR QUÉ SUFRO?\n\nSi te quiero, ¿por qué sufro?\nSi me quieres, ¿por qué duele?\n«¿Acaso el amor y el dolor son dos cosas gemelas?»\nTontería no es,\nporque he vivido los dos contigo.\n\nQuizá es ese deseo de no herir\ntu dulce corazón\ncon promesas hoy encendidas\ny mañana de cenizas revestidas.\nQuizá es la duda de mi mente\ndiciéndose\n«¿acaso es la elección correcta?»\nQuizá es el temor de mi ser\na lo que dirán al ver\na dos jovencitos apasionados,\nsin entender lo que viven,\nsimplemente enamorados.\n\nPor qué sufro,\nsi has flechado mi corazón.\nPor qué duele,\nquizá sea la herida de tu flecha.\nAmada, es cierto que duele y quebranta...\nAún así: aquí hay un corazón que te ama.",
+            "TAUTOLOGÍA\n\nTautología,\npalabras antes para mí desconocida.\nTautología,\nser circular y redundancia sin medida.\nTautología,\n¿sabes qué es esa palabra en mi vida?\nTautología es decir siempre que te quiero,\naunque ya haya dicho lo mucho que te quería.",
+            "BRECHA\n\nTe escribo desde el otro lado,\natravesando el abismo del olvido.\nDesde donde el amor aflora,\ny las emociones no tienen morada.\n\nTe escribo desde el precipicio,\nal límite de todo lo prohibido.\nNo atendiendo la profundidad,\ny mostrando la debilidad.\n\n¿Así tiene que ser la autoridad?\n¡Si esto lo sufre toda la humanidad!\nSolo busco un poco de intimidad,\nMcCarthy de por de.\nEs intensa la velocidad,\npero en mi corazón no hay maldad.",
+            "Te escribo desde ese mismo lugar\ndonde los sueños se vuelven realidad.\nDesde donde salen las palabras\nlimitadas por las etapas.\nTe escribo desde dentro,\ny con la mirada en lo alto.\nTe saludan mis ojos,\nque solo esbozan tu belleza.\n\nYo veo tus ojitos... Sí,\nlos que describen el infinito.\nTe escribo desde mi corazón,\ny directo a tu interior.\n¿Cómo fingir, cómo inhibir,\n¡cómo mentir!?\n¿Cómo esconder lo que siento por ti?\n\nMultitud de pensamientos\nno lo han podido conseguir.\nLo siento, pero la vida es así.",
+            "¿Cómo dejar de decir\nlo que tú despertaste en mí?\n\nTe escribo... Te hablo aun sin voz.\nSi alguien no lo entiende...\nLo siento, el amor me tocó.",
+            "ROSAS VACÍAS\n\nMultitud de rosas\nen un jardín encantado.\nMultitud de flores\npara un jardín desesperado.\n¿Acaso todas huelen igual?\n¿Acaso todas son así de hermosas?\n\nPienso, y ninguna será igual.\nMedito, y ninguna tendrá la misma fragancia.\nMi rosa sí tiene encanto,\ny benditos son sus pétalos.\nSus espinas incluso confortan;\nmi rosa, ninguna con su valor.",
+            "MIRAR TUS OJOS\n\nMirarte a los ojos\ny transmitir amor.\nMirarte a los ojos\ny ver tu corazón.\nMirarte a los ojos\ny escuchar tu clamor.\nMirarte a los ojos,\nmucho más que pasión.\nMirarte a los ojos\ny quererte siempre.\n¿Quién lo entiende?\nSolo tú y yo.",
+            "MI CIELO\n\nTú eres el cielo de mi vida.\nAl verte, todas las estrellas giran.\nTu imagen, siempre alumbra mis días.\nTu voz, la más dulce y tierna melodía.\nTú, tú eres mi mejor compañía.\nSí, tú eres el cielo de mi vida.",
+            "NO SABÍA QUE DOLÍA TANTO\n\nNo sabía que dolía tanto.\nNo imaginaba este quebranto.\nVer traspasado mi corazón\npor la supuesta alegría del amor.\nEstar rodeado y a la vez solo,\nmientras tiene lugar el desarrollo.\n\nSuelen decir que el amor trae paz,\npero eso no ha resultado eficaz.\n\nOh, quisiera decir que mientras escribo\ngozo es lo único que cultivo.\nPero más honda la herida percibo,\n¿cómo llegó hasta aquí? ¿Cuál fue su camino?\nOh, si los demás pudieran entender\nque siento más que un simple querer.\nAl menos una figura traducir,\nque mi corazón no piensa en maldecir.",
+            "Oh, si escucharan de mi interior el canto...\nOtra vez lo digo, solo estoy enamorado.",
+            "PIENSO EN TI\n\nPienso en ti donde esté.\nY cuando no estoy, pienso en ti.\nEres el recuerdo de mi amor,\ny también el de mi dolor.\n\nPero pienso en ti, y disfruto.\nY cuando no, pienso en ti.\nEsta es mi vida por ahora, así:\nSolo me queda pensar en ti.",
+            "NO ROMPAS EL CORAZÓN\n\nDicen que dos corazones unidos...\nPor cierto, ¿qué es el amor entre nosotros?\nDifícilmente son separados.\n¿Sabes que te quiero?\nNo importa que estén entristecidos,\n¿Te gusta mirar las estrellas en la soledad?\nPorque su vínculo ya ha sido establecido.\n¿Disfrutas el resplandor de la luna atravesar tu ventana?\nNo rompas nuestras canciones.\n¿Sabes que nuestro corazón atraviesa?",
+            "¿SIGUES TENIENDO ALAS?\n\n¿Sigues sintiéndolo?\n¿Sigues estando radiante?\n¿Tu corazón sigue teniendo alas?\n¿Sigues teniendo las ansias?\n¿Sigues viendo el milagro de tus sueños?\n¿Todavía existe el calor?\n¿Permanecen tus melodías?\n¿Todavía sigue nuestra sinfonía?\n¿O se supone que no debía haber ninguna?\n¿O nosotros, inmaduros,\nvivimos nuestro sueño de luna?\n¿Todavía puede componer el cantor?\n¿Sigue brillando eso que llamamos «amor»?",
+            "ENTENDÍ LO DIFÍCIL\n\nAl principio parecía hermoso;\nluego se miraba escandaloso.\nDespués seguía lo glorioso,\nsegún los ritos religiosos.\n\nMas en la experiencia, silencioso,\nel transcurso vivía, nervioso.\n\nQuería mostrarme respetuoso,\nempero terminaba contencioso.\nComo todo un cuidadoso,\nquería vencer lo doloroso.\n\nMas entendí que el comienzo amoroso,\ntambién puede ser desamoroso.",
+            "ESOS JUEGUITOS\n\n¿Dónde están esos jueguitos\nque jugábamos toditos?\n¿Dónde están esos momentos\nen que ignorábamos el tiempo?\n¿Dónde están esos días\nque nos hacían gozar y tanto?\n\nParece que se perdieron en el rincón del tiempo.\nEse tiempo que una mirada nos hizo querernos.\nPero no creo que estén perdidos,\nsimplemente están escondidos.\nEsperan a alguien que los encuentre,\ny los saque a brillar nuevamente.",
+            "UN ABRAZO\n\nCómo extraño ese instante\nen el que el tiempo se detiene.\nDonde se juntan nuestras visiones\ny saltan los corazones.\nDonde la ilusión del contacto\nse convierte en realidad.\n¿Dónde están esos momentos\nen los que oímos el «te quiero»?",
+            "RECUERDO VACÍO\n\nUn destello deslumbrante\na la distancia se asoma.\nUn recuerdo en el vacío\ncomo un reflejo levitante.\n\nFlores, perlas y mariposas\nadornan una casa Barbosa.\n«Venid, entrad y aspirad;\nllenad este círculo tan vacío»\n¿Esto tiene significado?\n\nPuede ser un lugar reservado.\nUn vacío en un alma sedienta\nesperando ser saciado.\n\nFlores, perlas y mariposas\nadornan una casa arteriosa.\nLos destellos, como luces cariñosas,\nla hacen cada vez más hermosa.",
+            "INTRUSIÓN\n\nMente viva en un momento desviada.\nPierde su pensamiento sin entender nada.\nSolo es fruto de la intrusión, camarada;\nesa figura en tu mente, apasionada.\n\nParece que en ti se ha quedado abandonada,\ncomo si nada más existiera, ahí condenada.\n\nPara tus sentimientos se vuelve una espada,\nmientras buscas el fin de esa jornada.\nEntonces tu alma se pregunta ansiosa:\n«¿Cómo caí en esta trampa envenenada?»\nLa doncella que te extendía la llamada\nresultó ser simplemente la camada.\n\nMas cuando quieres abandonar esa parada,\nno te resistes ante una nueva mirada.\nLa llama vuelve a la intensidad adecuada,\ny se prepara a esperar: «¿cuándo será la bajada?»",
+            "LA LUNA COMO NUNCA\n\nHe visto la luna como nunca antes.\nTan brillante y cálida como el sol.\nHe visto cómo deslumbra su reflejo,\ncapaz de despertar el corazón.\nHe visto cómo con su mirada\nllora y expresa mucho dolor,\nal traer a memoria aquellos días\nen que yo admiraba su expresión.\n\n¡Qué inocencia la de mi luna!\nNo conoce mi intención.\nNo me he olvidado de ella,\naún le compongo mi canción."
+        ];
         while (poemas.length < 365) {
-            poemas.push(poemas[Math.floor(Math.random() * 3)]);
+            poemas.push(poemas[Math.floor(Math.random() * poemas.length)]);
         }
 
         function obtenerDiaDelAño() {
             const ahora = new Date();
             const inicioAño = new Date(ahora.getFullYear(), 0, 1);
             const diferencia = ahora - inicioAño;
-            return Math.floor(diferencia / (1000 * 60 * 60 * 24)); // Día del año (0-364)
+            return Math.floor(diferencia / (1000 * 60 * 60 * 24));
         }
 
         function obtenerPoemaDiario() {
@@ -629,7 +586,6 @@
             const hoy = new Date().toISOString().split("T")[0];
             const clave = `frase-${emocion}-${hoy}`;
             let fraseGuardada = localStorage.getItem(clave);
-
             if (!fraseGuardada) {
                 const frasesDisponibles = frases[emocion];
                 fraseGuardada = frasesDisponibles[Math.floor(Math.random() * frasesDisponibles.length)];
@@ -876,12 +832,17 @@
 
         window.incrementarContadorEmocion = function(emocion) {
             if (usuarioActual === USUARIO_ESTRELLITA) {
+                console.log(`Registrando emoción: ${emocion} para ${usuarioActual}`);
                 const contadorRef = ref(db, `contadores/${emocion}`);
                 get(contadorRef).then((snapshot) => {
                     const valorActual = snapshot.exists() ? snapshot.val() : 0;
-                    set(contadorRef, valorActual + 1);
+                    set(contadorRef, valorActual + 1).then(() => {
+                        console.log(`Contador de ${emocion} actualizado a ${valorActual + 1}`);
+                    }).catch(error => {
+                        console.error("Error al incrementar contador:", error);
+                    });
                 }).catch(error => {
-                    console.error("Error al incrementar contador:", error);
+                    console.error("Error al leer contador:", error);
                 });
 
                 const historialEmocionesRef = ref(db, "historialEmociones");
@@ -890,16 +851,19 @@
                     usuario: usuarioActual,
                     timestamp: serverTimestamp(),
                     fecha: new Date().toLocaleString()
+                }).then(() => {
+                    console.log(`Emoción ${emocion} registrada en historial`);
                 }).catch(error => {
                     console.error("Error al registrar historial:", error);
                 });
             }
         };
 
-        function inicializarHistorialEmociones() {
+function inicializarHistorialEmociones() {
             console.log("Inicializando historial de emociones para administrador");
             const historialRef = ref(db, "historialEmociones");
             onValue(historialRef, (snapshot) => {
+                console.log("Datos de historial recibidos:", snapshot.val());
                 if (snapshot.exists()) {
                     actualizarUIHistorial(snapshot.val());
                 }
@@ -913,8 +877,8 @@
                 id: key,
                 ...value
             }));
-            historialArray.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-            historialArray.slice(0, 100).forEach(evento => {
+            historialArray.sort((a, b) => b.timestamp - a.timestamp); // Ordenar por timestamp descendente
+            historialArray.forEach(evento => { // Mostrar todas las entradas sin límite
                 const nombreEmocion = listaEmociones.find(e => e.value === evento.emocion)?.label || evento.emocion;
                 const div = document.createElement("div");
                 div.className = "historial-item";
