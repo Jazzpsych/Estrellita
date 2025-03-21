@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Alma del Jazz</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #1e1e1e; /* Fondo gris oscuro, casi negro */
+            color: #f0e6d2; /* Letras claras, tono crema suave */
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #d4af37; /* Amarillo dorado para encabezados */
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #d4af37;
+            font-size: 1.8em;
+            margin-top: 30px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #2b2b2b; /* Contenedor un poco más claro que el fondo */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        p {
+            font-size: 1.1em;
+            margin: 15px 0;
+        }
+        .figure {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .figure img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 20px;
+            border: 2px solid #d4af37; /* Borde dorado para las imágenes */
+        }
+        .figure-text {
+            flex: 1;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+            font-style: italic;
+        }
+        a.song-link {
+            color: #87ceeb; /* Azul claro para enlaces de canciones */
+            text-decoration: none;
+        }
+        a.song-link:hover {
+            color: #b0e0e6; /* Azul más claro al pasar el ratón */
+            text-decoration: underline;
+        }
+        a.secret-link {
+            color: #f0e6d2; /* Mismo color que el texto para que no se note */
+            text-decoration: none;
+        }
+        a.secret-link:hover {
+            color: #87ceeb; /* Cambio sutil a azul claro al pasar el ratón */
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.5em; }
+            .container { padding: 15px; }
+            p, li { font-size: 1em; }
+            .figure { flex-direction: column; text-align: center; }
+            .figure img { margin: 0 0 10px 0; width: 120px; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>El Alma del Jazz</h1>
+        <p>El jazz no es solo música; es una forma de vida, un reflejo del alma humana en notas improvisadas y ritmos que laten al compás del corazón. Surgió a finales del siglo XIX en las calles vibrantes de Nueva Orleans, donde las influencias del blues, el ragtime y las tradiciones africanas se fusionaron en un sonido único. Desde los clubes llenos de humo hasta los grandes escenarios del mundo, el jazz ha evolucionado, pero nunca ha perdido su esencia: la libertad de expresión.</p>
+        
+        <p>Este género ha dado lugar a momentos inolvidables y artistas que han trascendido el tiempo. A lo largo de los años, el jazz ha sabido adaptarse, desde el swing de los años 30 hasta el bebop de los 40 y el cool jazz de los 50. Es un arte que invita a escuchar con atención, a sentir cada nota como si contara una historia. A continuación, exploraremos a tres de sus figuras más emblemáticas y una selección de canciones que capturan su espíritu.</p>
+
+        <h2>Figuras Icónicas del Jazz</h2>
+
+        <div class="figure">
+            <img src="https://i.imgur.com/DgMHCSb.jpeg" alt="Frank Sinatra">
+            <div class="figure-text">
+                <p><strong>Frank Sinatra</strong>, conocido como "La Voz", llevó el jazz a nuevas alturas con su estilo suave y su habilidad para interpretar canciones con una emoción profunda. Aunque también fue un ícono del pop, su contribución al jazz vocal es innegable, especialmente en temas como "Fly Me to the Moon", donde su phrasing impecable brilla.</p>
+            </div>
+        </div>
+
+        <div class="figure">
+            <img src="https://i.imgur.com/101yBqK.jpeg" alt="Ella Fitzgerald">
+            <div class="figure-text">
+                <p><strong>Ella Fitzgerald</strong>, la "Primera Dama de la Canción", revolucionó el jazz con su voz cristalina y su dominio del scat, una técnica de improvisación vocal que convirtió en arte. Canciones como "Summertime" muestran su capacidad para transformar melodías en pura magia.</p>
+            </div>
+        </div>
+
+        <div class="figure">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Louis_Armstrong_restored.jpg/220px-Louis_Armstrong_restored.jpg" alt="Louis Armstrong">
+            <div class="figure-text">
+                <p><strong>Louis Armstrong</strong>, apodado "Satchmo", fue un pionero del jazz con su trompeta y su voz grave y carismática. Su interpretación de "What a Wonderful World" no solo es un himno de esperanza, sino una muestra de cómo el jazz puede tocar el alma.</p>
+            </div>
+        </div>
+
+        <h2>Canciones que Definen el Jazz</h2>
+        <p>El jazz vive en sus melodías, y estas canciones son un testimonio de su diversidad y belleza. Escucha estas piezas y déjate llevar por su encanto:</p>
+        <ul>
+            <li><a href="https://www.youtube.com/watch?v=A3yCcXgbKrE" class="song-link" target="_blank">"What a Wonderful World" - Louis Armstrong</a></li>
+            <li><a href="https://www.youtube.com/watch?v=u2bigf337aU" class="song-link" target="_blank">"Summertime" - Ella Fitzgerald</a></li>
+            <li><a href="https://www.youtube.com/watch?v=ZEcqHA7dbwM" class="song-link" target="_blank">"Fly Me to the Moon" - Frank Sinatra</a></li>
+            <li><a href="https://www.youtube.com/watch?v=vmDDOFXSgAs&pp=ygUJdGFrZSBmaXZl" class="song-link" target="_blank">"Take five" - Dave Brubeck</a></li>
+            <li><a href="https://www.youtube.com/watch?v=ylXk1LBvIqU" class="song-link" target="_blank">"So What" - Miles Davis</a></li>
+        </ul>
+
+        <h2>Un Legado Eterno</h2>
+        <p>El jazz es un género que nunca envejece. Cada acorde, cada improvisación, lleva consigo las historias de quienes lo crearon y lo vivieron. Desde los bares clandestinos de la Prohibición hasta las salas de concierto modernas, su espíritu sigue resonando. Es un recordatorio de que la música puede ser un refugio, una protesta o una celebración, todo al mismo tiempo.</p>
+        
+        <p>Si te apasiona este arte, sumérgete en sus raíces, descubre sus leyendas y déjate envolver por sus <a href="01Estrellita (ventanas y puertas al cielo y las estrellas del universo).html" class="secret-link">melodías</a>. El jazz siempre tendrá algo nuevo que ofrecer.</p>
+    </div>
+</body>
+</html>
