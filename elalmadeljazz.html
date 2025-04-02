@@ -1,21 +1,24 @@
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Alma del Jazz</title>
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>El Alma del Jazz</title>
+<style>
+        /* CSS completo de "El Alma del Jazz" */
         body {
             font-family: 'Georgia', serif;
-            background-color: #1e1e1e; /* Fondo gris oscuro, casi negro */
-            color: #f0e6d2; /* Letras claras, tono crema suave */
+            background-color: #1e1e1e;
+            color: #f0e6d2;
             margin: 0;
             padding: 20px;
             line-height: 1.6;
         }
         h1 {
             text-align: center;
-            color: #d4af37; /* Amarillo dorado para encabezados */
+            color: #d4af37;
             font-size: 2.5em;
             margin-bottom: 20px;
         }
@@ -27,55 +30,21 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background-color: #2b2b2b; /* Contenedor un poco más claro que el fondo */
+            background-color: #2b2b2b;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
-        p {
-            font-size: 1.1em;
-            margin: 15px 0;
-        }
-        .figure {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-        }
-        .figure img {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-right: 20px;
-            border: 2px solid #d4af37; /* Borde dorado para las imágenes */
-        }
-        .figure-text {
-            flex: 1;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin: 10px 0;
-            font-style: italic;
-        }
-        a.song-link {
-            color: #87ceeb; /* Azul claro para enlaces de canciones */
-            text-decoration: none;
-        }
-        a.song-link:hover {
-            color: #b0e0e6; /* Azul más claro al pasar el ratón */
-            text-decoration: underline;
-        }
-        a.secret-link {
-            color: #f0e6d2; /* Mismo color que el texto para que no se note */
-            text-decoration: none;
-        }
-        a.secret-link:hover {
-            color: #87ceeb; /* Cambio sutil a azul claro al pasar el ratón */
-            text-decoration: underline;
-        }
+        p { font-size: 1.1em; margin: 15px 0; }
+        .figure { display: flex; align-items: center; margin: 20px 0; }
+        .figure img { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; margin-right: 20px; border: 2px solid #d4af37; }
+        .figure-text { flex: 1; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 10px 0; font-style: italic; }
+        a.song-link { color: #87ceeb; text-decoration: none; }
+        a.song-link:hover { color: #b0e0e6; text-decoration: underline; }
+        a.secret-link { color: #f0e6d2; text-decoration: none; }
+        a.secret-link:hover { color: #87ceeb; text-decoration: underline; }
         @media (max-width: 600px) {
             h1 { font-size: 2em; }
             h2 { font-size: 1.5em; }
@@ -84,52 +53,1393 @@
             .figure { flex-direction: column; text-align: center; }
             .figure img { margin: 0 0 10px 0; width: 120px; height: 120px; }
         }
+
+        /* Estilos para el chat público */
+        .chat-container { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        #chat-publico { overflow-y: auto; height: 200px; padding: 10px; width: 100%; box-sizing: border-box; background-color: #3a3a3a; border-radius: 5px; margin-bottom: 10px; }
+        .input-container { display: flex; justify-content: center; align-items: center; width: 100%; margin-top: 5px; }
+        #mensajeInputPublico { width: 70%; resize: none; /* Cambiado a none */ height: 40px; /* Altura fija */ background-color: #f0e6d2; color: #1e1e1e; padding: 5px; border-radius: 5px; border: 1px solid #555; }
+        #enviarMensajePublico { padding: 8px 12px; /* Ajuste de padding */ margin-left: 5px; background-color: #d4af37; color: #1e1e1e; border: none; cursor: pointer; border-radius: 5px; height: 40px; }
+        .mensaje-item { text-align: left; margin: 8px 0; padding: 8px 12px; background-color: #4f4f4f; border-radius: 8px; word-wrap: break-word; }
+        .mensaje-item p { margin: 0; font-size: 1em; } /* Ajuste tamaño y margen */
+        .mensaje-item strong { color: #d4af37; } /* Nombre de usuario destacado */
+
+
+        /* Estilos para la sección secreta (adaptados de Estrellita) */
+        #seccion-secreta {
+          display: none;
+          background-color: #181825; /* Fondo principal oscuro */
+          color: #eaeaea; /* Texto general claro */
+          padding: 20px;
+          border-radius: 10px;
+          margin-top: 20px;
+          border: 1px solid #333; /* Borde sutil */
+        }
+
+        #loginContainer,
+        #contenido-secreto {
+          background-color: #1e1e2f; /* Fondo de contenedores internos */
+          padding: 25px; /* Más padding */
+          border-radius: 10px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+          margin-bottom: 20px; /* Espacio entre contenedores */
+        }
+
+        #loginContainer h2, #contenido-secreto h2 {
+          color: #d18fff; /* Color violeta para títulos */
+          text-align: center;
+          margin-bottom: 20px;
+        }
+
+        /* Estilos consistentes para inputs, selects, textareas, botones */
+        select, button, input[type="email"], input[type="password"], input[type="text"], textarea {
+          background-color: #2c2c3d; /* Fondo oscuro para inputs */
+          color: #f0f0f0; /* Texto claro */
+          border: 1px solid #555; /* Borde grisáceo */
+          padding: 10px 12px; /* Padding uniforme */
+          margin: 8px 0; /* Margen vertical */
+          border-radius: 6px;
+          font-size: 16px; /* Tamaño de fuente legible */
+          width: 100%; /* Ocupar ancho disponible */
+          box-sizing: border-box; /* Incluir padding y borde en el ancho */
+          font-family: 'Georgia', serif; /* Consistencia de fuente */
+        }
+        textarea {
+          resize: vertical; /* Permitir redimensionar verticalmente */
+          min-height: 60px; /* Altura mínima */
+        }
+
+        /* Contenedor de contraseña */
+        .password-container {
+          position: relative;
+          display: flex;
+          align-items: center;
+          width: 100%;
+        }
+        #password {
+          flex-grow: 1; /* Input ocupa espacio disponible */
+          margin-right: 0; /* Sin margen derecho */
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          border-right: none; /* Quitar borde derecho */
+        }
+        #togglePassword {
+          padding: 10px 12px;
+          margin: 8px 0 8px -1px; /* Ajuste margen para alinear con input */
+          border: 1px solid #555;
+          border-left: none;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          cursor: pointer;
+          background-color: #2c2c3d; /* Mismo fondo que input */
+          color: #f0f0f0;
+          width: auto; /* Ancho automático */
+          box-sizing: border-box;
+        }
+
+        /* Mensajes y Poemas */
+        #mensaje,
+        #poema {
+          font-size: 1.1em; /* Tamaño ligeramente mayor */
+          margin-top: 15px;
+          color: #c8a2c8; /* Lila suave para mensajes */
+          background-color: #2a2a3a; /* Fondo sutil */
+          padding: 10px;
+          border-radius: 5px;
+          border-left: 3px solid #d18fff; /* Borde izquierdo destacado */
+        }
+        #poema {
+          font-style: italic;
+          white-space: pre-wrap; /* Conservar saltos de línea */
+          color: #b0e0e6; /* Azul claro para poemas */
+           border-left: 3px solid #87ceeb; /* Borde izquierdo destacado */
+           line-height: 1.5;
+        }
+
+        /* Contenedor del chat secreto */
+        #chat {
+            overflow-y: auto; /* Permite scroll vertical */
+            height: 300px; /* Altura aumentada */
+            padding: 15px; /* Más padding */
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: #1e1e2f; /* Fondo del área de chat */
+            display: flex;
+            flex-direction: column; /* Mensajes uno debajo del otro */
+            gap: 12px; /* Espacio aumentado entre mensajes */
+            margin-bottom: 10px; /* Espacio antes del input */
+        }
+
+        /* Estilo de los mensajes tipo WhatsApp */
+        .mensaje-secreto {
+            display: inline-block; /* Permite que el fondo se ajuste al texto */
+            max-width: 75%; /* Ancho máximo del mensaje */
+            padding: 10px 15px; /* Padding interno */
+            border-radius: 18px; /* Bordes más redondeados */
+            margin: 0;
+            word-wrap: break-word; /* Romper palabras largas */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más común en chats */
+            font-size: 0.95em; /* Tamaño de fuente ligeramente menor */
+            line-height: 1.4; /* Espaciado de línea */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15); /* Sombra sutil */
+        }
+        .mensaje-secreto strong { /* Estilo para el nombre de usuario */
+             display: block; /* Nombre en línea separada */
+             font-weight: 600;
+             margin-bottom: 3px;
+             font-size: 0.9em;
+             color: inherit; /* Hereda color del padre (útil para diferenciar mio/otro si es necesario) */
+         }
+
+        /* Mensajes del usuario actual (a la derecha, verde) */
+        .mensaje-secreto.mio {
+            background-color: #075E54; /* Verde oscuro WhatsApp */
+            color: #e1f5e1; /* Texto claro sobre verde */
+            align-self: flex-end; /* Alinea a la derecha */
+            border-bottom-right-radius: 6px; /* Esquina menos redonda */
+        }
+         .mensaje-secreto.mio strong {
+             color: #a7ffb6; /* Color del nombre para mensajes propios */
+         }
+
+        /* Mensajes de otros usuarios (a la izquierda, gris oscuro) */
+        .mensaje-secreto.otro {
+            background-color: #262D31; /* Gris oscuro WhatsApp */
+            color: #e0e0e0; /* Texto claro */
+            align-self: flex-start; /* Alinea a la izquierda */
+            border-bottom-left-radius: 6px; /* Esquina menos redonda */
+        }
+        .mensaje-secreto.otro strong {
+            color: #87ceeb; /* Color del nombre para mensajes de otros */
+        }
+
+        /* Input y botón de enviar para chat secreto */
+        #seccion-secreta .input-container { /* Target específico para evitar conflictos */
+             display: flex;
+             align-items: flex-end; /* Alinear items abajo para textareas */
+             gap: 8px; /* Espacio entre textarea y botón */
+        }
+        #mensajeInput { /* Textarea del chat secreto */
+            flex-grow: 1; /* Ocupa el espacio restante */
+            height: auto; /* Altura automática inicial */
+            min-height: 40px; /* Altura mínima */
+            max-height: 120px; /* Altura máxima antes de scroll interno */
+            padding: 10px; /* Padding */
+            margin: 0; /* Sin margen extra */
+        }
+        #enviarMensaje { /* Botón de enviar del chat secreto */
+            width: auto; /* Ancho automático */
+            padding: 10px 15px; /* Padding */
+            margin: 0; /* Sin margen extra */
+            height: 40px; /* Altura fija alineada con min-height de textarea */
+            align-self: flex-end; /* Alinear el botón abajo */
+            background-color: #b48efc; /* Violeta para botón */
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #enviarMensaje:hover {
+            background-color: #d8b8ff; /* Color más claro al pasar el ratón */
+        }
+
+        /* Botones generales en sección secreta */
+        #seccion-secreta button:not(#enviarMensaje):not(#logout):not(#togglePassword) { /* Estilo para otros botones */
+          background-color: #b48efc;
+          color: #fff;
+          border: none;
+          padding: 10px 16px; /* Padding aumentado */
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          width: auto; /* Ancho automático */
+          margin-right: 10px; /* Espacio entre botones */
+        }
+        #seccion-secreta button:not(#enviarMensaje):not(#logout):not(#togglePassword):hover {
+          background-color: #d8b8ff;
+        }
+        #logout { /* Estilo específico botón logout */
+           background-color: #e74c3c; /* Rojo */
+           color: white;
+           padding: 10px 15px;
+           border: none;
+           cursor: pointer;
+           border-radius: 6px;
+           float: right; /* Alinear a la derecha */
+           margin-left: 10px; /* Espacio si hay otros elementos */
+           width: auto;
+        }
+        #logout:hover {
+             background-color: #c0392b; /* Rojo más oscuro */
+        }
+
+
+        /* Contadores y Admin Info */
+        .contador-emociones,
+        #admin-info {
+          background-color: #2b2b3d; /* Fondo ligeramente diferente */
+          border: 1px solid #555;
+          padding: 15px; /* Más padding */
+          border-radius: 8px;
+          margin-top: 20px; /* Más espacio superior */
+          color: #dddddd; /* Texto más claro */
+        }
+        .contador-emociones h3, #admin-info h3 {
+           color: #87ceeb; /* Azul claro para títulos internos */
+           margin-top: 0;
+           border-bottom: 1px solid #555;
+           padding-bottom: 8px;
+           margin-bottom: 15px;
+        }
+        .contador-item, .historial-item { /* Estilo para cada línea de contador/historial */
+           margin-bottom: 8px;
+           padding: 5px 0;
+        }
+        .contador-label { /* Etiqueta de la emoción */
+           display: inline-block;
+           width: 180px; /* Ancho fijo para alinear contadores */
+        }
+        .contador-valor { /* Valor del contador */
+            font-weight: bold;
+            color: #d18fff; /* Violeta */
+        }
+         #historial-container {
+             max-height: 250px; /* Más altura para historial */
+             overflow-y: auto;
+             padding-right: 10px; /* Espacio para barra de scroll */
+         }
+         .historial-item {
+             border-bottom: 1px dashed #444; /* Separador sutil */
+             padding-bottom: 5px;
+         }
+         .historial-item span:first-child { /* Emoción */
+             color: #c8a2c8; /* Lila suave */
+         }
+         .historial-item span:last-child { /* Fecha */
+            float: right;
+            font-style: italic;
+            font-size: 0.9em;
+            color: #aaa; /* Gris claro */
+        }
+         #admin-info p { margin: 8px 0; } /* Espaciado párrafos admin */
+         #admin-status { font-weight: bold; } /* Resaltar estado admin */
+
+        /* Imágenes */
+        .imagenes-container {
+            display: flex; /* Alineación horizontal */
+            justify-content: space-around; /* Espacio entre imágenes */
+            flex-wrap: wrap; /* Permitir que pasen a la siguiente línea en pantallas pequeñas */
+            margin-top: 25px;
+            gap: 20px; /* Espacio entre items */
+        }
+        .imagen-item {
+            text-align: center; /* Centrar contenido */
+            background-color: #2b2b3d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            max-width: 320px; /* Ancho máximo del contenedor de imagen */
+        }
+        .imagen-item img {
+          max-width: 100%; /* Imagen se ajusta al contenedor */
+          height: auto;
+          border-radius: 8px;
+          border: 2px solid #555; /* Borde alrededor de la imagen */
+          display: block; /* Evitar espacio extra debajo */
+          margin: 0 auto 10px auto; /* Centrar y añadir espacio debajo */
+        }
+        .imagen-emojis { margin-top: 10px; } /* Espacio sobre emojis/links */
+        .imagen-emojis span, .imagen-emojis a {
+           font-size: 1.5em; /* Emojis más grandes */
+           margin: 0 10px; /* Espacio entre emojis/links */
+           text-decoration: none;
+        }
+        .imagen-emojis a {
+           color: #b48efc; /* Color violeta para links de música */
+           transition: color 0.3s ease;
+        }
+         .imagen-emojis a:hover {
+            color: #d8b8ff; /* Más claro al pasar el ratón */
+         }
+
+        /* Mensaje de error login */
+        #loginError {
+            color: #e74c3c; /* Rojo */
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+            min-height: 1.2em; /* Evita saltos de layout */
+            /* display: none; /* Lo ocultamos/mostramos con JS */ /* CORRECCIÓN: Quitar esto si se maneja con JS */
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>El Alma del Jazz</h1>
-        <p>El jazz no es solo música; es una forma de vida, un reflejo del alma humana en notas improvisadas y ritmos que laten al compás del corazón. Surgió a finales del siglo XIX en las calles vibrantes de Nueva Orleans, donde las influencias del blues, el ragtime y las tradiciones africanas se fusionaron en un sonido único. Desde los clubes llenos de humo hasta los grandes escenarios del mundo, el jazz ha evolucionado, pero nunca ha perdido su esencia: la libertad de expresión.</p>
-        
-        <p>Este género ha dado lugar a momentos inolvidables y artistas que han trascendido el tiempo. A lo largo de los años, el jazz ha sabido adaptarse, desde el swing de los años 30 hasta el bebop de los 40 y el cool jazz de los 50. Es un arte que invita a escuchar con atención, a sentir cada nota como si contara una historia. A continuación, exploraremos a tres de sus figuras más emblemáticas y una selección de canciones que capturan su espíritu.</p>
+<div class="container">
+<h1>El Alma del Jazz</h1>
+<p>El jazz no es solo música; es una forma de vida, un reflejo del alma humana en notas improvisadas y ritmos que laten al compás del corazón. Surgió a finales del siglo XIX en las calles vibrantes de Nueva Orleans, donde las influencias del blues, el ragtime y las tradiciones africanas se fusionaron en un sonido único. Desde los clubes llenos de humo hasta los grandes escenarios del mundo, el jazz ha evolucionado, pero nunca ha perdido su esencia: la libertad de expresión.</p>
+<p>Este género ha dado lugar a momentos inolvidables y artistas que han trascendido el tiempo. A lo largo de los años, el jazz ha sabido adaptarse, desde el swing de los años 30 hasta el bebop de los 40 y el cool jazz de los 50. Es un arte que invita a escuchar con atención, a sentir cada nota como si contara una historia. A continuación, exploraremos a tres de sus figuras más emblemáticas y una selección de canciones que capturan su espíritu.</p>
+<h2>Figuras Icónicas del Jazz</h2>
+<div class="figure">
+<img alt="Frank Sinatra" src="https://i.imgur.com/DgMHCSb.jpeg"/>
+<div class="figure-text">
+<p><strong>Frank Sinatra</strong>, conocido como "La Voz", llevó el jazz a nuevas alturas con su estilo suave y su habilidad para interpretar canciones con una emoción profunda. Aunque también fue un ícono del pop, su contribución al jazz vocal es innegable, especialmente en temas como "Fly Me to the Moon", donde su phrasing impecable brilla.</p>
+</div>
+</div>
+<div class="figure">
+<img alt="Ella Fitzgerald" src="https://i.imgur.com/101yBqK.jpeg"/>
+<div class="figure-text">
+<p><strong>Ella Fitzgerald</strong>, la "Primera Dama de la Canción", revolucionó el jazz con su voz cristalina y su dominio del scat, una técnica de improvisación vocal que convirtió en arte. Canciones como "Summertime" muestran su capacidad para transformar melodías en pura magia.</p>
+</div>
+</div>
+<div class="figure">
+<img alt="Louis Armstrong" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Louis_Armstrong_restored.jpg/220px-Louis_Armstrong_restored.jpg"/>
+<div class="figure-text">
+<p><strong>Louis Armstrong</strong>, apodado "Satchmo", fue un pionero del jazz con su trompeta y su voz grave y carismática. Su interpretación de "What a Wonderful World" no solo es un himno de esperanza, sino una muestra de cómo el jazz puede tocar el alma.</p>
+</div>
+</div>
+<h2>Canciones que Definen el Jazz</h2>
+<p>El jazz vive en sus melodías, y estas canciones son un testimonio de su diversidad y belleza. Escucha estas piezas y déjate llevar por su encanto:</p>
+<ul>
+<li><a class="song-link" href="https://www.youtube.com/watch?v=A3yCcXgbKrE" target="_blank">"What a Wonderful World" - Louis Armstrong</a></li>
+<li><a class="song-link" href="https://www.youtube.com/watch?v=u2bigf337aU" target="_blank">"Summertime" - Ella Fitzgerald</a></li>
+<li><a class="song-link" href="https://www.youtube.com/watch?v=ZEcqHA7dbwM" target="_blank">"Fly Me to the Moon" - Frank Sinatra</a></li>
+<li><a class="song-link" href="https://www.youtube.com/watch?v=vmDDOFXSgAs&amp;pp=ygUJdGFrZSBmaXZl" target="_blank">"Take Five" - Dave Brubeck</a></li>
+<li><a class="song-link" href="https://www.youtube.com/watch?v=ylXk1LBvIqU" target="_blank">"So What" - Miles Davis</a></li>
+</ul>
 
-        <h2>Figuras Icónicas del Jazz</h2>
-
-        <div class="figure">
-            <img src="https://i.imgur.com/DgMHCSb.jpeg" alt="Frank Sinatra">
-            <div class="figure-text">
-                <p><strong>Frank Sinatra</strong>, conocido como "La Voz", llevó el jazz a nuevas alturas con su estilo suave y su habilidad para interpretar canciones con una emoción profunda. Aunque también fue un ícono del pop, su contribución al jazz vocal es innegable, especialmente en temas como "Fly Me to the Moon", donde su phrasing impecable brilla.</p>
-            </div>
-        </div>
-
-        <div class="figure">
-            <img src="https://i.imgur.com/101yBqK.jpeg" alt="Ella Fitzgerald">
-            <div class="figure-text">
-                <p><strong>Ella Fitzgerald</strong>, la "Primera Dama de la Canción", revolucionó el jazz con su voz cristalina y su dominio del scat, una técnica de improvisación vocal que convirtió en arte. Canciones como "Summertime" muestran su capacidad para transformar melodías en pura magia.</p>
-            </div>
-        </div>
-
-        <div class="figure">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Louis_Armstrong_restored.jpg/220px-Louis_Armstrong_restored.jpg" alt="Louis Armstrong">
-            <div class="figure-text">
-                <p><strong>Louis Armstrong</strong>, apodado "Satchmo", fue un pionero del jazz con su trompeta y su voz grave y carismática. Su interpretación de "What a Wonderful World" no solo es un himno de esperanza, sino una muestra de cómo el jazz puede tocar el alma.</p>
-            </div>
-        </div>
-
-        <h2>Canciones que Definen el Jazz</h2>
-        <p>El jazz vive en sus melodías, y estas canciones son un testimonio de su diversidad y belleza. Escucha estas piezas y déjate llevar por su encanto:</p>
-        <ul>
-            <li><a href="https://www.youtube.com/watch?v=A3yCcXgbKrE" class="song-link" target="_blank">"What a Wonderful World" - Louis Armstrong</a></li>
-            <li><a href="https://www.youtube.com/watch?v=u2bigf337aU" class="song-link" target="_blank">"Summertime" - Ella Fitzgerald</a></li>
-            <li><a href="https://www.youtube.com/watch?v=ZEcqHA7dbwM" class="song-link" target="_blank">"Fly Me to the Moon" - Frank Sinatra</a></li>
-            <li><a href="https://www.youtube.com/watch?v=vmDDOFXSgAs&pp=ygUJdGFrZSBmaXZl" class="song-link" target="_blank">"Take five" - Dave Brubeck</a></li>
-            <li><a href="https://www.youtube.com/watch?v=ylXk1LBvIqU" class="song-link" target="_blank">"So What" - Miles Davis</a></li>
-        </ul>
-
-        <h2>Un Legado Eterno</h2>
-        <p>El jazz es un género que nunca envejece. Cada acorde, cada improvisación, lleva consigo las historias de quienes lo crearon y lo vivieron. Desde los bares clandestinos de la Prohibición hasta las salas de concierto modernas, su espíritu sigue resonando. Es un recordatorio de que la música puede ser un refugio, una protesta o una celebración, todo al mismo tiempo.</p>
-        
-        <p>Si te apasiona este arte, sumérgete en sus raíces, descubre sus leyendas y déjate envolver por sus <a href="01Estrellita (ventanas y puertas al cielo y las estrellas del universo).html" class="secret-link">melodías</a>. El jazz siempre tendrá algo nuevo que ofrecer.</p>
+<h2>Comentarios</h2>
+<div class="chat-container">
+    <div id="chat-publico"></div>
+    <div class="input-container">
+        <textarea id="mensajeInputPublico" placeholder="Deja tu comentario..." rows="1"></textarea> <!-- rows="1" para empezar pequeño -->
+        <button id="enviarMensajePublico">Enviar</button>
     </div>
+</div>
+
+<h2>Un Legado Eterno</h2>
+<p>El jazz es un género que nunca envejece. Cada acorde, cada improvisación, lleva consigo las historias de quienes lo crearon y lo vivieron. Desde los bares clandestinos de la Prohibición hasta las salas de concierto modernas, su espíritu sigue resonando. Es un recordatorio de que la música puede ser un refugio, una protesta o una celebración, todo al mismo tiempo.</p>
+<p>Si te apasiona este arte, sumérgete en sus raíces, descubre sus leyendas y déjate envolver por sus <a class="secret-link" href="#" id="palabra-secreta">melodías</a>.</p>
+
+<!-- Sección secreta -->
+<div id="seccion-secreta">
+    <div id="loginContainer">
+        <h2>Iniciar Sesión</h2>
+        <input id="email" placeholder="Correo electrónico" required="" type="email"/>
+        <div class="password-container">
+            <input id="password" placeholder="Contraseña" required="" type="password"/>
+            <button id="togglePassword" type="button">👁</button>
+        </div>
+        <button id="login">Iniciar sesión</button>
+        <p id="loginError" style="display: none;"></p> <!-- Aseguramos que esté oculto por defecto -->
+    </div>
+
+    <div id="contenido-secreto" style="display: none;">
+        <button id="logout">Cerrar Sesión</button>
+        <div id="admin-info" style="display: none;"> <!-- Oculto por defecto -->
+            <h3>Panel de administrador</h3>
+            <p id="usuario-actual-info">Usuario actual: <strong id="usuario-nombre">No detectado</strong></p>
+            <p id="admin-status-info">Estado de administrador: <strong id="admin-status">No</strong></p>
+        </div>
+
+        <h2>Mi Rincón Especial ✨</h2>
+        <p>¿Cómo te sientes hoy, mi niña?</p>
+        <select id="emocion">
+            <option value="feliz">Feliz 😊</option>
+            <option value="triste">Triste 😔</option>
+            <option value="estresada">Estresada 😵‍💫</option>
+            <option value="cansada">Cansada 🥱</option>
+            <option value="extrañandote">Extrañándote 🥺</option>
+            <option value="pensandoEnTi">Pensando en ti 💭❤️</option>
+            <option value="conGanasDeVerte">Con ganas de verte 🥰</option>
+            <option value="conGanasDePensar">Con ganas de "pensar" 😏</option>
+        </select>
+        <button onclick="mostrarMensaje()">Ver mensaje</button>
+        <button onclick="mostrarPoema()">Poema del día</button>
+        <p id="mensaje"></p>
+        <p id="poema"></p>
+
+        <div class="contador-emociones" id="contador-emociones" style="display: none;"> <!-- Oculto por defecto -->
+            <h3>Contador de Emociones ❤️</h3>
+            <div id="contadores-container"></div>
+        </div>
+
+        <div class="contador-emociones" id="historial-emociones" style="display: none;"> <!-- Oculto por defecto -->
+            <h3>Historial de Emociones ⏱️</h3>
+            <div id="historial-container"></div>
+        </div>
+
+        <div class="imagenes-container">
+            <div class="imagen-item">
+                <img alt="Piano con notas musicales" src="https://i.imgur.com/8jWcK6P.png"/>
+                <div class="imagen-emojis">
+                    <span>❤️</span>
+                    <a href="https://youtu.be/M7k5tjw3-0M" target="_blank">🎵</a>
+                </div>
+            </div>
+            <div class="imagen-item">
+                <img alt="Estrellita especial" src="https://i.imgur.com/qO3JLoN.jpeg"/>
+                <div class="imagen-emojis">
+                    <span>❤️</span>
+                    <a href="https://www.youtube.com/watch?v=ITbjjKDDSO0&amp;pp=ygUgbGEgbWVqb3IgdmVyc2nDs24gam9zZSB5IGVsIHRvcm8%3D" target="_blank">🎵</a>
+                </div>
+            </div>
+        </div>
+
+        <h2>Chat con Estrellita 💬</h2>
+        <div class="chat-container"> <!-- Reutilizamos clase para consistencia -->
+             <div id="chat"></div> <!-- Área de mensajes del chat secreto -->
+             <div class="input-container"> <!-- Contenedor para input y botón -->
+                 <textarea id="mensajeInput" placeholder="Escribe un mensaje..." rows="1"></textarea> <!-- rows="1" inicial -->
+                 <button id="enviarMensaje">Enviar</button>
+             </div>
+         </div>
+
+    </div> <!-- Fin de contenido-secreto -->
+</div> <!-- Fin de seccion-secreta -->
+
+</div> <!-- Fin de container principal -->
+
+<script>
+        // --- Código JS NO modular (frases, poemas, funciones mostrarMensaje/Poema, listeners básicos) ---
+
+        const frases = {
+            feliz: [
+                "Me encanta saber que estás feliz, mi niña. Siempre quiero verte así. 🌸", "Tu felicidad es mi felicidad. Que nunca te falte una sonrisa. 😊",
+                "Hoy el sol brilla más porque tú estás feliz. ☀️💖", "No hay nada que me haga más feliz que verte sonreír. 💫",
+                "Quisiera guardar este momento en un frasco y abrirlo cuando lo necesitemos. 🎀", "Cuando eres feliz, haces del mundo un lugar mejor. 🌍✨",
+                "Si tu alegría tuviera sonido, sería mi canción favorita. 🎶💖", "Disfruta este momento, porque te lo mereces. 💕",
+                "Cada risa tuya es un regalo para mí. 🎁😊", "Me encanta la forma en que iluminas todo con tu alegría. ✨",
+                "Que este día sea solo el comienzo de una larga felicidad. 💛", "Estar feliz es como volar sin alas, ¿verdad? 🕊️",
+                "Recuerda siempre estos momentos y guárdalos en tu corazón. 💖", "Si supieras lo hermosa que te ves cuando sonríes... 🥰",
+                "Ojalá pudiera congelar este instante y guardarlo para siempre. ❄️❤️", "Mi deseo es que nunca pierdas esa luz que llevas dentro. 🌟",
+                "Que cada día sea más brillante que el anterior. ✨🌈", "Tu felicidad es contagiosa, y me encanta ser contagiado. 😆💖",
+                "No importa lo que pase, siempre hay motivos para sonreír. 😊", "Hoy es un día perfecto porque tú lo hiciste así. 🌷💖",
+                "Que cada paso que des esté lleno de alegría. 🚀", "Sonríe, porque te mereces toda la felicidad del mundo. 😍",
+                "Si el mundo tuviera más personas como tú, sería un mejor lugar. 🌎💖", "Qué bonito es verte tan radiante. 🌞✨",
+                "La felicidad es un camino, y tú lo recorres con gracia. 🚶‍♀️💛", "Vive el momento, porque la felicidad está en los pequeños detalles. 🎈",
+                "Me siento afortunado de compartir tu felicidad. 💕", "Un día lleno de alegría es un día bien vivido. 🌸",
+                "Que tu sonrisa nunca se apague, porque ilumina mi mundo. 💖", "No dejes que nada ni nadie apague esta felicidad. ¡Brilla! 🌟"
+            ],
+            triste: [
+                "Recuerda que, pase lo que pase, siempre estaré para ti. 💕", "Las nubes pasan, pero el cielo sigue ahí. Y yo también estaré siempre contigo. 🌧️❤️",
+                "Si estás triste, piensa en lo mucho que significas para mí. 💖", "No importa la tormenta, el sol siempre vuelve a brillar. ☀️",
+                "A veces, llorar también es parte de sanar. Estoy aquí para ti. 💙", "Te mando un abrazo que dure hasta que vuelvas a sonreír. 🤗💖",
+                "No tienes que ser fuerte todo el tiempo. Está bien sentirse así. 💕", "Aunque no lo parezca, este momento difícil pasará. 🌈",
+                "Si necesitas un hombro en el que apoyarte, siempre tendrás el mío. 💛", "Me gustaría poder quitarte toda la tristeza con un solo abrazo. 🫂",
+                "Respira hondo y recuerda lo fuerte que eres. 🌸", "No hay tristeza eterna, solo momentos que nos enseñan. 💖",
+                "Aunque no lo creas, todo esto tiene un propósito. 🌟", "Cuando todo se sienta oscuro, piensa en la luz que llevas dentro. 🔥",
+                "Incluso la noche más larga tiene su amanecer. 🌅", "Recuerda cuánto has logrado y lo increíble que eres. 💕",
+                "Si supieras lo mucho que vales, nunca estarías triste. 💖", "Eres más fuerte de lo que crees, y yo creo en ti. 🌸",
+                "Siempre hay un nuevo comienzo esperando por ti. 💫", "No estás sola. Aquí estoy, contigo. 💕"
+            ],
+            estresada: [
+                "Respira hondo, mi amor. Todo estará bien. 💕", "No tienes que hacerlo todo de una vez, paso a paso. 🦋",
+                "Cierra los ojos por un momento y deja que el estrés se disuelva. ✨", "Incluso las tormentas más fuertes pasan, y esta también lo hará. ⛈️",
+                "Si el mundo pesa demasiado, deja que comparta la carga contigo. 💛", "Hoy puede ser difícil, pero eres más fuerte de lo que crees. 💪",
+                "No dejes que el estrés te haga olvidar lo increíble que eres. 💖", "Descansa un momento, tu bienestar es lo más importante. 🌿",
+                "Un respiro profundo puede hacer maravillas. Inhala… Exhala… 🌬️", "Recuerda que siempre puedes contar conmigo. 🫂💖",
+                "Cada desafío te está haciendo más fuerte, aunque no lo parezca. 🏋️‍♀️", "No dejes que la presión te quite la alegría de cada día. 💫",
+                "Está bien parar un momento y simplemente respirar. ⏳", "Hoy enfócate en lo que puedes controlar y deja ir el resto. 🎈",
+                "Incluso cuando sientas que todo se descontrola, aquí estoy yo para ti. 💕", "Prioriza lo más importante: tú. ✨💖",
+                "Un mal día no significa una mala vida. ☀️💛", "Tómate tu tiempo, las prisas no llevan a nada bueno. 🚶‍♀️",
+                "A veces, un pequeño descanso hace toda la diferencia. 🌊", "Date permiso para desconectar y recargar energías. 🔋",
+                "No dejes que el estrés te impida disfrutar las pequeñas cosas. 🌷", "Recuerda por qué empezaste, pero también permítete descansar. 🌟",
+                "Tu esfuerzo es admirable, pero también lo es tu bienestar. 💖", "A veces, lo mejor que puedes hacer es dejarlo ir y seguir adelante. 🕊️",
+                "La calma llegará, solo aguanta un poco más. 💛", "Si hoy sientes que el mundo pesa, recuerda que no lo cargas sola. 🫂",
+                "Estás haciendo lo mejor que puedes, y eso ya es suficiente. 🌸", "Eres fuerte, incluso cuando no lo sientas. 💪",
+                "Tómate un respiro, la vida no es una carrera. 🌿", "Mañana será un nuevo día, lleno de oportunidades. 🌅"
+            ],
+            cansada: [
+                "Cierra los ojos un momento, descansa, yo cuidaré de ti. 💕", "A veces lo mejor que puedes hacer es dormir y empezar de nuevo mañana. 🌙",
+                "No tienes que hacerlo todo hoy, tómate tu tiempo. ⏳", "Descansa, mi amor. Nada es más importante que tu bienestar. 🌸",
+                "Dormir es como reiniciar el alma. Date permiso de hacerlo. 🔄💖", "Si el día fue agotador, permítete un momento de tranquilidad. 🌿",
+                "Apoya la cabeza, cierra los ojos y deja que el cansancio se disuelva. 💤", "Te mando un abrazo lleno de calma y paz. 🤗💛",
+                "La fatiga no define lo increíble que eres. 💫", "Un día a la vez, mi amor. No hay prisa, descansa. 💕",
+                "Recuerda que hasta las estrellas necesitan descansar. 🌟", "Tu cuerpo y mente te están pidiendo un respiro. Escúchalos. 🦋",
+                "El descanso también es productividad. 🛌✨", "Tómate un momento para ti, lo mereces. 🎀",
+                "No importa lo que pase, todo puede esperar. Tu bienestar primero. 💛", "No te sientas culpable por descansar, es necesario. 🌿",
+                "Un café, una siesta o una pausa pueden hacer maravillas. ☕💖", "Relájate, respira y deja que la calma entre en ti. 🌊",
+                "Cuando despiertes, verás las cosas con más claridad. 🌅", "Hoy te ganaste el derecho de descansar sin remordimientos. 💕",
+                "A veces, descansar es la mejor forma de seguir adelante. 🚶‍♀️💛", "Cierra los ojos, piensa en algo lindo y deja que el sueño te abrace. 💖",
+                "No hay prisa, todo estará aquí cuando despiertes. 🌸", "Mañana será un nuevo día, lleno de oportunidades. 🌟",
+                "Cuando estés lista, sigue adelante. Por ahora, descansa. 💤", "Deja que el cansancio se disuelva y la tranquilidad tome su lugar. 💕",
+                "Un buen descanso puede cambiar todo. 🌙💖", "Nadie puede ser fuerte todo el tiempo. Permítete un respiro. 💛",
+                "Me gustaría estar ahí para abrazarte hasta que duermas. 🤗", "No tienes que cargar el mundo, solo descansar y ser tú. ✨"
+            ],
+            extrañandote: [
+                "Tú dices que me extrañas... Pero yo te extraño más. Y lo sabes. 🥺❤️", "La distancia solo hace que te quiera más. 💫",
+                "Ojalá pudiera abrazarte ahora mismo. 💖", "Cierro los ojos y te imagino aquí conmigo. 🌙",
+                "Cada día sin ti es un día menos para verte otra vez. ⏳💛", "Si pudiera teletransportarme, ya estaría contigo. 🚀💕",
+                "Contando los días, las horas y los minutos para verte. 🕰️💖", "Te extraño tanto que hasta el aire parece más pesado sin ti. 💕",
+                "Mi corazón late diferente cuando no estás cerca. 💘", "Extrañarte es la parte más difícil de mi día. 😔",
+                "A veces, desearía que el tiempo corriera más rápido. ⏳💛", "Si el amor pudiera acortar distancias, ya estaríamos juntos. 🥰",
+                "No importa dónde estés, mi corazón siempre te sigue. 💖", "Cada día sin ti es un pequeño desafío que supero con amor. 💕",
+                "Ojalá pudieras ver cuánto te echo de menos. 💫", "Pensar en ti es mi forma de sentirte cerca. 💛",
+                "No importa la distancia, siempre estamos conectados. 🌍✨", "Aunque no estemos juntos, sé que piensas en mí como yo en ti. 🥰",
+                "Es difícil no verte, pero lo que siento por ti lo hace más llevadero. 💖", "A veces, extraño hasta el sonido de tu voz. 📞💕",
+                "Si el tiempo pudiera ir más rápido cuando no estás… ⏳💛", "Dicen que la ausencia hace crecer el amor, y yo lo siento cada día. ❤️",
+                "No importa cuánto tiempo pase, siempre te extrañaré igual. 💕", "Te pienso tanto que casi parece que estás aquí. 💖",
+                "No hay un solo día en el que no desee verte. 🥰", "Quisiera que el universo conspirara para juntarnos ahora mismo. 🌟",
+                "La espera es dura, pero valdrá la pena cuando te vea otra vez. 💫", "Si pudiera pedir un deseo, sería estar contigo ahora. 💕",
+                "A veces, solo quiero cerrar los ojos y que, al abrirlos, estés aquí. 😔", "Mientras te extraño, me consuela saber que tú también piensas en mí. 💖"
+            ],
+            pensandoEnTi: [
+                "Ahora mismo estaba pensando en ti… Aunque en realidad, siempre lo hago. 🥰", "Eres mi pensamiento favorito del día. 💭❤️",
+                "Si supieras cuántas veces pienso en ti al día, te asustarías. 😆💓", "Pensarte se ha vuelto mi pasatiempo favorito. 💕",
+                "Cada pensamiento bonito que tengo, de alguna forma, termina en ti. 🌸", "A veces, sin darme cuenta, sonrío porque te estoy recordando. 😊❤️",
+                "¿Sabes lo bonito que es despertar y que mi primer pensamiento seas tú? 💛", "Si me pagaran por cada vez que pienso en ti, ya sería millonario. 💰💕",
+                "Estás en mis pensamientos como una melodía que no quiero dejar de escuchar. 🎶", "A veces, te imagino aquí conmigo, y mi día se siente más bonito. 🌷",
+                "Me encanta perderme en mis pensamientos cuando el tema eres tú. 💖", "Aunque esté ocupado, siempre hay un rinconcito en mi mente reservado para ti. 🧠💘",
+                "¿Cómo logras habitar mis pensamientos las 24 horas del día? 🤔💛", "Si el pensamiento pudiera teletransportarme, ya estaría contigo. 🚀💖",
+                "Hay momentos en los que el mundo se queda en pausa… Porque me pierdo pensando en ti. ⏳💕", "Si pudiera dibujar mi mente, estaría llena de recuerdos contigo. 🖌️💖",
+                "Te pienso tanto que hasta en mis sueños te apareces. 🌙💫", "¿Sabes lo que más me gusta de pensar en ti? Que me hace sentir cerca de ti. 💕",
+                "A veces, ni siquiera me doy cuenta de cuánto te pienso… Hasta que alguien me lo señala. 😊💖", "Si cada pensamiento sobre ti fuera una estrella, el cielo de mi mente estaría iluminado siempre. ✨🌙",
+                "No hay un solo día en el que no aparezcas en mi mente al menos una vez. 💛", "Si el amor se midiera en pensamientos, creo que el mío por ti es infinito. ♾️💖",
+                "Te pienso tanto que siento que el universo ya debería habernos juntado. 🌍💕", "No sé si eres un pensamiento en mi mente o un latido en mi corazón… Quizá ambos. 💓💭",
+                "¿Qué haré el día que te tenga a mi lado y ya no tenga que imaginarte? 🥺💖", "Cuando el mundo se pone ruidoso, pensar en ti es mi refugio. 💕",
+                "Me gusta cuando pienso en ti y, de repente, me llega un mensaje tuyo. ¿Conexión? 😏💘", "Cada vez que el día se siente difícil, pensar en ti me da fuerzas. 💪💖",
+                "En mi lista de pensamientos importantes, tú siempre ocupas el primer lugar. 🥇💖", "A veces, solo quiero decirte: 'Estoy pensando en ti'. 💭❤️"
+            ],
+            conGanasDeVerte: [
+                "Ojalá pudiera verte ahora mismo. ¿Sabes cuánto daría por eso? Muchísimo. 💖", "Contando los días para verte de nuevo… Porque cada segundo sin ti es un siglo. ⏳❤️",
+                "Si pudiera teletransportarme, ya estaría contigo. 💫", "Extraño mirarte a los ojos y perderme en ellos. 👀💕",
+                "El día en que te vea otra vez, no te voy a soltar ni un segundo. 🥰", "Quisiera que el universo conspirara para juntarnos ahora mismo. 🌟",
+                "A veces, todo lo que necesito es verte y abrazarte fuerte. 🤗💖", "Si tuviera un deseo, sería poder verte hoy mismo. ✨",
+                "No importa cuánto tiempo pase, siempre tendré ganas de verte. 💛", "Contando los segundos para nuestro próximo encuentro. ⏳💕",
+                "Verte es como un regalo que siempre espero con ansias. 🎁💖", "No hay nada que quiera más ahora mismo que verte y decirte cuánto te quiero. 💘",
+                "Mi día no está completo sin verte, aunque sea un ratito. ☀️💕", "Ojalá pudiera robarte un momento y verte aunque sea de lejos. 👀💖",
+                "Si pudiera detener el tiempo cuando estemos juntos, lo haría sin dudarlo. ⏳💛", "Hay muchas cosas que quiero hacer… Pero todas empiezan con verte. 💕",
+                "La distancia es cruel cuando lo único que quiero es verte sonreír. 😊💖", "¿Sabes ese vacío en el pecho? Es porque me faltas tú. 🥺💕",
+                "Cuando por fin te vea, no querré despedirme. Nunca. 💛", "Ya no sé qué hacer con tantas ganas de verte… 💕",
+                "Si verte fuera un medicamento, lo necesitaría todos los días. 💊💖", "El mejor momento del día será cuando por fin estemos frente a frente. 🥰",
+                "No hay nada que me emocione más que la idea de verte de nuevo. 🌟💘", "Quisiera que el destino nos diera una sorpresa y nos hiciera coincidir hoy. 😍💕",
+                "Cada día sin verte es un día menos para el reencuentro. ⏳💖", "¿Y si nos encontramos sin planearlo? Sería el mejor accidente del mundo. 😏💕",
+                "No importa cuánto tiempo pase, mis ganas de verte solo crecen. 💛", "Te imagino aquí conmigo y sonrío solo de pensarlo. 😊💖",
+                "Dicen que la espera vale la pena… Pero yo ya no quiero esperar. 🥺💕", "El día en que te vea otra vez, te recordaré cuánto te extrañé. ❤️"
+            ],
+            conGanasDePensar: [
+                "¿Otra vez con ganas de 'pensar'? 😏 Bueno… Yo también. ❤️‍🔥", "Pensar contigo siempre es una buena idea. 😉",
+                "Si te digo lo que estoy pensando ahora… 😳", "A veces siento que tu 'pensar' tiene doble sentido. 😏",
+                "Cuando dices eso, solo me da más curiosidad… 😆", "Me gusta cuando dices que tienes ganas de 'pensar'… ¿De qué tipo de pensamiento hablamos? 😏",
+                "Hay pensamientos que deberían guardarse… Pero otros deberían compartirse. 🤭", "Entre pensar y hacer… Solo hay un paso. 😏",
+                "¿Seguro que quieres decirme lo que estás pensando? 😳", "No sé si estás pensando lo mismo que yo… Pero espero que sí. 😏",
+                "Tu forma de pensar me encanta. 💖", "Si lo que piensas es lo que imagino… Entonces sí. 😏",
+                "A veces, 'pensar' es solo una excusa. 😉", "Me encanta cuando te pones en modo pensativa. 😍",
+                "Pensar contigo es peligroso… Pero me encanta. 😏", "Hay pensamientos que no deberían decirse… Pero contigo quiero compartirlos todos. 😉",
+                "¿De verdad estás pensando eso? Porque yo también. 😆", "Me pregunto si tu 'pensar' se parece al mío… 😏",
+                "Si estás pensando lo que creo… 👀", "¿Segura que solo quieres 'pensar'? 😏"
+            ]
+        };
+
+        const poemas = [
+            "ENTRE NÚMEROS Y LETRAS\n\nEntre números y letras\nsurgió una rosa en una libreta.\nEntre ecuaciones y canciones\nsurgieron nuestros amores.",
+            "TOMA MI MANO\n\nToma mi mano,\ny acompáñame al camino\nde la vida.\n\nToma mi mano,\ny recorramos la senda,\nde por vida.",
+            // ... (Añade el resto de tus poemas aquí para que funcione obtenerPoemaDiario) ...
+            "LA LUNA COMO NUNCA\n\nHe visto la luna como nunca antes.\nTan brillante y cálida como el sol.\nHe visto cómo deslumbra su reflejo,\ncapaz de despertar el corazón.\nHe visto cómo con su mirada\nllora y expresa mucho dolor,\nal traer a memoria aquellos días\nen que yo admiraba su expresión.\n\n¡Qué inocencia la de mi luna!\nNo conoce mi intención.\nNo me he olvidado de ella,\naún le compongo mi canción."
+        ];
+         // Rellenar poemas si hay menos de 365
+         while (poemas.length > 0 && poemas.length < 365) { // Evitar bucle infinito si está vacío
+             poemas.push(poemas[Math.floor(Math.random() * poemas.length)]);
+         }
+
+        function obtenerDiaDelAño() {
+            const ahora = new Date();
+            const inicioAño = new Date(ahora.getFullYear(), 0, 1);
+            const diferencia = ahora - inicioAño;
+            return Math.floor(diferencia / (1000 * 60 * 60 * 24));
+        }
+
+        function obtenerPoemaDiario() {
+            const hoy = new Date().toISOString().split("T")[0];
+            const clave = `poema-${hoy}`;
+            let poemaGuardado = localStorage.getItem(clave);
+            if (!poemaGuardado && poemas.length > 0) { // Asegurarse de que hay poemas
+                const diaDelAño = obtenerDiaDelAño();
+                poemaGuardado = poemas[diaDelAño % poemas.length]; // Usar módulo por si acaso
+                localStorage.setItem(clave, poemaGuardado);
+            }
+            return poemaGuardado || "No hay poema disponible para hoy."; // Fallback
+        }
+
+        function mostrarPoema() {
+            const poemaDiv = document.getElementById("poema");
+            if(poemaDiv) { // Verificar si existe
+                poemaDiv.innerText = obtenerPoemaDiario();
+            }
+        }
+
+        function obtenerFraseDiaria(emocion) {
+            const hoy = new Date().toISOString().split("T")[0];
+            const clave = `frase-${emocion}-${hoy}`;
+            let fraseGuardada = localStorage.getItem(clave);
+            if (!fraseGuardada) {
+                const frasesDisponibles = frases[emocion];
+                if (!frasesDisponibles || frasesDisponibles.length === 0) return "Hmm, no sé qué decir a eso ahora mismo."; // Fallback
+                fraseGuardada = frasesDisponibles[Math.floor(Math.random() * frasesDisponibles.length)];
+                localStorage.setItem(clave, fraseGuardada);
+            }
+            return fraseGuardada;
+        }
+
+        function mostrarMensaje() {
+            const emocionSelect = document.getElementById("emocion");
+            if (!emocionSelect) return;
+            const emocion = emocionSelect.value;
+            const mensaje = obtenerFraseDiaria(emocion);
+            const mensajeP = document.getElementById("mensaje");
+             if (mensajeP) mensajeP.innerText = mensaje;
+
+            if (typeof window.incrementarContadorEmocion === 'function') {
+                 window.incrementarContadorEmocion(emocion);
+             } else {
+                 console.warn("incrementarContadorEmocion no está disponible globalmente.");
+             }
+        }
+
+        // --- Chat público ---
+         const mensajesFijosPublicos = [
+             { usuario: "JazzFanatic", mensaje: "¡Qué gran interpretación de Miles Davis en So What!" },
+             { usuario: "MusicLover", mensaje: "Summertime de Ella Fitzgerald es pura magia. ✨" },
+             { usuario: "Juan R.", mensaje: "Take Five siempre me pone de buen humor. ¡Un clásico!" },
+             { usuario: "SmoothJazz", mensaje: "Frank Sinatra tiene una voz inconfundible. Fly me to the moon! 🚀" }
+         ];
+
+         function sanitizarTextoGlobal(texto) {
+             if (typeof texto !== 'string') texto = String(texto);
+             const temp = document.createElement('div');
+             temp.textContent = texto;
+             return temp.innerHTML;
+         }
+
+         function mostrarMensajeChatPublico(data) {
+             const chat = document.getElementById("chat-publico");
+             if (!chat) return;
+             const mensajeElemento = document.createElement("div");
+             mensajeElemento.classList.add("mensaje-item");
+             const usuarioSanitizado = sanitizarTextoGlobal(data.usuario || "Anónimo");
+             const mensajeSanitizado = sanitizarTextoGlobal(data.mensaje);
+             mensajeElemento.innerHTML = `<p><strong>${usuarioSanitizado}:</strong> ${mensajeSanitizado}</p>`;
+             chat.appendChild(mensajeElemento);
+             chat.scrollTop = chat.scrollHeight;
+
+             if (!data.fijo) {
+                 setTimeout(() => {
+                    if (mensajeElemento.parentNode === chat) {
+                         mensajeElemento.remove();
+                    }
+                 }, 90000); // 90 segundos
+            }
+         }
+
+         document.addEventListener('DOMContentLoaded', () => {
+             mensajesFijosPublicos.forEach(mensaje => mostrarMensajeChatPublico({ ...mensaje, fijo: true }));
+         });
+
+         const enviarBtnPublico = document.getElementById("enviarMensajePublico");
+         const inputPublico = document.getElementById("mensajeInputPublico");
+
+         if (enviarBtnPublico && inputPublico) {
+            enviarBtnPublico.addEventListener("click", () => {
+                const mensaje = inputPublico.value.trim();
+                if (mensaje) {
+                    const nombreUsuario = window.nombreUsuarioLogueado || "Tú";
+                    mostrarMensajeChatPublico({ usuario: nombreUsuario, mensaje: mensaje });
+                    inputPublico.value = "";
+                }
+            });
+
+             inputPublico.addEventListener("keypress", function(event) {
+                 if (event.key === "Enter" && !event.shiftKey) {
+                     event.preventDefault();
+                     enviarBtnPublico.click();
+                 }
+             });
+         }
+
+
+        // --- Palabra secreta y toggle password ---
+        const palabraSecretaLink = document.getElementById("palabra-secreta");
+        const seccionSecretaDiv = document.getElementById("seccion-secreta");
+        if (palabraSecretaLink && seccionSecretaDiv) {
+            palabraSecretaLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                seccionSecretaDiv.style.display = "block";
+                seccionSecretaDiv.scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        const togglePasswordBtn = document.getElementById("togglePassword");
+        const passwordInput = document.getElementById("password");
+        if (togglePasswordBtn && passwordInput) {
+             togglePasswordBtn.addEventListener("click", () => {
+                const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+                passwordInput.setAttribute("type", type);
+                togglePasswordBtn.textContent = type === "password" ? "👁" : "🙈";
+             });
+         }
+
+         if (passwordInput) {
+            passwordInput.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    const loginBtn = document.getElementById("login");
+                    if (loginBtn) loginBtn.click();
+                }
+            });
+         }
+        const emailInput = document.getElementById("email");
+        if (emailInput && passwordInput) {
+            emailInput.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    passwordInput.focus();
+                }
+            });
+        }
+
+</script>
+
+<!-- ============================================================== -->
+<!-- ESTE ES EL SCRIPT MODULE DEL ARCHIVO QUE SÍ FUNCIONA          -->
+<!-- ASEGÚRATE DE REEMPLAZAR TUS CLAVES REALES EN firebaseConfig    -->
+<!-- ============================================================== -->
+<script type="module">
+        // --- Código JS Modular (Firebase, lógica de usuario, chat secreto, etc.) ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, push, onChildAdded, get, set, onValue, serverTimestamp, onDisconnect, query, limitToLast, orderByChild } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // ========================================================================
+        // ¡¡¡ IMPORTANTE !!!
+        // REEMPLAZA ESTOS VALORES CON LOS DE TU PROYECTO FIREBASE
+        // Ve a Project Settings (icono de engranaje) -> General -> Your apps -> SDK setup and configuration
+        // ========================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAcweOs5qS3v4xbzmkYCFLKxVaSWVsly_M",
+            authDomain: "estrellita-chl.firebaseapp.com",
+            databaseURL: "https://estrellita-chl-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "estrellita-chl",
+            storageBucket: "estrellita-chl.firebasestorage.app",
+            messagingSenderId: "1006618062076",
+            appId: "1:1006618062076:web:8cc3a6bb3ebe800d11fb79",
+            measurementId: "G-X2K8ZCR608"
+        };
+        // ========================================================================
+        // ¡¡¡ ASEGÚRATE TAMBIÉN !!!
+        // 1. Haber habilitado "Email/Password" en Firebase -> Authentication -> Sign-in method
+        // 2. Haber creado usuarios en Firebase -> Authentication -> Users
+        // ========================================================================
+
+        let app;
+        let auth;
+        let db;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app); // Pasar app es buena práctica
+            db = getDatabase(app); // Pasar app es buena práctica
+            console.log("Firebase inicializado correctamente.");
+        } catch (error) {
+             console.error("¡ERROR GRAVE AL INICIALIZAR FIREBASE!", error);
+             alert("Error crítico al conectar con Firebase. Revisa la configuración en el código y la consola (F12) para más detalles.");
+             // Detener la ejecución de más código Firebase si la inicialización falla
+             // Podrías ocultar la sección secreta o mostrar un mensaje permanente
+             const loginContainerEl = document.getElementById("loginContainer");
+             const contenidoSecretoEl = document.getElementById("contenido-secreto");
+             if(loginContainerEl) loginContainerEl.innerHTML = "<h2>Error de conexión</h2><p>No se pudo inicializar Firebase. Revisa la consola.</p>";
+             if(contenidoSecretoEl) contenidoSecretoEl.style.display = 'none';
+             // Lanzar el error de nuevo para detener el script si es necesario,
+             // o simplemente no continuar con el resto del código que depende de Firebase.
+             // throw error; // Descomentar si quieres detener todo
+             // Salir de este script si Firebase no inicializa
+             // ¡IMPORTANTE! Esto significa que el resto del código en este <script type="module"> no se ejecutará.
+             // Asegúrate de que la UI refleje este estado de error.
+             // Alternativamente, puedes envolver todo el código dependiente de Firebase en el 'try' o usar banderas.
+             // Por simplicidad aquí, asumimos que si falla, mucho no funcionará.
+             // Añadiremos chequeos de 'auth' y 'db' más adelante por si acaso.
+        }
+
+
+        const USUARIO_ESTRELLITA = "oras5982"; // Cambia si el usuario es diferente
+        const USUARIO_ADMIN = "jahaziel.alvarezreyes"; // Cambia si el admin es diferente
+
+        // --- Referencias a elementos del DOM (Login) ---
+        const loginButton = document.getElementById("login");
+        const logoutButton = document.getElementById("logout");
+        const emailInputLogin = document.getElementById("email"); // Renombrado para evitar confusión
+        const passwordInputLogin = document.getElementById("password"); // Renombrado para evitar confusión
+        const loginError = document.getElementById("loginError");
+        const loginContainer = document.getElementById("loginContainer");
+        const contenidoSecreto = document.getElementById("contenido-secreto");
+
+        // --- Otras referencias y variables globales del módulo ---
+        const enviarBtnSecreto = document.getElementById("enviarMensaje");
+        const inputSecreto = document.getElementById("mensajeInput");
+        let inactivityTimer;
+        let usuarioActual = ""; // Almacena el nombre corto (sin @...)
+        let nombreUsuarioLogueado = ""; // Almacena el nombre a mostrar ("Estrellita", "Luna", etc.)
+        window.nombreUsuarioLogueado = ""; // Para acceso desde chat público
+        let loginTime = null;
+        let mensajesMostrados = new Set(); // Para evitar duplicados en el chat secreto
+
+        // --- Funciones Utilitarias y de Configuración ---
+
+        function sanitizarTexto(texto) {
+            if (typeof texto !== 'string') texto = String(texto);
+            const temp = document.createElement('div');
+            temp.textContent = texto;
+            return temp.innerHTML;
+        }
+
+        function cargarEmailJS() {
+            // No necesitas emailjs para el login, pero lo dejo si lo usas para notificaciones
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+            script.onload = function() {
+                try {
+                    // Reemplaza con tu User ID de EmailJS
+                     window.emailjs.init('FK-l7zhLUb3b7Ah2X'); // <-- REEMPLAZA CON TU USER ID SI USAS EMAILJS
+                     console.log("EmailJS inicializado.");
+                 } catch (e) {
+                     console.error("Error inicializando EmailJS:", e);
+                 }
+            };
+            script.onerror = function() {
+                console.error("Error al cargar EmailJS.");
+            }
+            document.head.appendChild(script);
+        }
+        // Solo cargar si Firebase inicializó (o mover fuera si no depende de Firebase)
+        if (app) {
+             cargarEmailJS();
+         }
+
+        function enviarNotificacionEmail(usuario, tipoMensaje, contenido = "") {
+             // Verificar si emailjs está cargado antes de usarlo
+             if (window.emailjs && typeof window.emailjs.send === 'function') {
+                 const serviceID = 'service_mrtsxqh'; // <-- REEMPLAZA CON TU SERVICE ID
+                 const templateID = 'template_xypee8k'; // <-- REEMPLAZA CON TU TEMPLATE ID
+
+                const templateParams = {
+                     from_name: usuario, // Quién realiza la acción
+                     message: tipoMensaje === 'login' ? `${usuario} ha iniciado sesión.` :
+                              tipoMensaje === 'message' ? `Nuevo mensaje de ${usuario}: ${contenido}` :
+                              tipoMensaje === 'emotion' ? `${usuario} registró la emoción: ${contenido}` :
+                              'Acción registrada.', // Mensaje por defecto
+                     date: new Date().toLocaleString()
+                 };
+
+                 window.emailjs.send(serviceID, templateID, templateParams)
+                     .then(function(response) {
+                         console.log(`Notificación (${tipoMensaje}) enviada:`, response.status, response.text);
+                     }, function(error) {
+                         console.error(`Error al enviar notificación (${tipoMensaje}):`, error);
+                     });
+             } else {
+                  console.warn("EmailJS no está cargado o inicializado, no se puede enviar notificación.");
+              }
+         }
+
+
+        function obtenerNombreUsuario(email) {
+             if (!email || typeof email !== 'string') return "desconocido";
+             return email.split('@')[0].toLowerCase();
+        }
+
+        function obtenerNombreMostrado(email) {
+            const usuario = obtenerNombreUsuario(email);
+            if (usuario === USUARIO_ESTRELLITA) return "Estrellita";
+            if (usuario === USUARIO_ADMIN) return "Luna";
+            return "Usuario";
+        }
+
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+             // Solo resetear si auth está definido
+             if (!auth) return;
+            inactivityTimer = setTimeout(() => {
+                if (auth.currentUser) {
+                    console.log("Cerrando sesión por inactividad...");
+                    registrarTiempoSesion(usuarioActual);
+                    signOut(auth).then(() => {
+                         alert("Sesión cerrada por inactividad.");
+                    }).catch(error => {
+                         console.error("Error al cerrar sesión por inactividad:", error);
+                    });
+                 }
+            }, 15 * 60 * 1000); // 15 minutos de inactividad
+        }
+
+        // --- Registro de Accesos y Sesiones ---
+
+        function registrarAcceso(usuario) {
+             if (!usuario || !db || !auth || !auth.currentUser) return; // Verificar dependencias
+             console.log(`Registrando acceso para ${usuario}`);
+             try {
+                 const accessLogRef = ref(db, `accesos/${usuario}`);
+                 const now = new Date();
+                 push(accessLogRef, {
+                     timestamp: serverTimestamp(),
+                     fechaLocal: now.toLocaleString(),
+                     inicioEpoch: now.getTime()
+                 });
+                 loginTime = now.getTime();
+
+                 // Enviar notificación de acceso
+                 enviarNotificacionEmail(nombreUsuarioLogueado, 'login');
+             } catch (error) {
+                  console.error("Error registrando acceso en DB:", error);
+              }
+         }
+
+        function registrarTiempoSesion(usuario) {
+             if (!usuario || loginTime === null || !db) return; // Verificar dependencias
+             const sessionEndTime = new Date().getTime();
+             const sessionDurationMillis = sessionEndTime - loginTime;
+             const sessionDurationMinutes = (sessionDurationMillis / 1000 / 60).toFixed(2);
+
+             console.log(`Registrando fin de sesión para ${usuario}. Duración: ${sessionDurationMinutes} min`);
+             try {
+                 const sessionLogRef = ref(db, `tiempoSesiones/${usuario}`);
+                 push(sessionLogRef, {
+                     timestamp: serverTimestamp(),
+                     fechaLocalInicio: new Date(loginTime).toLocaleString(),
+                     fechaLocalFin: new Date(sessionEndTime).toLocaleString(),
+                     duracionMinutos: parseFloat(sessionDurationMinutes),
+                     inicioEpoch: loginTime,
+                     finEpoch: sessionEndTime
+                 });
+                 loginTime = null;
+             } catch (error) {
+                  console.error("Error registrando tiempo de sesión en DB:", error);
+              }
+         }
+
+        // --- Lógica de Emociones ---
+
+         const listaEmociones = [
+             { value: "feliz", label: "Feliz 😊" }, { value: "triste", label: "Triste 😔" },
+             { value: "estresada", label: "Estresada 😵‍💫" }, { value: "cansada", label: "Cansada 🥱" },
+             { value: "extrañandote", label: "Extrañándote 🥺" }, { value: "pensandoEnTi", label: "Pensando en ti 💭❤️" },
+             { value: "conGanasDeVerte", label: "Con ganas de verte 🥰" }, { value: "conGanasDePensar", label: "Con ganas de 'pensar' 😏" }
+         ];
+
+         function inicializarContadoresEmociones() {
+             if (!db || !usuarioActual) return; // Verificar dependencias
+
+             const contadoresRef = ref(db, "contadores");
+             const historialEmocionesRef = ref(db, "historialEmociones");
+             const usuario = usuarioActual;
+             actualizarInfoAdmin(usuario);
+             const contadorElement = document.getElementById("contador-emociones");
+             const historialElement = document.getElementById("historial-emociones");
+
+             // Reset listeners (o gestionarlos mejor si es necesario)
+             // Aquí simplemente volvemos a añadirlos, onValue maneja esto bien generalmente.
+
+             if (usuario === USUARIO_ADMIN) {
+                 if (contadorElement) contadorElement.style.display = "block";
+                 if (historialElement) historialElement.style.display = "block";
+                  try {
+                     onValue(contadoresRef, (snapshot) => {
+                         actualizarUIContadores(snapshot.exists() ? snapshot.val() : {});
+                     }, error => console.error("Error leyendo contadores:", error));
+                     onValue(historialEmocionesRef, (snapshot) => {
+                         actualizarUIHistorial(snapshot.exists() ? snapshot.val() : {});
+                     }, error => console.error("Error leyendo historial:", error));
+                 } catch(error) {
+                     console.error("Error al añadir listeners de contadores/historial:", error);
+                 }
+             } else {
+                 if (contadorElement) contadorElement.style.display = "none";
+                 if (historialElement) historialElement.style.display = "none";
+                 // Detener listeners si es necesario (aunque onValue debería manejarse bien)
+             }
+         }
+
+         function actualizarInfoAdmin(usuario) {
+             const adminInfoPanel = document.getElementById("admin-info");
+             const usuarioNombreEl = document.getElementById("usuario-nombre");
+             const adminStatusEl = document.getElementById("admin-status");
+             if (adminInfoPanel && usuarioNombreEl && adminStatusEl) {
+                 const esAdmin = (usuario === USUARIO_ADMIN);
+                 adminInfoPanel.style.display = esAdmin ? "block" : "none";
+                 if (esAdmin) {
+                      usuarioNombreEl.textContent = usuario;
+                      adminStatusEl.textContent = "Sí";
+                      adminStatusEl.style.color = "#2ecc71";
+                 }
+             }
+         }
+
+         function actualizarUIContadores(contadores) {
+             const contenedor = document.getElementById("contadores-container");
+             if (!contenedor) return;
+             contenedor.innerHTML = "";
+             listaEmociones.forEach(emocion => {
+                 const contador = contadores[emocion.value] || 0;
+                 const div = document.createElement("div");
+                 div.className = "contador-item";
+                 div.innerHTML = `<span class="contador-label">${sanitizarTexto(emocion.label)}:</span> <span class="contador-valor">${contador}</span>`;
+                 contenedor.appendChild(div);
+             });
+         }
+
+        function actualizarUIHistorial(historial) {
+            const contenedor = document.getElementById("historial-container");
+            if (!contenedor) return;
+            contenedor.innerHTML = "";
+            // Añadir check por si historial no es un objeto (p.ej., null)
+            if (!historial || typeof historial !== 'object') {
+                 contenedor.innerHTML = "<p>Aún no hay historial de emociones.</p>";
+                 return;
+            }
+            const historialArray = Object.entries(historial).map(([key, value]) => ({
+                id: key, ...value,
+                // Mejorar el cálculo del timestampEpoch
+                timestampEpoch: value?.timestampEpoch || (typeof value?.timestamp === 'number' ? value.timestamp : new Date(value?.fechaLocal || 0).getTime()) || Date.now()
+            }));
+            historialArray.sort((a, b) => b.timestampEpoch - a.timestampEpoch);
+            if (historialArray.length === 0) {
+                 contenedor.innerHTML = "<p>Aún no hay historial de emociones.</p>"; return;
+            }
+            historialArray.forEach(evento => {
+                const emocionData = listaEmociones.find(e => e.value === evento.emocion);
+                const nombreEmocion = emocionData ? emocionData.label : evento.emocion;
+                const fechaFormateada = evento.fechaLocal || new Date(evento.timestampEpoch).toLocaleString();
+                const div = document.createElement("div");
+                div.className = "historial-item";
+                div.innerHTML = `<span>${sanitizarTexto(nombreEmocion)}</span> <span style="float: right; font-style: italic; font-size: 0.9em;">${sanitizarTexto(fechaFormateada)}</span>`;
+                contenedor.appendChild(div);
+            });
+        }
+
+        window.incrementarContadorEmocion = function(emocion) {
+            // Verificar dependencias
+            if (!auth || !auth.currentUser || !db || usuarioActual !== USUARIO_ESTRELLITA) {
+                 console.log(`Usuario ${usuarioActual} (${nombreUsuarioLogueado}) no es Estrellita o Firebase no está listo, no se registra emoción.`);
+                 return;
+             }
+
+             console.log(`Registrando emoción: ${emocion} para ${usuarioActual}`);
+             try {
+                 // 1. Incrementar contador
+                 const contadorRef = ref(db, `contadores/${emocion}`);
+                 get(contadorRef).then((snapshot) => set(contadorRef, (snapshot.exists() ? snapshot.val() : 0) + 1));
+
+                 // 2. Añadir historial
+                 const historialEmocionesRef = ref(db, "historialEmociones");
+                 const now = new Date();
+                 push(historialEmocionesRef, {
+                     emocion: emocion, usuario: usuarioActual, timestamp: serverTimestamp(),
+                     fechaLocal: now.toLocaleString(), timestampEpoch: now.getTime()
+                 }).then(() => {
+                     const emocionLabel = listaEmociones.find(e => e.value === emocion)?.label || emocion;
+                     enviarNotificacionEmail(nombreUsuarioLogueado, 'emotion', emocionLabel);
+                 });
+             } catch (error) {
+                  console.error("Error al registrar emoción en DB:", error);
+              }
+        };
+
+        // --- Lógica del Chat Secreto ---
+
+        function mostrarMensajeChatSecreto(data) {
+            if (!data || (data.key && mensajesMostrados.has(data.key))) return;
+            const chat = document.getElementById("chat");
+            if (!chat) return;
+            const mensajeElemento = document.createElement("div");
+            mensajeElemento.classList.add("mensaje-secreto");
+            // Verificar auth.currentUser antes de usarlo
+            const esMio = auth && auth.currentUser && data.usuario === obtenerNombreMostrado(auth.currentUser.email);
+            mensajeElemento.classList.add(esMio ? "mio" : "otro");
+            if (data.key) mensajesMostrados.add(data.key);
+            const nombreMostrado = sanitizarTexto(data.usuario || "Usuario");
+            const mensajeSanitizado = sanitizarTexto(data.mensaje);
+            const mensajeFormateado = mensajeSanitizado.replace(/\n/g, '<br>');
+            mensajeElemento.innerHTML = `<strong>${nombreMostrado}</strong>${mensajeFormateado}`;
+            chat.appendChild(mensajeElemento);
+            // Asegurar scroll al final
+            requestAnimationFrame(() => { // Esperar al siguiente frame para asegurar renderizado
+                 chat.scrollTop = chat.scrollHeight;
+            });
+        }
+
+        function cargarMensajesIniciales() {
+             if (!db) return; // Verificar dependencia
+            const mensajesRef = ref(db, "mensajes");
+            mensajesMostrados.clear();
+            const chat = document.getElementById("chat");
+            if (!chat) return;
+            chat.innerHTML = "";
+            console.log("Cargando mensajes iniciales...");
+            const mensajesQuery = query(mensajesRef, orderByChild('timestamp'), limitToLast(50));
+             try {
+                 get(mensajesQuery).then((snapshot) => {
+                     if (snapshot.exists()) {
+                         snapshot.forEach((childSnapshot) => {
+                             mostrarMensajeChatSecreto({ key: childSnapshot.key, ...childSnapshot.val() });
+                         });
+                         // Scroll final tras añadir todos
+                          requestAnimationFrame(() => {
+                             chat.scrollTop = chat.scrollHeight;
+                         });
+                     } else {
+                         chat.innerHTML = "<p style='text-align:center; opacity:0.7;'>Inicia la conversación...</p>";
+                     }
+                 }).catch(error => console.error("Error en get() de mensajes iniciales:", error));
+             } catch (error) {
+                  console.error("Error al configurar query/get de mensajes iniciales:", error);
+              }
+        }
+
+        let childAddedListener = null; // Para poder removerlo si es necesario
+
+        function inicializarReceptorMensajes() {
+             if (!db) return; // Verificar dependencia
+
+             // Detener listener anterior si existe (para evitar duplicados al re-loguear)
+             // Esto requiere una referencia más compleja a la query, no solo al ref.
+             // Por ahora, confiamos en el chequeo de mensajesMostrados.
+             // if (childAddedListener) {
+             //    off(mensajesRef, 'child_added', childAddedListener); // Necesita la referencia exacta
+             // }
+
+            const mensajesRef = ref(db, "mensajes");
+             console.log("Inicializando listener para nuevos mensajes...");
+             try {
+                 // Usar una query más reciente para el listener si es posible
+                 const mensajesNuevosQuery = query(mensajesRef, orderByChild('timestamp'), limitToLast(1)); // Opcional: escuchar solo el último
+
+                 childAddedListener = onChildAdded(mensajesRef, (snapshot) => { // Escuchar en la referencia base sigue siendo común
+                     const data = snapshot.val(); const key = snapshot.key;
+                     if (key && data && !mensajesMostrados.has(key)) {
+                          mostrarMensajeChatSecreto({ key, ...data });
+                          if (document.hidden && auth && auth.currentUser && data.usuario !== obtenerNombreMostrado(auth.currentUser.email)) {
+                              console.log("Nuevo mensaje recibido mientras la pestaña estaba inactiva.");
+                          }
+                      }
+                 });
+             } catch (error) {
+                  console.error("Error al añadir listener onChildAdded:", error);
+              }
+        }
+
+        if (enviarBtnSecreto && inputSecreto) {
+            enviarBtnSecreto.addEventListener("click", function () {
+                if (!auth || !auth.currentUser || !db) { // Verificar dependencias
+                    console.error("Firebase no listo o usuario no autenticado, no se puede enviar mensaje.");
+                    return;
+                 }
+                const user = auth.currentUser;
+                const mensajesRef = ref(db, "mensajes");
+                const mensajeTexto = inputSecreto.value.trim();
+                if (mensajeTexto) {
+                    const nombreParaMostrar = obtenerNombreMostrado(user.email);
+                    const nuevoMensaje = {
+                        usuario: nombreParaMostrar, mensaje: mensajeTexto,
+                        fechaLocal: new Date().toLocaleString(), timestamp: serverTimestamp()
+                    };
+                    inputSecreto.value = ""; inputSecreto.style.height = 'auto';
+                     try {
+                         push(mensajesRef, nuevoMensaje)
+                             .then(() => {
+                                 console.log("Mensaje enviado a Firebase.");
+                                 enviarNotificacionEmail(nombreParaMostrar, 'message', mensajeTexto); // Notifica al enviar
+                             })
+                             .catch((error) => console.error("Error en push() de mensaje:", error));
+                     } catch (error) {
+                          console.error("Error al configurar push() de mensaje:", error);
+                      }
+                    resetInactivityTimer();
+                }
+            });
+            inputSecreto.addEventListener("keydown", function(event) {
+                 if (event.key === "Enter" && !event.shiftKey) {
+                     event.preventDefault(); enviarBtnSecreto.click();
+                 }
+                 setTimeout(() => { inputSecreto.style.height = 'auto'; inputSecreto.style.height = inputSecreto.scrollHeight + 'px'; }, 0);
+            });
+         }
+
+
+        // --- Autenticación y Estado del Usuario ---
+
+        // Solo añadir listeners si los botones existen y Firebase auth está listo
+        if (loginButton && auth) {
+            loginButton.addEventListener("click", () => {
+                if (!auth) { console.error("Auth no inicializado."); return; } // Chequeo extra
+
+                const email = emailInputLogin ? emailInputLogin.value : '';
+                const password = passwordInputLogin ? passwordInputLogin.value : '';
+
+                if (loginError) {
+                    loginError.textContent = "";
+                    loginError.style.display = "none";
+                }
+
+                if (!email || !password) {
+                     if (loginError) {
+                        loginError.textContent = "Por favor, ingresa correo y contraseña.";
+                        loginError.style.display = "block";
+                    }
+                     return;
+                 }
+
+                console.log("Intentando iniciar sesión con:", email);
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        console.log("Inicio de sesión en proceso para:", userCredential.user.email);
+                    })
+                    .catch((error) => {
+                        console.error("Error al iniciar sesión:", error.code, error.message);
+                        if (loginError) {
+                            switch(error.code) {
+                                case 'auth/invalid-email': loginError.textContent = "El formato del correo no es válido."; break;
+                                case 'auth/user-not-found':
+                                case 'auth/wrong-password':
+                                case 'auth/invalid-credential': loginError.textContent = "Correo o contraseña incorrectos."; break;
+                                case 'auth/too-many-requests': loginError.textContent = "Demasiados intentos fallidos. Intenta más tarde."; break;
+                                default: loginError.textContent = "Error al iniciar sesión. Verifica tus datos o la conexión.";
+                            }
+                            loginError.style.display = "block";
+                        }
+                    });
+            });
+        } else if (!auth) {
+             console.warn("Botón de login encontrado pero Auth no está inicializado.");
+         }
+
+        if (logoutButton && auth) {
+            logoutButton.addEventListener("click", () => {
+                 if (!auth) { console.error("Auth no inicializado."); return; } // Chequeo extra
+                console.log("Cerrando sesión...");
+                registrarTiempoSesion(usuarioActual);
+                signOut(auth).catch((error) => {
+                    console.error("Error al cerrar sesión:", error);
+                    alert("Error al cerrar sesión: " + error.message);
+                });
+            });
+         } else if (!auth) {
+             console.warn("Botón de logout encontrado pero Auth no está inicializado.");
+         }
+
+        // Manejador central del estado de autenticación
+        // Solo añadir si auth está listo
+        if (auth) {
+            onAuthStateChanged(auth, (user) => {
+                 if (user) {
+                     // Usuario está logueado
+                     console.log("Usuario autenticado:", user.email);
+                     usuarioActual = obtenerNombreUsuario(user.email);
+                     nombreUsuarioLogueado = obtenerNombreMostrado(user.email);
+                     window.nombreUsuarioLogueado = nombreUsuarioLogueado;
+
+                     if (loginContainer) loginContainer.style.display = "none";
+                     if (contenidoSecreto) contenidoSecreto.style.display = "block";
+                     if (loginError) loginError.style.display = 'none';
+
+                     // Inicializar funcionalidades dependientes de DB y Auth
+                     registrarAcceso(usuarioActual);
+                     inicializarContadoresEmociones();
+                     cargarMensajesIniciales();
+                     inicializarReceptorMensajes();
+                     // inicializarEstadoConexion(); // Descomentar si se implementa
+
+                     resetInactivityTimer();
+                     document.addEventListener("mousemove", resetInactivityTimer);
+                     document.addEventListener("keydown", resetInactivityTimer);
+
+                 } else {
+                     // Usuario está deslogueado
+                     console.log("Usuario no autenticado.");
+                     usuarioActual = "";
+                     nombreUsuarioLogueado = "";
+                     window.nombreUsuarioLogueado = "";
+
+                     if (loginContainer) loginContainer.style.display = "block";
+                     if (contenidoSecreto) contenidoSecreto.style.display = "none";
+
+                     clearTimeout(inactivityTimer);
+                     document.removeEventListener("mousemove", resetInactivityTimer);
+                     document.removeEventListener("keydown", resetInactivityTimer);
+                     mensajesMostrados.clear();
+                     const chat = document.getElementById("chat");
+                     if (chat) chat.innerHTML = "";
+
+                      if (emailInputLogin) emailInputLogin.value = '';
+                      if (passwordInputLogin) passwordInputLogin.value = '';
+                      if (loginError) {
+                        loginError.textContent = '';
+                        loginError.style.display = 'none';
+                      }
+                     // Detener listeners de Firebase si es necesario (ej. detach onValue/onChildAdded)
+                 }
+             });
+        } else {
+             console.error("Auth no está disponible, no se puede añadir el listener onAuthStateChanged.");
+             // Informar al usuario o manejar el error de UI
+             if (loginContainer) loginContainer.innerHTML = "<h2>Error</h2><p>No se pudo conectar al servicio de autenticación.</p>";
+        }
+
+
+        // --- Otras Inicializaciones ---
+        window.addEventListener('beforeunload', () => {
+             // Solo registrar si Firebase está listo y hay usuario
+             if (db && auth && auth.currentUser && usuarioActual && loginTime) {
+                 registrarTiempoSesion(usuarioActual);
+             }
+        });
+
+        // DOMContentLoaded ya se disparó probablemente, pero podemos poner logs finales aquí
+         console.log("Script modular finalizado.");
+         if (!app) {
+            console.error("Firebase App no se inicializó correctamente al final del script.");
+        }
+
+
+        // (Opcional: Función inicializarEstadoConexion)
+        function inicializarEstadoConexion() {
+            // Añadir chequeos de dependencias
+            if (!auth || !auth.currentUser || !db) return;
+            const currentUserEmail = auth.currentUser.email;
+            const currentUserShortName = obtenerNombreUsuario(currentUserEmail);
+            const nombreMostradoLocal = obtenerNombreMostrado(currentUserEmail);
+
+            if (currentUserShortName === USUARIO_ESTRELLITA || currentUserShortName === USUARIO_ADMIN) {
+                 try {
+                     const userStatusRef = ref(db, `estadoUsuarios/${nombreMostradoLocal}`);
+                     const presenceRef = ref(db, '.info/connected');
+
+                     onValue(presenceRef, (snap) => {
+                         if (!auth.currentUser) return;
+                         if (snap.val() === true) {
+                             set(userStatusRef, { online: true, last_changed: serverTimestamp() });
+                             onDisconnect(userStatusRef).set({ online: false, last_changed: serverTimestamp() });
+                             console.log(`${nombreMostradoLocal} está conectado.`);
+                         } else {
+                             console.log(`${nombreMostradoLocal} está desconectado (o conectando).`);
+                         }
+                     });
+
+                     const otroUsuarioNombre = nombreMostradoLocal === "Estrellita" ? "Luna" : "Estrellita";
+                     const otroUsuarioStatusRef = ref(db, `estadoUsuarios/${otroUsuarioNombre}`);
+                     onValue(otroUsuarioStatusRef, (snapshot) => {
+                         if (snapshot.exists()) {
+                             const estadoOtro = snapshot.val();
+                             console.log(`Estado de ${otroUsuarioNombre}: ${estadoOtro.online ? 'Conectado' : 'Desconectado'}`);
+                         }
+                     });
+                 } catch (error) {
+                      console.error("Error inicializando estado de conexión:", error);
+                  }
+            }
+        }
+
+</script>
+
 </body>
 </html>
