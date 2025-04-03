@@ -1,6 +1,6 @@
 
-
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
@@ -409,99 +409,88 @@
 <li><a class="song-link" href="https://www.youtube.com/watch?v=vmDDOFXSgAs&amp;pp=ygUJdGFrZSBmaXZl" target="_blank">"Take Five" - Dave Brubeck</a></li>
 <li><a class="song-link" href="https://www.youtube.com/watch?v=ylXk1LBvIqU" target="_blank">"So What" - Miles Davis</a></li>
 </ul>
-
 <h2>Comentarios</h2>
 <div class="chat-container">
-    <div id="chat-publico"></div>
-    <div class="input-container">
-        <textarea id="mensajeInputPublico" placeholder="Deja tu comentario..." rows="1"></textarea> <!-- rows="1" para empezar pequeño -->
-        <button id="enviarMensajePublico">Enviar</button>
-    </div>
+<div id="chat-publico"></div>
+<div class="input-container">
+<textarea id="mensajeInputPublico" placeholder="Deja tu comentario..." rows="1"></textarea> <!-- rows="1" para empezar pequeño -->
+<button id="enviarMensajePublico">Enviar</button>
 </div>
-
+</div>
 <h2>Un Legado Eterno</h2>
 <p>El jazz es un género que nunca envejece. Cada acorde, cada improvisación, lleva consigo las historias de quienes lo crearon y lo vivieron. Desde los bares clandestinos de la Prohibición hasta las salas de concierto modernas, su espíritu sigue resonando. Es un recordatorio de que la música puede ser un refugio, una protesta o una celebración, todo al mismo tiempo.</p>
 <p>Si te apasiona este arte, sumérgete en sus raíces, descubre sus leyendas y déjate envolver por sus <a class="secret-link" href="#" id="palabra-secreta">melodías</a>.</p>
-
 <!-- Sección secreta -->
 <div id="seccion-secreta">
-    <div id="loginContainer">
-        <h2>Iniciar Sesión</h2>
-        <input id="email" placeholder="Correo electrónico" required="" type="email"/>
-        <div class="password-container">
-            <input id="password" placeholder="Contraseña" required="" type="password"/>
-            <button id="togglePassword" type="button">👁</button>
-        </div>
-        <button id="login">Iniciar sesión</button>
-        <p id="loginError" style="display: none;"></p> <!-- Aseguramos que esté oculto por defecto -->
-    </div>
+<div id="loginContainer">
+<h2>Iniciar Sesión</h2>
+<input id="email" placeholder="Correo electrónico" required="" type="email"/>
+<div class="password-container">
+<input id="password" placeholder="Contraseña" required="" type="password"/>
+<button id="togglePassword" type="button">👁</button>
+</div>
+<button id="login">Iniciar sesión</button>
+<p id="loginError" style="display: none;"></p> <!-- Aseguramos que esté oculto por defecto -->
+</div>
+<div id="contenido-secreto" style="display: none;">
 
-    <div id="contenido-secreto" style="display: none;">
-        <button id="logout">Cerrar Sesión</button>
-        <div id="admin-info" style="display: none;"> <!-- Oculto por defecto -->
-            <h3>Panel de administrador</h3>
-            <p id="usuario-actual-info">Usuario actual: <strong id="usuario-nombre">No detectado</strong></p>
-            <p id="admin-status-info">Estado de administrador: <strong id="admin-status">No</strong></p>
-        </div>
-
-        <h2>Mi Rincón Especial ✨</h2>
-        <p>¿Cómo te sientes hoy, mi niña?</p>
-        <select id="emocion">
-            <option value="feliz">Feliz 😊</option>
-            <option value="triste">Triste 😔</option>
-            <option value="estresada">Estresada 😵‍💫</option>
-            <option value="cansada">Cansada 🥱</option>
-            <option value="extrañandote">Extrañándote 🥺</option>
-            <option value="pensandoEnTi">Pensando en ti 💭❤️</option>
-            <option value="conGanasDeVerte">Con ganas de verte 🥰</option>
-            <option value="conGanasDePensar">Con ganas de "pensar" 😏</option>
-        </select>
-        <button onclick="mostrarMensaje()">Ver mensaje</button>
-        <button onclick="mostrarPoema()">Poema del día</button>
-        <p id="mensaje"></p>
-        <p id="poema"></p>
-
-        <div class="contador-emociones" id="contador-emociones" style="display: none;"> <!-- Oculto por defecto -->
-            <h3>Contador de Emociones ❤️</h3>
-            <div id="contadores-container"></div>
-        </div>
-
-        <div class="contador-emociones" id="historial-emociones" style="display: none;"> <!-- Oculto por defecto -->
-            <h3>Historial de Emociones ⏱️</h3>
-            <div id="historial-container"></div>
-        </div>
-
-        <div class="imagenes-container">
-            <div class="imagen-item">
-                <img alt="Piano con notas musicales" src="https://i.imgur.com/8jWcK6P.png"/>
-                <div class="imagen-emojis">
-                    <span>❤️</span>
-                    <a href="https://youtu.be/M7k5tjw3-0M" target="_blank">🎵</a>
-                </div>
-            </div>
-            <div class="imagen-item">
-                <img alt="Estrellita especial" src="https://i.imgur.com/qO3JLoN.jpeg"/>
-                <div class="imagen-emojis">
-                    <span>❤️</span>
-                    <a href="https://www.youtube.com/watch?v=ITbjjKDDSO0&amp;pp=ygUgbGEgbWVqb3IgdmVyc2nDs24gam9zZSB5IGVsIHRvcm8%3D" target="_blank">🎵</a>
-                </div>
-            </div>
-        </div>
-
-        <h2>Chat con Estrellita 💬</h2>
-        <div class="chat-container"> <!-- Reutilizamos clase para consistencia -->
-             <div id="chat"></div> <!-- Área de mensajes del chat secreto -->
-             <div class="input-container"> <!-- Contenedor para input y botón -->
-                 <textarea id="mensajeInput" placeholder="Escribe un mensaje..." rows="1"></textarea> <!-- rows="1" inicial -->
-                 <button id="enviarMensaje">Enviar</button>
-             </div>
-         </div>
-
-    </div> <!-- Fin de contenido-secreto -->
+<div id="admin-info" style="display: none;"> <!-- Oculto por defecto -->
+<h3>Panel de administrador</h3>
+<p id="usuario-actual-info">Usuario actual: <strong id="usuario-nombre">No detectado</strong></p>
+<p id="admin-status-info">Estado de administrador: <strong id="admin-status">No</strong></p>
+</div>
+<h2>Mi Rincón Especial ✨</h2>
+<p>¿Cómo te sientes hoy, mi niña?</p>
+<select id="emocion">
+<option value="feliz">Feliz 😊</option>
+<option value="triste">Triste 😔</option>
+<option value="estresada">Estresada 😵‍💫</option>
+<option value="cansada">Cansada 🥱</option>
+<option value="extrañandote">Extrañándote 🥺</option>
+<option value="pensandoEnTi">Pensando en ti 💭❤️</option>
+<option value="conGanasDeVerte">Con ganas de verte 🥰</option>
+<option value="conGanasDePensar">Con ganas de "pensar" 😏</option>
+</select>
+<button onclick="mostrarMensaje()">Ver mensaje</button>
+<button onclick="mostrarPoema()">Poema del día</button>
+<p id="mensaje"></p>
+<p id="poema"></p>
+<div class="contador-emociones" id="contador-emociones" style="display: none;"> <!-- Oculto por defecto -->
+<h3>Contador de Emociones ❤️</h3>
+<div id="contadores-container"></div>
+</div>
+<div class="contador-emociones" id="historial-emociones" style="display: none;"> <!-- Oculto por defecto -->
+<h3>Historial de Emociones ⏱️</h3>
+<div id="historial-container"></div>
+</div>
+<div class="imagenes-container">
+<div class="imagen-item">
+<img alt="Piano con notas musicales" src="https://i.imgur.com/8jWcK6P.png"/>
+<div class="imagen-emojis">
+<span>❤️</span>
+<a href="https://youtu.be/M7k5tjw3-0M" target="_blank">🎵</a>
+</div>
+</div>
+<div class="imagen-item">
+<img alt="Estrellita especial" src="https://i.imgur.com/qO3JLoN.jpeg"/>
+<div class="imagen-emojis">
+<span>❤️</span>
+<a href="https://www.youtube.com/watch?v=ITbjjKDDSO0&amp;pp=ygUgbGEgbWVqb3IgdmVyc2nDs24gam9zZSB5IGVsIHRvcm8%3D" target="_blank">🎵</a>
+</div>
+</div>
+</div>
+<h2>Comentarios</h2>
+<button id="logout">Cerrar Sesión</button>
+<div class="chat-container"> <!-- Reutilizamos clase para consistencia -->
+<div id="chat"></div> <!-- Área de mensajes del chat secreto -->
+<div class="input-container"> <!-- Contenedor para input y botón -->
+<textarea id="mensajeInput" placeholder="Escribe un mensaje..." rows="1"></textarea> <!-- rows="1" inicial -->
+<button id="enviarMensaje">Enviar</button>
+</div>
+</div>
+</div> <!-- Fin de contenido-secreto -->
 </div> <!-- Fin de seccion-secreta -->
-
 </div> <!-- Fin de container principal -->
-
 <script>
         // --- Código JS NO modular (frases, poemas, funciones mostrarMensaje/Poema, listeners básicos) ---
 
@@ -801,7 +790,6 @@
         }
 
 </script>
-
 <!-- ============================================================== -->
 <!-- ESTE ES EL SCRIPT MODULE DEL ARCHIVO QUE SÍ FUNCIONA          -->
 <!-- ASEGÚRATE DE REEMPLAZAR TUS CLAVES REALES EN firebaseConfig    -->
@@ -1168,33 +1156,41 @@
             });
         }
 
-        function cargarMensajesIniciales() {
-             if (!db) return; // Verificar dependencia
-            const mensajesRef = ref(db, "mensajes");
-            mensajesMostrados.clear();
-            const chat = document.getElementById("chat");
-            if (!chat) return;
-            chat.innerHTML = "";
-            console.log("Cargando mensajes iniciales...");
-            const mensajesQuery = query(mensajesRef, orderByChild('timestamp'), limitToLast(50));
-             try {
-                 get(mensajesQuery).then((snapshot) => {
-                     if (snapshot.exists()) {
-                         snapshot.forEach((childSnapshot) => {
-                             mostrarMensajeChatSecreto({ key: childSnapshot.key, ...childSnapshot.val() });
-                         });
-                         // Scroll final tras añadir todos
-                          requestAnimationFrame(() => {
-                             chat.scrollTop = chat.scrollHeight;
-                         });
-                     } else {
-                         chat.innerHTML = "<p style='text-align:center; opacity:0.7;'>Inicia la conversación...</p>";
-                     }
-                 }).catch(error => console.error("Error en get() de mensajes iniciales:", error));
-             } catch (error) {
-                  console.error("Error al configurar query/get de mensajes iniciales:", error);
-              }
-        }
+function cargarMensajesIniciales() {
+    if (!db) return;
+    const mensajesRef = ref(db, "mensajes");
+    mensajesMostrados.clear();
+    const chat = document.getElementById("chat");
+    if (!chat) return;
+    chat.innerHTML = "";
+    console.log("Cargando mensajes iniciales...");
+    const mensajesQuery = query(mensajesRef, orderByChild('timestamp'), limitToLast(50));
+    try {
+        get(mensajesQuery).then((snapshot) => {
+            if (snapshot.exists()) {
+                snapshot.forEach((childSnapshot) => {
+                    mostrarMensajeChatSecreto({ key: childSnapshot.key, ...childSnapshot.val() });
+                });
+                // Asegurar scroll al final con verificación repetitiva
+                let intentos = 0;
+                const maxIntentos = 10; // Límite para evitar bucles infinitos
+                const intervaloScroll = setInterval(() => {
+                    chat.scrollTop = chat.scrollHeight;
+                    // Verificar si el scroll está realmente al final
+                    if (chat.scrollTop + chat.clientHeight >= chat.scrollHeight - 1 || intentos >= maxIntentos) {
+                        clearInterval(intervaloScroll);
+                        console.log("Scroll ajustado a los últimos mensajes iniciales después de", intentos, "intentos.");
+                    }
+                    intentos++;
+                }, 100); // Revisar cada 100ms
+            } else {
+                chat.innerHTML = "<p style='text-align:center; opacity:0.7;'>Inicia la conversación...</p>";
+            }
+        }).catch(error => console.error("Error en get() de mensajes iniciales:", error));
+    } catch (error) {
+        console.error("Error al configurar query/get de mensajes iniciales:", error);
+    }
+}
 
         let childAddedListener = null; // Para poder removerlo si es necesario
 
@@ -1329,57 +1325,66 @@
 
         // Manejador central del estado de autenticación
         // Solo añadir si auth está listo
-        if (auth) {
-            onAuthStateChanged(auth, (user) => {
-                 if (user) {
-                     // Usuario está logueado
-                     console.log("Usuario autenticado:", user.email);
-                     usuarioActual = obtenerNombreUsuario(user.email);
-                     nombreUsuarioLogueado = obtenerNombreMostrado(user.email);
-                     window.nombreUsuarioLogueado = nombreUsuarioLogueado;
+if (auth) {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("Usuario autenticado:", user.email);
+            usuarioActual = obtenerNombreUsuario(user.email);
+            nombreUsuarioLogueado = obtenerNombreMostrado(user.email);
+            window.nombreUsuarioLogueado = nombreUsuarioLogueado;
 
-                     if (loginContainer) loginContainer.style.display = "none";
-                     if (contenidoSecreto) contenidoSecreto.style.display = "block";
-                     if (loginError) loginError.style.display = 'none';
+            if (loginContainer) loginContainer.style.display = "none";
+            if (contenidoSecreto) {
+                contenidoSecreto.style.display = "block";
+                // Asegurar que el chat esté visible y desplazado al final
+                const chat = document.getElementById("chat");
+                if (chat) {
+                    // Forzar recalculo de dimensiones al mostrar el contenedor
+                    chat.style.display = "flex"; // Asegurar que el flex se aplique
+                    setTimeout(() => {
+                        chat.scrollTop = chat.scrollHeight;
+                        console.log("Chat desplazado al último mensaje al mostrar contenido secreto.");
+                    }, 200); // Retraso para esperar renderizado completo
+                }
+            }
+            if (loginError) loginError.style.display = 'none';
 
-                     // Inicializar funcionalidades dependientes de DB y Auth
-                     registrarAcceso(usuarioActual);
-                     inicializarContadoresEmociones();
-                     cargarMensajesIniciales();
-                     inicializarReceptorMensajes();
-                     // inicializarEstadoConexion(); // Descomentar si se implementa
+            registrarAcceso(usuarioActual);
+            inicializarContadoresEmociones();
+            cargarMensajesIniciales();
+            inicializarReceptorMensajes();
 
-                     resetInactivityTimer();
-                     document.addEventListener("mousemove", resetInactivityTimer);
-                     document.addEventListener("keydown", resetInactivityTimer);
-
-                 } else {
-                     // Usuario está deslogueado
-                     console.log("Usuario no autenticado.");
-                     usuarioActual = "";
-                     nombreUsuarioLogueado = "";
-                     window.nombreUsuarioLogueado = "";
-
-                     if (loginContainer) loginContainer.style.display = "block";
-                     if (contenidoSecreto) contenidoSecreto.style.display = "none";
-
-                     clearTimeout(inactivityTimer);
-                     document.removeEventListener("mousemove", resetInactivityTimer);
-                     document.removeEventListener("keydown", resetInactivityTimer);
-                     mensajesMostrados.clear();
-                     const chat = document.getElementById("chat");
-                     if (chat) chat.innerHTML = "";
-
-                      if (emailInputLogin) emailInputLogin.value = '';
-                      if (passwordInputLogin) passwordInputLogin.value = '';
-                      if (loginError) {
-                        loginError.textContent = '';
-                        loginError.style.display = 'none';
-                      }
-                     // Detener listeners de Firebase si es necesario (ej. detach onValue/onChildAdded)
-                 }
-             });
+            resetInactivityTimer();
+            document.addEventListener("mousemove", resetInactivityTimer);
+            document.addEventListener("keydown", resetInactivityTimer);
         } else {
+            // Usuario está deslogueado
+            console.log("Usuario no autenticado.");
+            usuarioActual = "";
+            nombreUsuarioLogueado = "";
+            window.nombreUsuarioLogueado = "";
+
+            if (loginContainer) loginContainer.style.display = "block";
+            if (contenidoSecreto) contenidoSecreto.style.display = "none";
+
+            clearTimeout(inactivityTimer);
+            document.removeEventListener("mousemove", resetInactivityTimer);
+            document.removeEventListener("keydown", resetInactivityTimer);
+            mensajesMostrados.clear();
+            const chat = document.getElementById("chat");
+            if (chat) chat.innerHTML = "";
+
+            if (emailInputLogin) emailInputLogin.value = '';
+            if (passwordInputLogin) passwordInputLogin.value = '';
+            if (loginError) {
+                loginError.textContent = '';
+                loginError.style.display = 'none';
+            }
+        }
+    });
+}
+ 
+else {
              console.error("Auth no está disponible, no se puede añadir el listener onAuthStateChanged.");
              // Informar al usuario o manejar el error de UI
              if (loginContainer) loginContainer.innerHTML = "<h2>Error</h2><p>No se pudo conectar al servicio de autenticación.</p>";
@@ -1440,6 +1445,5 @@
         }
 
 </script>
-
 </body>
 </html>
