@@ -882,54 +882,49 @@
             return temp.innerHTML;
         }
 
-        function cargarEmailJS() {
-            // No necesitas emailjs para el login, pero lo dejo si lo usas para notificaciones
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-            script.onload = function() {
-                try {
-                    // Reemplaza con tu User ID de EmailJS
-                     window.emailjs.init('FK-l7zhLUb3b7Ah2X'); // <-- REEMPLAZA CON TU USER ID SI USAS EMAILJS
-                     console.log("EmailJS inicializado.");
-                 } catch (e) {
-                     console.error("Error inicializando EmailJS:", e);
-                 }
-            };
-            script.onerror = function() {
-                console.error("Error al cargar EmailJS.");
-            }
-            document.head.appendChild(script);
+   function cargarEmailJS() {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+    script.onload = function() {
+        try {
+            window.emailjs.init('8SKjsqXHTpjoSMWRw');
+            console.log("EmailJS inicializado.");
+        } catch (e) {
+            console.error("Error inicializando EmailJS:", e);
         }
-        // Solo cargar si Firebase inicializó (o mover fuera si no depende de Firebase)
-        if (app) {
-             cargarEmailJS();
-         }
+    };
+    script.onerror = function() {
+        console.error("Error al cargar EmailJS.");
+    };
+    document.head.appendChild(script);
+}
 
-        function enviarNotificacionEmail(usuario, tipoMensaje, contenido = "") {
-             // Verificar si emailjs está cargado antes de usarlo
-             if (window.emailjs && typeof window.emailjs.send === 'function') {
-                 const serviceID = 'service_mrtsxqh'; // <-- REEMPLAZA CON TU SERVICE ID
-                 const templateID = 'template_xypee8k'; // <-- REEMPLAZA CON TU TEMPLATE ID
+// Solo cargar si Firebase fue inicializado
+if (typeof app !== 'undefined') {
+    cargarEmailJS();
+}
 
-                const templateParams = {
-                     from_name: usuario, // Quién realiza la acción
-                     message: tipoMensaje === 'login' ? `${usuario} ha iniciado sesión.` :
-                              tipoMensaje === 'message' ? `Nuevo mensaje de ${usuario}: ${contenido}` :
-                              tipoMensaje === 'emotion' ? `${usuario} registró la emoción: ${contenido}` :
-                              'Acción registrada.', // Mensaje por defecto
-                     date: new Date().toLocaleString()
-                 };
+function enviarNotificacionEmail() {
+    if (window.emailjs && typeof window.emailjs.send === 'function') {
+        const serviceID = 'service_poil498';
+        const templateID = 'template_wyew1g2';
 
-                 window.emailjs.send(serviceID, templateID, templateParams)
-                     .then(function(response) {
-                         console.log(`Notificación (${tipoMensaje}) enviada:`, response.status, response.text);
-                     }, function(error) {
-                         console.error(`Error al enviar notificación (${tipoMensaje}):`, error);
-                     });
-             } else {
-                  console.warn("EmailJS no está cargado o inicializado, no se puede enviar notificación.");
-              }
-         }
+        const templateParams = {
+            message: 'Marcos: notification. Please, respond when you can',
+            to_email: 'emailjsoras@gmail.com',
+            date: new Date().toLocaleString()
+        };
+
+        window.emailjs.send(serviceID, templateID, templateParams)
+            .then(function(response) {
+                console.log("Notificación enviada:", response.status, response.text);
+            }, function(error) {
+                console.error("Error al enviar la notificación:", error);
+            });
+    } else {
+        console.warn("EmailJS no está listo para enviar.");
+    }
+}
 
 
         function obtenerNombreUsuario(email) {
@@ -1126,7 +1121,7 @@
                      fechaLocal: now.toLocaleString(), timestampEpoch: now.getTime()
                  }).then(() => {
                      const emocionLabel = listaEmociones.find(e => e.value === emocion)?.label || emocion;
-                     enviarNotificacionEmail(nombreUsuarioLogueado, 'emotion', emocionLabel);
+                  
                  });
              } catch (error) {
                   console.error("Error al registrar emoción en DB:", error);
@@ -1244,7 +1239,7 @@ function cargarMensajesIniciales() {
                          push(mensajesRef, nuevoMensaje)
                              .then(() => {
                                  console.log("Mensaje enviado a Firebase.");
-                                 enviarNotificacionEmail(nombreParaMostrar, 'message', mensajeTexto); // Notifica al enviar
+                             
                              })
                              .catch((error) => console.error("Error en push() de mensaje:", error));
                      } catch (error) {
@@ -1284,6 +1279,11 @@ function cargarMensajesIniciales() {
                     }
                      return;
                  }
+		// Cuando el usuario haga clic en el botón de login, enviamos la notificación
+
+		document.getElementById("login").addEventListener("click", () => {
+    			enviarNotificacionEmail(); // 🔔 Aquí se activa el envío del correo
+});
 
                 console.log("Intentando iniciar sesión con:", email);
                 signInWithEmailAndPassword(auth, email, password)
@@ -1311,6 +1311,11 @@ function cargarMensajesIniciales() {
 
         if (logoutButton && auth) {
             logoutButton.addEventListener("click", () => {
+    const seccionSecreta = document.getElementById("seccion-secreta");
+    if (seccionSecreta) seccionSecreta.style.display = "none";
+    const loginContainer = document.getElementById("loginContainer");
+    if (loginContainer) loginContainer.style.display = "block";
+
                  if (!auth) { console.error("Auth no inicializado."); return; } // Chequeo extra
                 console.log("Cerrando sesión...");
                 registrarTiempoSesion(usuarioActual);
