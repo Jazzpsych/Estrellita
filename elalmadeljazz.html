@@ -16,6 +16,23 @@
             padding: 20px;
             line-height: 1.6;
         }
+	#borrarChatBtn {
+   		background-color: #c0392b; /* Rojo oscuro de advertencia */
+   		color: white;
+  		padding: 10px 15px;
+  		border: none;
+   		cursor: pointer;
+   		border-radius: 6px;
+   		width: auto;
+   		font-family: 'Georgia', serif; /* Misma fuente que otros botones */
+   		font-size: 16px;
+   		transition: background-color 0.3s ease;
+	}
+	#borrarChatBtn:hover {
+    		background-color: #a93226; /* Rojo más oscuro al pasar el ratón */
+	}
+
+
         h1 {
             text-align: center;
             color: #d4af37;
@@ -480,7 +497,11 @@
 </div>
 </div>
 <h2>Comentarios</h2>
-<button id="logout">Cerrar Sesión</button>
+<div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-bottom: 15px;">
+    <h2 style="margin: 0; flex-grow: 1; color: #d18fff;">
+    <button id="borrarChatBtn" style="display: none;">Borrar Chat</button>
+    <button id="logout">Cerrar Sesión</button>
+</div>
 <div class="chat-container"> <!-- Reutilizamos clase para consistencia -->
 <div id="chat"></div> <!-- Área de mensajes del chat secreto -->
 <div class="input-container"> <!-- Contenedor para input y botón -->
@@ -798,7 +819,7 @@
         // --- Código JS Modular (Firebase, lógica de usuario, chat secreto, etc.) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, push, onChildAdded, get, set, onValue, serverTimestamp, onDisconnect, query, limitToLast, orderByChild } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, push, onChildAdded, get, set, onValue, serverTimestamp, onDisconnect, query, limitToLast, orderByChild, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         // ========================================================================
         // ¡¡¡ IMPORTANTE !!!
@@ -1448,6 +1469,64 @@ else {
                   }
             }
         }
+
+// PEGA TODO ESTE BLOQUE AL FINAL DE TU SCRIPT DE TIPO MODULE
+
+const borrarChatBtn = document.getElementById('borrarChatBtn');
+
+// Lógica principal de borrado y visibilidad
+if (borrarChatBtn && db && auth) {
+
+    // 1. Añadimos el listener para la acción de borrado
+    borrarChatBtn.addEventListener('click', () => {
+        // Pedimos una doble confirmación, ya que es una acción irreversible
+        const confirmacion = confirm("¿Estás MUY segura de que quieres borrar TODOS los mensajes del chat?\n\nEsta acción es permanente y no se puede deshacer.");
+
+        if (confirmacion) {
+            console.log("El administrador confirmó el borrado. Eliminando mensajes...");
+            const mensajesRef = ref(db, 'mensajes');
+
+            // Usamos la función remove() para borrar todo el nodo 'mensajes' de Firebase
+            remove(mensajesRef)
+                .then(() => {
+                    console.log("Todos los mensajes han sido eliminados de Firebase.");
+                    alert("El chat ha sido limpiado con éxito.");
+
+                    // Limpiamos la interfaz de usuario para que refleje el cambio
+                    const chat = document.getElementById("chat");
+                    if (chat) {
+                        chat.innerHTML = "<p style='text-align:center; opacity:0.7;'>El chat ha sido limpiado por un administrador.</p>";
+                    }
+                    
+                    // Reseteamos el set de mensajes mostrados para evitar problemas
+                    mensajesMostrados.clear();
+                })
+                .catch((error) => {
+                    console.error("Error al borrar los mensajes:", error);
+                    alert("Ocurrió un error al intentar limpiar el chat. Revisa la consola (F12).");
+                });
+        } else {
+            console.log("El administrador canceló la operación de borrado.");
+        }
+    });
+
+    // 2. Controlamos la visibilidad del botón según el usuario logueado
+    onAuthStateChanged(auth, (user) => {
+        if (user && borrarChatBtn) {
+            const usuario = obtenerNombreUsuario(user.email);
+            // El botón solo será visible si el usuario es el administrador
+            if (usuario === USUARIO_ADMIN) {
+                borrarChatBtn.style.display = 'inline-block';
+            } else {
+                borrarChatBtn.style.display = 'none';
+            }
+        } else if (borrarChatBtn) {
+            // Si no hay usuario, el botón debe estar oculto
+            borrarChatBtn.style.display = 'none';
+        }
+    });
+}
+// FIN DEL BLOQUE PARA PEGAR
 
 </script>
 </body>
