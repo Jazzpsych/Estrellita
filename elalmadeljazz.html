@@ -1172,6 +1172,34 @@ function enviarNotificacionEmail() {
             });
         }
 
+// PEGA ESTA NUEVA FUNCIÓN EN TU SCRIPT DE TIPO MODULE
+
+function inicializarListenerDeBorradoDeChat() {
+    if (!db) return; // Salir si la base de datos no está lista
+
+    const mensajesRef = ref(db, "mensajes");
+    console.log("Inicializando listener de borrado en tiempo real para el chat.");
+
+    try {
+        // onValue escucha cualquier cambio en el nodo 'mensajes', incluido su borrado
+        onValue(mensajesRef, (snapshot) => {
+            // Si el snapshot no existe, significa que el nodo /mensajes fue eliminado
+            if (!snapshot.exists()) {
+                console.log("Se detectó que el nodo de mensajes fue eliminado. Limpiando la interfaz.");
+                const chat = document.getElementById("chat");
+                if (chat) {
+                    // Dejamos el chat completamente en blanco
+                    chat.innerHTML = ""; 
+                }
+                // También limpiamos nuestro registro local de mensajes mostrados
+                mensajesMostrados.clear();
+            }
+        });
+    } catch (error) {
+        console.error("Error al configurar el listener de borrado de chat:", error);
+    }
+}
+
 function cargarMensajesIniciales() {
     if (!db) return;
     const mensajesRef = ref(db, "mensajes");
@@ -1379,6 +1407,8 @@ if (auth) {
             inicializarContadoresEmociones();
             cargarMensajesIniciales();
             inicializarReceptorMensajes();
+	    inicializarListenerDeBorradoDeChat();
+
 
             resetInactivityTimer();
             document.addEventListener("mousemove", resetInactivityTimer);
@@ -1495,7 +1525,7 @@ if (borrarChatBtn && db && auth) {
                     // Limpiamos la interfaz de usuario para que refleje el cambio
                     const chat = document.getElementById("chat");
                     if (chat) {
-                        chat.innerHTML = "<p style='text-align:center; opacity:0.7;'>El chat ha sido limpiado por un administrador.</p>";
+                        chat.innerHTML = ""
                     }
                     
                     // Reseteamos el set de mensajes mostrados para evitar problemas
